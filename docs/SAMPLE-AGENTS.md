@@ -3,6 +3,8 @@
 Fifteen **deterministic** teaching agents live under `src/agentest/samples/`.  
 They are **additional** to the oracle fixtures `golden` / `broken`.
 
+Catalogue (design authority): [Agentic AI Test Checklist 110 on Hugging Face](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110) · Hub [USER-GUIDE.md](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md).
+
 ## Green ladder (1–10)
 
 | name | cx | idea | expected matrix |

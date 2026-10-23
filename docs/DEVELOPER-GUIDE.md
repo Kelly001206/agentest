@@ -6,7 +6,7 @@ and want to run checklist tests **without Hugging Face**, plug in their own
 agent, and (optionally) extend suites later.
 
 **Audience:** developers who have only the GitHub link.  
-**Runner version:** `0.7.0a0` (see `pyproject.toml`).  
+**Runner version:** `0.9.1a0` (see `pyproject.toml`).  
 **Pinned catalogue:** Hub `v1.1.2` packs vendored under `catalog/` (see
 `catalog/VERSION`).  
 Hub-first narrative (same packs): [USER-GUIDE.md](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md).
@@ -454,10 +454,35 @@ right `*_IDS` list and to `SUITE_IDS` via those constants.
 
 1. Change pack CSVs on Hugging Face first (catalogue source of truth).
 2. Copy them into `catalog/` byte-identical.
-3. Update `catalog/VERSION` (`hub_revision`, pack URLs/commits).
+3. Refresh hashes and pins:
+   ```bash
+   python scripts/check_hub_sync.py --write-hashes
+   # edit catalog/VERSION: hub_revision / hub_main_sha_at_sync / pack URLs
+   python scripts/check_hub_sync.py          # offline
+   python scripts/check_hub_sync.py --live   # optional network check
+   ```
+4. Keep Hub `USER-GUIDE.md` / README / FAQ pointing at current agentest sample
+   agents (green ladder 1–10 + expected-fail 11–15 / `agentest samples --failing`).
 
 Do **not** invent conflicting Hub IDs only in this repo. Security-labelled
 work remains **parked** (see README non-goals).
+
+### Keeping Hub and GitHub in sync
+
+| Surface | Authority | What must match |
+|:--------|:----------|:----------------|
+| Hugging Face dataset | **Design** (packs, USER-GUIDE, kit) | Pack CSV bytes for suites in scope |
+| This GitHub repo | **Runner** (cases, oracles, samples, CI) | Vendored `catalog/*.csv` + `catalog/VERSION` |
+
+**Offline guard (CI):** `python scripts/check_hub_sync.py` compares each
+in-scope CSV to `sha256_*` lines in `catalog/VERSION`. No Hub token or network.
+
+**Live guard (authors):** `python scripts/check_hub_sync.py --live` downloads
+`packs/<name>.csv` from Hub `main` and byte-compares. Optional; never required
+for contributor CI.
+
+After editing Hub docs only (no pack change), still bump runner docs that
+mention sample-agent counts, and leave `hub_revision` / pack hashes unchanged.
 
 ### Where things live
 
@@ -467,8 +492,9 @@ work remains **parked** (see README non-goals).
 | Sample agents | `src/agentest/samples/` |
 | Policy rules (teaching) | `src/agentest/samples/policies/` |
 | Vendored packs | `catalog/*.csv`, `catalog/VERSION` |
+| Hub sync check | `scripts/check_hub_sync.py` |
 | Pytest | `tests/functional`, `tests/privacy`, … |
-| CI | `.github/workflows/ci.yml` |
+| CI | `.github/workflows/ci.yml` (includes offline sync check) |
 
 ---
 
@@ -478,14 +504,16 @@ work remains **parked** (see README non-goals).
 
 1. Checkout + Python **3.11**
 2. `pip install -e ".[dev]"`
-3. `pytest -q`
-4. Golden suites: functional, privacy, explainability, bias_fairness, orchestration
-5. `agentest samples` + `agentest matrix`
+3. `python scripts/check_hub_sync.py` (offline catalog hash check)
+4. `pytest -q`
+5. Golden suites: functional, privacy, explainability, bias_fairness, orchestration
+6. `agentest samples` + `agentest matrix`
 
 Mirror locally:
 
 ```bash
 python -m pip install -e ".[dev]"
+python scripts/check_hub_sync.py
 pytest -q
 agentest run --suite functional --agent golden
 agentest run --suite privacy --agent golden

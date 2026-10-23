@@ -34,6 +34,7 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 | M5 | `v0.7.0a0` | **Orchestration** theme (8 Hub IDs) + samples 6–7 ✅ |
 | M5b | `v0.8.0a0` | Sample agents **8–10** (`planner`, `critic`, `federation`) ✅ |
 | M5c | `v0.9.0a0` | Expected-fail scenarios **11–15** (`leaky`…`flaky_plan`) ✅ |
+| M5d | `v0.9.1a0` | Hub↔GitHub sync check (`scripts/check_hub_sync.py`) ✅ |
 | M6 | `v1.0.0-open` | Actions template + Hub cross-links |
 
 ## Developer guide (GitHub standalone)
