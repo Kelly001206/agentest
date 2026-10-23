@@ -32,6 +32,7 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 | M3 | `v0.4.0` | **Explainability** (5) ✅ |
 | M4 | `v0.5.0` | **Bias / fairness** (3) ✅ |
 | M5 | `v0.7.0a0` | **Orchestration** theme (8 Hub IDs) + samples 6–7 ✅ |
+| M5b | `v0.8.0a0` | Sample agents **8–10** (`planner`, `critic`, `federation`) ✅ |
 | M6 | `v1.0.0-open` | Actions template + Hub cross-links |
 
 ## Developer guide (GitHub standalone)
@@ -66,18 +67,21 @@ Every implemented ID must **Pass** a golden agent and **Fail** the matching brok
 
 ## Sample agents
 
-Seven teaching agents of increasing complexity (`stub` → `handoff`) live in-repo so learners can run the full checklist against real implementations:
+Ten teaching agents of increasing complexity (`stub` → `federation`) live in-repo so learners can run the full checklist against real implementations:
 
 ```bash
-agentest samples   # stub…handoff (1–7)
+agentest samples   # stub…federation (1–10)
 agentest run --suite orchestration --agent supervisor
 agentest run --suite orchestration --agent handoff
+agentest run --suite functional --agent planner
+agentest run --suite explainability --agent critic
+agentest run --suite orchestration --agent federation
 agentest run --suite functional --agent stub
 agentest run --suite privacy --agent scripted
 agentest matrix   # all suites × samples (+ golden); stub/eager fails are expected
 ```
 
-Details: [`docs/SAMPLE-AGENTS.md`](docs/SAMPLE-AGENTS.md).
+Details: [`docs/SAMPLE-AGENTS.md`](docs/SAMPLE-AGENTS.md), [`docs/SCENARIOS-8-10.md`](docs/SCENARIOS-8-10.md).
 
 ## Explainability
 

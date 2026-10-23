@@ -31,5 +31,5 @@ Privacy extends Env with profiles, multi-tenant stores, consent, exports/emails,
 
 Seven complexity-graded agents under `agentest.samples` (`stub` → `handoff`).  
 See [`docs/SAMPLE-AGENTS.md`](SAMPLE-AGENTS.md). CLI: `agentest samples`, `agentest matrix`,  
-`agentest run --agent stub|eager|scripted|policy|reflective|supervisor|handoff`.  
+`agentest run --agent stub|eager|scripted|policy|reflective|supervisor|handoff|planner|critic|federation`.  
 `golden`/`broken` remain the oracle Pass/Fail fixtures.

@@ -1,4 +1,4 @@
-"""Sample agents — stub fails; scripted…handoff pass all registered IDs."""
+"""Sample agents — stub fails; scripted…federation pass all registered IDs."""
 
 from __future__ import annotations
 
@@ -17,11 +17,11 @@ EXPECTED_UNIQUE = 41
 EXPECTED_MATRIX_TOTAL = 42
 
 
-def test_list_samples_returns_seven():
+def test_list_samples_returns_ten():
     infos = list_samples()
-    assert len(infos) == 7
+    assert len(infos) == 10
     assert [i.name for i in infos] == list(SAMPLE_AGENT_NAMES)
-    assert [i.complexity for i in infos] == [1, 2, 3, 4, 5, 6, 7]
+    assert [i.complexity for i in infos] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 
 def test_cli_samples_exit_0():
@@ -38,7 +38,7 @@ def test_stub_fails_privacy_soft_delete():
     assert results[0].outcome is Outcome.FAIL
 
 
-@pytest.mark.parametrize("agent", ["scripted", "policy", "reflective", "supervisor", "handoff"])
+@pytest.mark.parametrize("agent", ["scripted", "policy", "reflective", "supervisor", "handoff", "planner", "critic", "federation"])
 @pytest.mark.parametrize("checklist_id", ALL_IDS)
 def test_passing_samples_pass_every_id(agent: str, checklist_id: str):
     results = run_ids([checklist_id], suite="functional", agent=agent)
@@ -64,13 +64,16 @@ def test_run_agent_choices_include_samples():
     assert cli_main(["run", "--suite", "functional", "--ids", "T1-007", "--agent", "scripted"]) == 0
     assert cli_main(["run", "--suite", "orchestration", "--ids", "T3-001", "--agent", "supervisor"]) == 0
     assert cli_main(["run", "--suite", "orchestration", "--ids", "T3-001", "--agent", "handoff"]) == 0
+    assert cli_main(["run", "--suite", "functional", "--ids", "T2-001", "--agent", "planner"]) == 0
+    assert cli_main(["run", "--suite", "explainability", "--ids", "T1-018", "--agent", "critic"]) == 0
+    assert cli_main(["run", "--suite", "orchestration", "--ids", "T3-007", "--agent", "federation"]) == 0
 
 
 def test_matrix_must_pass_agents():
     summary = run_matrix(include_golden=True)
     assert summary["stub"]["pass"] < summary["stub"]["total"]
     assert summary["stub"]["fail"] > summary["stub"]["pass"]
-    for agent in ("scripted", "policy", "reflective", "supervisor", "handoff", "golden"):
+    for agent in ("scripted", "policy", "reflective", "supervisor", "handoff", "planner", "critic", "federation", "golden"):
         assert summary[agent]["pass"] == summary[agent]["total"] == EXPECTED_MATRIX_TOTAL, (
             agent,
             summary[agent],

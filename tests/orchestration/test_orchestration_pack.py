@@ -47,7 +47,7 @@ def test_cli_orchestration_broken_exit_nonzero():
     assert cli_main(["run", "--suite", "orchestration", "--agent", "broken"]) != 0
 
 
-@pytest.mark.parametrize("agent", ["scripted", "policy", "reflective", "supervisor", "handoff"])
+@pytest.mark.parametrize("agent", ["scripted", "policy", "reflective", "supervisor", "handoff", "planner", "critic", "federation"])
 def test_passing_samples_pass_orchestration_suite(agent: str):
     results = run_ids(None, suite="orchestration", agent=agent)
     assert len(results) == 8

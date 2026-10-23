@@ -15,7 +15,7 @@ class SampleAgentInfo:
 
     name: str
     title: str
-    complexity: int  # 1..7
+    complexity: int  # 1..10
     description: str
 
 

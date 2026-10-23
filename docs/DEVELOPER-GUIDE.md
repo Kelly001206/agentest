@@ -95,7 +95,7 @@ agentest samples
 
 agentest run --suite functional --agent scripted
 agentest matrix
-# Exit 0 iff scripted/policy/reflective/supervisor/handoff/(golden) all-pass.
+# Exit 0 iff scripted…federation/(golden) all-pass.
 # stub/eager failures are expected and do not fail the process.
 ```
 
@@ -187,7 +187,7 @@ from agentest.types import Trace
 class MyAgent(SampleAgent):
     name = "myagent"           # CLI --agent value
     title = "My agent"
-    complexity = 3             # teaching scale 1–7 (informational)
+    complexity = 3             # teaching scale 1–10 (informational)
     description = "Short learner-facing blurb."
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
@@ -373,7 +373,7 @@ For multi-run IDs, prefer `cases.multi_run.run_multi("T1-002", "scripted")`
 those loops). New agents that are not listed in `_PASSING_MULTI` need an
 update in `multi_run.py` if you expect `T1-002`/`T1-003` to call
 `handle` correctly under the multi-run path — today that set is
-`golden`, `scripted`, `policy`, `reflective`, `supervisor`, `handoff`.
+`golden`, `scripted`, `policy`, `reflective`, `supervisor`, `handoff`, `planner`, `critic`, `federation`.
 
 ---
 
@@ -399,16 +399,19 @@ Expected teaching behaviour (full matrix totals sum all five suites;
 | `scripted` | 3 | **All PASS** (case goldens) |
 | `policy` | 4 | **All PASS** (rule engine) |
 | `reflective` | 5 | **All PASS** (+ explain / bias fields) |
-| `supervisor` | 6 | **All PASS** (planner / HITL grantor) |
+| `supervisor` | 6 | **All PASS** (HITL grantor / handoff contract) |
 | `handoff` | 7 | **All PASS** (receiver / independent authz) |
+| `planner` | 8 | **All PASS** (plan-then-act / DEPENDS_ON + HITL) |
+| `critic` | 9 | **All PASS** (generate–critique–repair) |
+| `federation` | 10 | **All PASS** (tenant + TTL + single-use federation) |
 | `golden` | — | **All PASS** (oracle fixture) |
 | `broken` | — | **All FAIL** (oracle fixture; not in matrix) |
 
 `MATRIX_MUST_PASS` is
-`{scripted, policy, reflective, supervisor, handoff, golden}`.
+`{scripted, policy, reflective, supervisor, handoff, planner, critic, federation, golden}`.
 Stub/eager failures never fail `agentest matrix`’s exit status.
 
-Details: [`SAMPLE-AGENTS.md`](SAMPLE-AGENTS.md), [`ORCHESTRATION.md`](ORCHESTRATION.md).
+Details: [`SAMPLE-AGENTS.md`](SAMPLE-AGENTS.md), [`SCENARIOS-8-10.md`](SCENARIOS-8-10.md), [`ORCHESTRATION.md`](ORCHESTRATION.md).
 
 ---
 
@@ -527,7 +530,7 @@ Pass — that is a teaching signal, not a green light to skip the gateway.
 | `agentest run --suite S --agent A` | Run all IDs in suite `S` with agent `A` |
 | `agentest run --suite S --ids ID1,ID2 --agent A` | Subset of IDs |
 | `agentest run ... --json` | Machine-readable results |
-| `agentest samples` | List teaching agents (cx 1–7) |
+| `agentest samples` | List teaching agents (cx 1–10) |
 | `agentest matrix` | All suites × samples (+ golden) |
 | `agentest matrix --no-golden` | Samples only |
 | `pytest -q` | Full unit/integration suite |
@@ -544,7 +547,7 @@ Exit codes: `run` → 0 iff all results Pass; `matrix` → 0 iff every agent in
 | Name | Role |
 |:-----|:-----|
 | `golden` / `broken` | Oracle Pass / Fail fixtures |
-| `stub` … `handoff` | Teaching samples, complexity **1–7** |
+| `stub` … `federation` | Teaching samples, complexity **1–10** |
 
 ### Key modules
 

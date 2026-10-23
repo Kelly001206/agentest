@@ -26,18 +26,18 @@ def main(argv: list[str] | None = None) -> int:
         "--agent",
         default="golden",
         choices=list(ALL_AGENTS),
-        help="Agent under test: golden|broken|stub|eager|scripted|policy|reflective|supervisor|handoff",
+        help="Agent under test: golden|broken|stub|eager|scripted|policy|reflective|supervisor|handoff|planner|critic|federation",
     )
     run.add_argument("--json", action="store_true", help="Emit machine-readable results")
 
-    samples = sub.add_parser("samples", help="List teaching sample agents (complexity 1–7)")
+    samples = sub.add_parser("samples", help="List teaching sample agents (complexity 1–10)")
     samples.add_argument("--json", action="store_true", help="Emit JSON")
 
     matrix = sub.add_parser(
         "matrix",
         help=(
             "Run all suites × sample agents (and golden). "
-            "Exit 0 if scripted/policy/reflective/supervisor/handoff/(golden) all-pass; "
+            "Exit 0 if scripted…federation/(golden) all-pass; "
             "stub/eager failures are expected and do not fail the process."
         ),
     )
@@ -138,7 +138,7 @@ def _cmd_matrix(args: argparse.Namespace) -> int:
         print()
         print(
             "Note: stub/eager are meant to fail many IDs. "
-            "Exit status reflects scripted/policy/reflective/supervisor/handoff/(golden) all-pass only."
+            "Exit status reflects scripted…federation/(golden) all-pass only."
         )
     return 0 if matrix_ok(summary) else 1
 

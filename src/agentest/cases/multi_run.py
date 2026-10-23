@@ -17,7 +17,7 @@ from agentest.types import Outcome, Result, Trace
 MULTI_RUN_IDS = frozenset({"T1-002", "T1-003"})
 
 # Sample / oracle agents that correctly complete one high-risk episode.
-_PASSING_MULTI = frozenset({"golden", "scripted", "policy", "reflective", "supervisor", "handoff"})
+_PASSING_MULTI = frozenset({"golden", "scripted", "policy", "reflective", "supervisor", "handoff", "planner", "critic", "federation"})
 
 
 def _fresh_high_risk_env() -> Env:

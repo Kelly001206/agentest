@@ -13,7 +13,7 @@ OracleFn = Callable[[Env, Trace], Result]
 EnvFactory = Callable[[], Env]
 
 ORACLE_AGENTS = ("golden", "broken")
-SAMPLE_AGENTS = ("stub", "eager", "scripted", "policy", "reflective", "supervisor", "handoff")
+SAMPLE_AGENTS = ("stub", "eager", "scripted", "policy", "reflective", "supervisor", "handoff", "planner", "critic", "federation")
 ALL_AGENTS = ORACLE_AGENTS + SAMPLE_AGENTS
 
 

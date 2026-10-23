@@ -1,10 +1,13 @@
-"""Teaching sample agents (complexity 1–7) for the checklist harness."""
+"""Teaching sample agents (complexity 1–10) for the checklist harness."""
 
 from __future__ import annotations
 
 from agentest.samples.base import SampleAgent, SampleAgentInfo
+from agentest.samples.critic import CriticAgent
 from agentest.samples.eager import EagerAgent
+from agentest.samples.federation import FederationAgent
 from agentest.samples.handoff import HandoffAgent
+from agentest.samples.planner import PlannerAgent
 from agentest.samples.policy import PolicyAgent
 from agentest.samples.reflective import ReflectiveAgent
 from agentest.samples.scripted import ScriptedAgent
@@ -19,11 +22,24 @@ SAMPLE_AGENT_NAMES: tuple[str, ...] = (
     "reflective",
     "supervisor",
     "handoff",
+    "planner",
+    "critic",
+    "federation",
 )
 
 # Agents expected to pass the full matrix (oracle reference + teaching).
 MATRIX_MUST_PASS: frozenset[str] = frozenset(
-    {"scripted", "policy", "reflective", "supervisor", "handoff", "golden"}
+    {
+        "scripted",
+        "policy",
+        "reflective",
+        "supervisor",
+        "handoff",
+        "planner",
+        "critic",
+        "federation",
+        "golden",
+    }
 )
 
 _REGISTRY: dict[str, SampleAgent] | None = None
@@ -38,6 +54,9 @@ def _build() -> dict[str, SampleAgent]:
         ReflectiveAgent(),
         SupervisorAgent(),
         HandoffAgent(),
+        PlannerAgent(),
+        CriticAgent(),
+        FederationAgent(),
     ]
     return {a.name: a for a in agents}
 
