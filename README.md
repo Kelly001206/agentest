@@ -1,17 +1,36 @@
 # agentest
 
-**Open-core runner for the [Agentic AI Test Checklist 110](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110).**
+[![CI](https://github.com/srpadmanabhuni/agentest/actions/workflows/ci.yml/badge.svg)](https://github.com/srpadmanabhuni/agentest/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
+[![HF dataset](https://img.shields.io/badge/Hugging%20Face-checklist%20110-yellow.svg)](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+[![Zenodo](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23587407-blue.svg)](https://doi.org/10.5281/zenodo.23587407)
 
-Thin CLI + harness that executes checklist IDs against a mock tool gateway.  
-Catalogue lives on Hugging Face; this repo is the runnable open core.
+**Offline open-core runner for the [Agentic AI Test Checklist 110](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110).**  
+Clone → install → run. No Hugging Face account, token, or download required at runtime. ISO 42001–aligned assurance checklist design (not certification).
+
+## Clone and run (30 seconds)
+
+```bash
+git clone https://github.com/srpadmanabhuni/agentest.git
+cd agentest
+python -m venv .venv && source .venv/bin/activate
+python -m pip install -e ".[dev]"
+
+agentest samples            # 15 teaching agents (1–15)
+agentest run --suite functional --agent golden
+agentest matrix             # green ladder must stay 42/42
+```
+
+Developer guide (GitHub-only path): [`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md) · Launch copy: [`docs/launch/`](docs/launch/)
 
 | Surface | Location |
 |:--------|:---------|
+| **Runner (this repo)** | [`srpadmanabhuni/agentest`](https://github.com/srpadmanabhuni/agentest) |
 | Catalogue (source of truth) | [`srinivaspadmanabhuni/agentic-ai-test-checklist-110`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110) |
 | Hub **User guide** | [`USER-GUIDE.md`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md) |
-| Orchestration pack (Hub) | [`packs/orchestration.csv`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/packs/orchestration.csv) |
-| Runner (this repo) | [`srpadmanabhuni/agentest`](https://github.com/srpadmanabhuni/agentest) |
-| Developer guide (GitHub standalone) | [`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md) |
+| Pulse (110 tests) | [Testing Agentic AI](https://www.linkedin.com/pulse/testing-agentic-ai-dr-srinivas-padmanabhuni-5stoc) · `#100daysoftestingagenticai` |
+| Zenodo taxonomy | [10.5281/zenodo.23587407](https://doi.org/10.5281/zenodo.23587407) |
 | Commercial harness | Private (AiEnsured / testAIng) — later |
 
 **Author:** Dr Srinivas Padmanabhuni · srinivas AT testAIng.com · [testAIng.com](https://testaing.com) / [AiEnsured](https://aiensured.com)
@@ -35,22 +54,12 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 | M5b | `v0.8.0a0` | Sample agents **8–10** (`planner`, `critic`, `federation`) ✅ |
 | M5c | `v0.9.0a0` | Expected-fail scenarios **11–15** (`leaky`…`flaky_plan`) ✅ |
 | M5d | `v0.9.1a0` | Hub↔GitHub sync check (`scripts/check_hub_sync.py`) ✅ |
+| M5e | `v0.9.2a0` | Launch hygiene + `docs/launch/` ready copy ✅ |
 | M6 | `v1.0.0-open` | Actions template + Hub cross-links |
 
-## Developer guide (GitHub standalone)
-
-**Only have this GitHub link?** You can install and test any agent **without Hugging Face**.
-
-→ **[`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md)** — install offline, run suites, bring your own agent, extend cases, CI mirror.  
-Hub-first visitors: **[USER-GUIDE.md on Hugging Face](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md)**.
-
-## Quick start (M6 sample agents)
+## Suites
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
-python -m pip install -e ".[dev]"
-
-# Functional + Privacy + Explainability + Bias/fairness
 agentest run --suite functional --agent golden         # exit 0
 agentest run --suite privacy --agent golden            # exit 0
 agentest run --suite explainability --agent golden     # exit 0
@@ -65,7 +74,6 @@ pytest
 ```
 
 Every implemented ID must **Pass** a golden agent and **Fail** the matching broken behaviour.
-
 
 ## Sample agents
 
@@ -100,7 +108,8 @@ Details: [`docs/SAMPLE-AGENTS.md`](docs/SAMPLE-AGENTS.md), [`docs/SCENARIOS-8-10
 ## Catalogue pin
 
 See [`catalog/VERSION`](catalog/VERSION) (pinned Hub **v1.1.2**), plus vendored [`catalog/functional.csv`](catalog/functional.csv), [`catalog/privacy.csv`](catalog/privacy.csv), [`catalog/explainability.csv`](catalog/explainability.csv), [`catalog/bias_fairness.csv`](catalog/bias_fairness.csv), and [`catalog/orchestration.csv`](catalog/orchestration.csv).  
-Change packs on Hugging Face first, then sync here. Hub visitors: start with [USER-GUIDE.md](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md).
+Change packs on Hugging Face first, then sync here. Hub visitors: start with [USER-GUIDE.md](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md).  
+Keep Hub↔GitHub locked: `python scripts/check_hub_sync.py` (CI) · optional `--live`.
 
 ## Licence
 
