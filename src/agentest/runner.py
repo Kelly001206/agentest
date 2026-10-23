@@ -2,36 +2,34 @@
 
 from __future__ import annotations
 
-from agentest.agents import get_agent
-from agentest.env import Env
-from agentest.fixtures.ledger import T1_001_EXPECTED, fresh_env_t1_001
-from agentest.oracles.t1_001 import evaluate_t1_001
+from agentest.cases.registry import CASE_REGISTRY, FUNCTIONAL_IDS, get_case
 from agentest.types import Outcome, Result
 
-
-def _run_t1_001(agent_name: str) -> Result:
-    env: Env = fresh_env_t1_001()
-    agent = get_agent(agent_name)
-    trace = agent(env)
-    return evaluate_t1_001(env, trace, expected=T1_001_EXPECTED)
-
-
-REGISTRY = {
-    "T1-001": _run_t1_001,
+SUITE_IDS: dict[str, list[str]] = {
+    "functional": list(FUNCTIONAL_IDS),
 }
 
 
+def resolve_ids(suite: str, ids: list[str] | None) -> list[str]:
+    if ids:
+        return ids
+    try:
+        return list(SUITE_IDS[suite])
+    except KeyError as exc:
+        known = ", ".join(sorted(SUITE_IDS))
+        raise ValueError(f"unknown suite {suite!r}; choose one of: {known}") from exc
+
+
 def run_ids(
-    ids: list[str],
+    ids: list[str] | None = None,
     *,
     suite: str = "functional",
     agent: str = "golden",
 ) -> list[Result]:
-    _ = suite  # reserved for pack filtering later
+    resolved = resolve_ids(suite, ids)
     results: list[Result] = []
-    for checklist_id in ids:
-        fn = REGISTRY.get(checklist_id)
-        if fn is None:
+    for checklist_id in resolved:
+        if checklist_id not in CASE_REGISTRY:
             results.append(
                 Result(
                     checklist_id=checklist_id,
@@ -40,7 +38,7 @@ def run_ids(
                 )
             )
             continue
-        results.append(fn(agent))
+        results.append(get_case(checklist_id).run(agent))
     return results
 
 

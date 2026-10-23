@@ -1,15 +1,16 @@
-"""Environment: mock systems of record (ledger, …)."""
+"""Environment: mock systems of record for functional pack IDs."""
 
 from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass, field
+from typing import Any
 
 
-# Allowed ledger statuses for T1-001 style tasks.
 PENDING = "PENDING"
 APPROVED = "APPROVED"
 REJECTED = "REJECTED"
+ACTIVE = "ACTIVE"
 
 
 @dataclass
@@ -37,6 +38,15 @@ class Ledger:
     def seed_snapshot(self) -> dict[str, str]:
         return dict(self._seed)
 
+    def unchanged_except(self, expected_ids: set[str]) -> bool:
+        seed = self._seed
+        for rid, seeded in seed.items():
+            if rid in expected_ids:
+                continue
+            if self.records.get(rid) != seeded:
+                return False
+        return True
+
     def clone(self) -> Ledger:
         other = Ledger()
         other.seed(deepcopy(self._seed))
@@ -45,10 +55,96 @@ class Ledger:
 
 
 @dataclass
+class NotifyMock:
+    call_count: int = 0
+
+    def send(self, **_kwargs: Any) -> dict[str, Any]:
+        self.call_count += 1
+        return {"ok": True, "n": self.call_count}
+
+
+@dataclass
+class AgentState:
+    bindings: dict[str, str] = field(default_factory=dict)
+    binding_history: dict[str, list[str]] = field(default_factory=dict)
+    completed: set[str] = field(default_factory=set)
+    locale: str = "en"
+
+    def bind(self, key: str, value: str) -> None:
+        self.bindings[key] = value
+        self.binding_history.setdefault(key, []).append(value)
+
+    def complete(self, item: str) -> None:
+        self.completed.add(item)
+
+    def clone(self) -> AgentState:
+        return AgentState(
+            bindings=dict(self.bindings),
+            binding_history={k: list(v) for k, v in self.binding_history.items()},
+            completed=set(self.completed),
+            locale=self.locale,
+        )
+
+
+@dataclass
 class Env:
     """Fresh mock environment for one agent run."""
 
     ledger: Ledger = field(default_factory=Ledger)
+    contacts: dict[str, dict[str, Any]] = field(default_factory=dict)
+    counters: dict[str, int] = field(default_factory=dict)
+    users: dict[str, dict[str, Any]] = field(default_factory=dict)
+    orders: dict[str, dict[str, Any]] = field(default_factory=dict)
+    inventory: dict[str, int] = field(default_factory=dict)
+    tickets: dict[str, dict[str, Any]] = field(default_factory=dict)
+    notify: NotifyMock = field(default_factory=NotifyMock)
+    state: AgentState = field(default_factory=AgentState)
+    # Extra durable keys for side-effect fence tests
+    extras: dict[str, Any] = field(default_factory=dict)
+
+    def snapshot(self) -> dict[str, Any]:
+        """Business-store snapshot for diff / side-effect fence."""
+        snap: dict[str, Any] = {}
+        for rid, status in self.ledger.records.items():
+            snap[f"ledger.{rid}"] = status
+        for cid, data in self.contacts.items():
+            snap[cid] = deepcopy(data)
+        for name, val in self.counters.items():
+            snap[f"counter.{name}"] = val
+        for uid, data in self.users.items():
+            snap[f"user.{uid}"] = deepcopy(data)
+        for oid, data in self.orders.items():
+            snap[f"order.{oid}"] = deepcopy(data)
+        for sku, qty in self.inventory.items():
+            snap[f"inventory.{sku}"] = qty
+        for tid, data in self.tickets.items():
+            snap[f"ticket.{tid}"] = deepcopy(data)
+        for k, v in self.extras.items():
+            snap[k] = deepcopy(v)
+        snap["state.locale"] = self.state.locale
+        snap["state.bindings"] = dict(self.state.bindings)
+        snap["state.completed"] = sorted(self.state.completed)
+        return snap
+
+    @staticmethod
+    def diff(before: dict[str, Any], after: dict[str, Any]) -> dict[str, Any]:
+        keys = set(before) | set(after)
+        changed: dict[str, Any] = {}
+        for k in keys:
+            if before.get(k) != after.get(k):
+                changed[k] = {"before": before.get(k), "after": after.get(k)}
+        return changed
 
     def clone(self) -> Env:
-        return Env(ledger=self.ledger.clone())
+        return Env(
+            ledger=self.ledger.clone(),
+            contacts=deepcopy(self.contacts),
+            counters=dict(self.counters),
+            users=deepcopy(self.users),
+            orders=deepcopy(self.orders),
+            inventory=dict(self.inventory),
+            tickets=deepcopy(self.tickets),
+            notify=NotifyMock(call_count=self.notify.call_count),
+            state=self.state.clone(),
+            extras=deepcopy(self.extras),
+        )

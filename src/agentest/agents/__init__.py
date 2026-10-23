@@ -1,4 +1,7 @@
-"""Reference agents: golden (must Pass) and broken (must Fail)."""
+"""Reference agents for T1-001 (legacy) and re-exports.
+
+Per-ID golden/broken behaviours live under agentest.cases.*.
+"""
 
 from __future__ import annotations
 
@@ -11,6 +14,7 @@ from agentest.types import Trace
 
 AgentFn = Callable[[Env], Trace]
 
+# T1-001 defaults (used by examples/ and legacy tests)
 AGENTS: dict[str, AgentFn] = {
     "golden": golden_mod.run,
     "broken": broken_mod.run,

@@ -24,27 +24,34 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 | Milestone | Tag | Scope |
 |:----------|:----|:------|
 | M0 | `v0.1.0` | CLI + gateway + **T1-001** |
-| M1 | `v0.2.0` | Full **functional** pack (18 IDs) |
+| M1 | `v0.2.0` | Full **functional** pack (18 IDs) ✅ |
 | M2 | `v0.3.0` | **Privacy** (8) |
 | M3 | `v0.4.0` | **Explainability** (5) |
 | M4 | `v0.5.0` | **Bias** (3) + broken_agent suite |
 | M5 | `v1.0.0-open` | Actions template + Hub cross-links |
 
-## Quick start (M0)
+## Quick start (M1)
 
 ```bash
+python -m venv .venv && source .venv/bin/activate
 python -m pip install -e ".[dev]"
-agentest run --suite functional --ids T1-001 --agent golden   # exit 0
-agentest run --suite functional --ids T1-001 --agent broken   # exit 1
+
+# All 18 functional IDs
+agentest run --suite functional --agent golden    # exit 0
+agentest run --suite functional --agent broken    # exit 1
+
+# Single ID
+agentest run --suite functional --ids T1-005 --agent golden
+
 pytest
 ```
 
-Every implemented ID must **Pass** a golden agent and **Fail** `examples/broken_agent`.
+Every implemented ID must **Pass** a golden agent and **Fail** the matching broken behaviour.
 
 ## Catalogue pin
 
-See [`catalog/VERSION`](catalog/VERSION) and [`catalog/t1_001.yaml`](catalog/t1_001.yaml).  
-Change packs on Hugging Face first, then sync here. Do not edit Hub CSVs only in this repo.
+See [`catalog/VERSION`](catalog/VERSION) and [`catalog/functional.csv`](catalog/functional.csv) (Hub v1.1 pack).  
+Change packs on Hugging Face first, then sync here.
 
 ## Licence
 

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from agentest.env import APPROVED, PENDING, REJECTED, Env, Ledger
 
-# Canonical T1-001 example: approve R1–R3, reject R4; R5 must stay PENDING (collateral).
 T1_001_SEED_IDS = ("R1", "R2", "R3", "R4", "R5")
 T1_001_EXPECTED: dict[str, str] = {
     "R1": APPROVED,

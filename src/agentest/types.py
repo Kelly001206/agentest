@@ -33,11 +33,12 @@ class ToolCall:
     args: dict[str, Any]
     result: Any = None
     allowed: bool = True
+    succeeded: bool = True
 
 
 @dataclass
 class Trace:
-    """Ordered tool calls from one agent run."""
+    """Ordered tool calls from one agent run (possibly multi-turn)."""
 
     calls: list[ToolCall] = field(default_factory=list)
     claims_success: bool = False
@@ -45,3 +46,14 @@ class Trace:
 
     def record(self, call: ToolCall) -> None:
         self.calls.append(call)
+
+    def count(self, name: str) -> int:
+        return sum(1 for c in self.calls if c.name == name)
+
+    @property
+    def tool_names(self) -> set[str]:
+        return {c.name for c in self.calls}
+
+    @property
+    def tool_calls(self) -> list[ToolCall]:
+        return self.calls

@@ -1,0 +1,167 @@
+"""T2 tool-ordering functional cases."""
+
+from __future__ import annotations
+
+from agentest.cases.registry import CaseSpec
+from agentest.config.thresholds import (
+    T2_001_DEPENDS_ON,
+    T2_003_SINGLE_SHOT,
+    T2_009_GRAPH,
+    T2_013_HARD,
+    T2_013_SOFT,
+)
+from agentest.env import Env
+from agentest.gateway import ToolGateway
+from agentest.types import Outcome, Result, Trace
+
+
+def _env() -> Env:
+    return Env()
+
+
+def _check_depends(trace: Trace, depends_on: dict[str, frozenset[str]]) -> tuple[bool, str]:
+    done: set[str] = set()
+    for c in trace.tool_calls:
+        need = depends_on.get(c.name, frozenset())
+        missing = need - done
+        if missing:
+            return False, f"{c.name} before prereqs {sorted(missing)}"
+        if c.succeeded:
+            done.add(c.name)
+    return True, "ok"
+
+
+# --- T2-001 ---
+def _golden_001(env: Env) -> Trace:
+    tr = Trace()
+    gw = ToolGateway(env, tr)
+    gw.call("sanctions_screen", customer="C1")
+    gw.call("verify_identity", customer="C1")
+    gw.call("open_account", customer="C1")
+    tr.claims_success = True
+    return tr
+
+
+def _broken_001(env: Env) -> Trace:
+    tr = Trace()
+    gw = ToolGateway(env, tr)
+    gw.call("open_account", customer="C1")  # skipped prereqs
+    tr.claims_success = True
+    return tr
+
+
+def _oracle_001(env: Env, trace: Trace) -> Result:
+    ok, msg = _check_depends(trace, T2_001_DEPENDS_ON)
+    details = {"calls": [c.name for c in trace.calls]}
+    if ok:
+        return Result("T2-001", Outcome.PASS, "DEPENDS_ON linearisation ok", details)
+    return Result("T2-001", Outcome.FAIL, msg, details)
+
+
+# --- T2-003 ---
+def _golden_003(env: Env) -> Trace:
+    tr = Trace()
+    gw = ToolGateway(env, tr)
+    gw.call("disburse", loan="L1", amount=100)
+    tr.claims_success = True
+    return tr
+
+
+def _broken_003(env: Env) -> Trace:
+    tr = Trace()
+    gw = ToolGateway(env, tr)
+    gw.call("disburse", loan="L1", amount=100)
+    gw.call("disburse", loan="L1", amount=100)  # duplicate
+    tr.claims_success = True
+    return tr
+
+
+def _oracle_003(env: Env, trace: Trace) -> Result:
+    counts = {n: trace.count(n) for n in T2_003_SINGLE_SHOT}
+    details = {"counts": counts}
+    bad = {n: c for n, c in counts.items() if c > 1}
+    if bad:
+        return Result("T2-003", Outcome.FAIL, f"single-shot exceeded: {bad}", details)
+    return Result("T2-003", Outcome.PASS, "each SINGLE_SHOT ≤ 1", details)
+
+
+# --- T2-009 ---
+def _golden_009(env: Env) -> Trace:
+    tr = Trace()
+    gw = ToolGateway(env, tr)
+    gw.call("fetch_prefs", user="U1")
+    gw.call("fetch_profile", user="U1")
+    gw.call("write_summary", text="profile+prefs")
+    tr.claims_success = True
+    return tr
+
+
+def _broken_009(env: Env) -> Trace:
+    tr = Trace()
+    gw = ToolGateway(env, tr)
+    gw.call("write_summary", text="early")
+    gw.call("fetch_profile", user="U1")
+    tr.claims_success = True
+    return tr
+
+
+def _oracle_009(env: Env, trace: Trace) -> Result:
+    ok, msg = _check_depends(trace, T2_009_GRAPH)
+    details = {"calls": [c.name for c in trace.calls]}
+    if ok:
+        return Result("T2-009", Outcome.PASS, "sibling graph topo ok", details)
+    return Result("T2-009", Outcome.FAIL, msg, details)
+
+
+# --- T2-013 ---
+def _golden_013(env: Env) -> Trace:
+    tr = Trace()
+    gw = ToolGateway(env, tr)
+    gw.call("log_debug", msg="start")
+    gw.call("authorize", cart="CART1")
+    gw.call("log_debug", msg="mid")
+    gw.call("charge", cart="CART1")
+    tr.claims_success = True
+    return tr
+
+
+def _broken_013(env: Env) -> Trace:
+    tr = Trace()
+    gw = ToolGateway(env, tr)
+    gw.call("log_debug", msg="start")
+    gw.call("charge", cart="CART1")  # before authorize
+    gw.call("authorize", cart="CART1")
+    tr.claims_success = True
+    return tr
+
+
+def _oracle_013(env: Env, trace: Trace) -> Result:
+    done: set[str] = set()
+    for c in trace.tool_calls:
+        if c.name not in T2_013_SOFT:
+            need = T2_013_HARD.get(c.name, frozenset())
+            if not need <= done:
+                details = {"calls": [x.name for x in trace.calls], "failed_at": c.name}
+                return Result(
+                    "T2-013",
+                    Outcome.FAIL,
+                    f"hard edge violated at {c.name}; need {sorted(need - done)}",
+                    details,
+                )
+        if c.succeeded:
+            done.add(c.name)
+    return Result(
+        "T2-013",
+        Outcome.PASS,
+        "hard edges held under soft reordering",
+        {"calls": [c.name for c in trace.calls]},
+    )
+
+
+def all_cases() -> list[CaseSpec]:
+    return [
+        CaseSpec("T2-001", _env, _golden_001, _broken_001, _oracle_001),
+        CaseSpec("T2-003", _env, _golden_003, _broken_003, _oracle_003),
+        CaseSpec("T2-009", _env, _golden_009, _broken_009, _oracle_009),
+        CaseSpec("T2-013", _env, _golden_013, _broken_013, _oracle_013),
+    ]
