@@ -32,6 +32,12 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 | M5 | `v0.7.0a0` | **Orchestration** theme (8 Hub IDs) + samples 6–7 ✅ |
 | M6 | `v1.0.0-open` | Actions template + Hub cross-links |
 
+## Developer guide (GitHub standalone)
+
+**Only have this GitHub link?** You can install and test any agent **without Hugging Face**.
+
+→ **[`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md)** — install offline, run suites, bring your own agent, extend cases, CI mirror.
+
 ## Quick start (M6 sample agents)
 
 ```bash
