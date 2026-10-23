@@ -1,4 +1,4 @@
-"""Environment: mock systems of record for functional pack IDs."""
+"""Environment: mock systems of record for functional + privacy packs."""
 
 from __future__ import annotations
 
@@ -64,11 +64,21 @@ class NotifyMock:
 
 
 @dataclass
+class TenantStore:
+    """Per-tenant durable store with write counter."""
+
+    writes: int = 0
+    contacts: dict[str, dict[str, Any]] = field(default_factory=dict)
+    data: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
 class AgentState:
     bindings: dict[str, str] = field(default_factory=dict)
     binding_history: dict[str, list[str]] = field(default_factory=dict)
     completed: set[str] = field(default_factory=set)
     locale: str = "en"
+    consent: dict[str, bool] = field(default_factory=dict)
 
     def bind(self, key: str, value: str) -> None:
         self.bindings[key] = value
@@ -83,6 +93,7 @@ class AgentState:
             binding_history={k: list(v) for k, v in self.binding_history.items()},
             completed=set(self.completed),
             locale=self.locale,
+            consent=dict(self.consent),
         )
 
 
@@ -99,8 +110,17 @@ class Env:
     tickets: dict[str, dict[str, Any]] = field(default_factory=dict)
     notify: NotifyMock = field(default_factory=NotifyMock)
     state: AgentState = field(default_factory=AgentState)
-    # Extra durable keys for side-effect fence tests
     extras: dict[str, Any] = field(default_factory=dict)
+
+    # Privacy pack
+    profiles: dict[str, dict[str, Any]] = field(default_factory=dict)
+    tenants: dict[str, TenantStore] = field(default_factory=dict)
+    session_tenant_id: str = "A"
+    files: list[dict[str, Any]] = field(default_factory=list)
+    exports: list[dict[str, Any]] = field(default_factory=list)
+    emails: list[dict[str, Any]] = field(default_factory=list)
+    post_revoke_share_calls: int = 0
+    denied: bool = False
 
     def snapshot(self) -> dict[str, Any]:
         """Business-store snapshot for diff / side-effect fence."""
@@ -119,11 +139,14 @@ class Env:
             snap[f"inventory.{sku}"] = qty
         for tid, data in self.tickets.items():
             snap[f"ticket.{tid}"] = deepcopy(data)
+        for pid, data in self.profiles.items():
+            snap[f"profile.{pid}"] = deepcopy(data)
         for k, v in self.extras.items():
             snap[k] = deepcopy(v)
         snap["state.locale"] = self.state.locale
         snap["state.bindings"] = dict(self.state.bindings)
         snap["state.completed"] = sorted(self.state.completed)
+        snap["state.consent"] = dict(self.state.consent)
         return snap
 
     @staticmethod
@@ -147,4 +170,12 @@ class Env:
             notify=NotifyMock(call_count=self.notify.call_count),
             state=self.state.clone(),
             extras=deepcopy(self.extras),
+            profiles=deepcopy(self.profiles),
+            tenants={k: TenantStore(writes=v.writes, contacts=deepcopy(v.contacts), data=deepcopy(v.data)) for k, v in self.tenants.items()},
+            session_tenant_id=self.session_tenant_id,
+            files=deepcopy(self.files),
+            exports=deepcopy(self.exports),
+            emails=deepcopy(self.emails),
+            post_revoke_share_calls=self.post_revoke_share_calls,
+            denied=self.denied,
         )

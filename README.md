@@ -25,23 +25,24 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 |:----------|:----|:------|
 | M0 | `v0.1.0` | CLI + gateway + **T1-001** |
 | M1 | `v0.2.0` | Full **functional** pack (18 IDs) ✅ |
-| M2 | `v0.3.0` | **Privacy** (8) |
+| M2 | `v0.3.0` | **Privacy** (8) ✅ |
 | M3 | `v0.4.0` | **Explainability** (5) |
 | M4 | `v0.5.0` | **Bias** (3) + broken_agent suite |
 | M5 | `v1.0.0-open` | Actions template + Hub cross-links |
 
-## Quick start (M1)
+## Quick start (M2)
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
 python -m pip install -e ".[dev]"
 
-# All 18 functional IDs
+# Functional (18) + Privacy (8)
 agentest run --suite functional --agent golden    # exit 0
-agentest run --suite functional --agent broken    # exit 1
+agentest run --suite privacy --agent golden       # exit 0
+agentest run --suite privacy --agent broken       # exit 1
 
 # Single ID
-agentest run --suite functional --ids T1-005 --agent golden
+agentest run --suite privacy --ids T5-004 --agent golden
 
 pytest
 ```
@@ -50,7 +51,7 @@ Every implemented ID must **Pass** a golden agent and **Fail** the matching brok
 
 ## Catalogue pin
 
-See [`catalog/VERSION`](catalog/VERSION) and [`catalog/functional.csv`](catalog/functional.csv) (Hub v1.1 pack).  
+See [`catalog/VERSION`](catalog/VERSION), [`catalog/functional.csv`](catalog/functional.csv), and [`catalog/privacy.csv`](catalog/privacy.csv) (Hub v1.1 packs).  
 Change packs on Hugging Face first, then sync here.
 
 ## Licence
