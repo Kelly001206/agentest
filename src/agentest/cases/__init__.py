@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from agentest.cases.registry import (
+    BIAS_FAIRNESS_IDS,
     CASE_REGISTRY,
     EXPLAINABILITY_IDS,
     FUNCTIONAL_IDS,
@@ -11,6 +12,7 @@ from agentest.cases.registry import (
 )
 
 __all__ = [
+    "BIAS_FAIRNESS_IDS",
     "CASE_REGISTRY",
     "EXPLAINABILITY_IDS",
     "FUNCTIONAL_IDS",

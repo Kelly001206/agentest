@@ -16,7 +16,7 @@
 ## Cases
 
 Each Hub ID is a `CaseSpec` (`make_env`, `golden`, `broken`, `oracle`) in `agentest.cases`.  
-`FUNCTIONAL_IDS` lists the 18-pack order; `PRIVACY_IDS` the 8-pack; `EXPLAINABILITY_IDS` the 5-pack. Multi-run IDs (T1-002, T1-003) use `cases.multi_run`.  
+`FUNCTIONAL_IDS` lists the 18-pack order; `PRIVACY_IDS` the 8-pack; `EXPLAINABILITY_IDS` the 5-pack; `BIAS_FAIRNESS_IDS` the 3-pack (`--suite bias_fairness`, alias `bias`). Multi-run IDs (T1-002, T1-003) use `cases.multi_run`.  
 Privacy extends Env with profiles, multi-tenant stores, consent, exports/emails, and mask oracles.
 
 ## Constraints

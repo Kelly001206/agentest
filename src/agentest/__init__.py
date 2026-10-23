@@ -1,6 +1,6 @@
 """agentest — open-core runner for Agentic AI Test Checklist 110."""
 
-__version__ = "0.4.0a0"
+__version__ = "0.5.0a0"
 
 from agentest.types import Outcome, Result, ToolCall, Trace
 

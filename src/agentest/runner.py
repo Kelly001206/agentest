@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from agentest.cases.registry import (
+    BIAS_FAIRNESS_IDS,
     CASE_REGISTRY,
     EXPLAINABILITY_IDS,
     FUNCTIONAL_IDS,
@@ -11,10 +12,13 @@ from agentest.cases.registry import (
 )
 from agentest.types import Outcome, Result
 
+# Primary suite name: bias_fairness; alias: bias
 SUITE_IDS: dict[str, list[str]] = {
     "functional": list(FUNCTIONAL_IDS),
     "privacy": list(PRIVACY_IDS),
     "explainability": list(EXPLAINABILITY_IDS),
+    "bias_fairness": list(BIAS_FAIRNESS_IDS),
+    "bias": list(BIAS_FAIRNESS_IDS),  # alias
 }
 
 
