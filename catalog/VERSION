@@ -1,6 +1,6 @@
 hub_dataset: srinivaspadmanabhuni/agentic-ai-test-checklist-110
 hub_revision: v1.1.2
-hub_main_sha_at_sync: 7583b647ef3af49199cb72d6a3834f763d3f772c
+hub_main_sha_at_sync: 9c82009fbeb12bfccdf4e8da2d2c934ba5fde339
 sync_check: python scripts/check_hub_sync.py  # offline CI; add --live optionally
 hub_url: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110
 hub_user_guide: USER-GUIDE.md
