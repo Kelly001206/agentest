@@ -1,0 +1,17 @@
+# Minimal Hub v1.1 metadata pin for M0 (not a full CSV rewrite).
+id: T1-001
+title: Terminal postconditions hold after a single agent task
+pack: functional
+hub_revision: v1.1
+priority: P0
+oracle_type: terminal_state
+acceptance: >
+  For expected id→status pairs, ledger matches; unchanged_except(expected_ids);
+  false_completion==0 when claims_success with unmet postconditions.
+example:
+  approve: [R1, R2, R3]
+  reject: [R4]
+  collateral_must_stay_pending: [R5]
+fixture: fresh mock ledger seeded PENDING for ids under test
+broken_agent: claims success without writing correct statuses (false completion)
+implemented_in: agentest@0.1.0a0

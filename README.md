@@ -8,7 +8,7 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 | Surface | Location |
 |:--------|:---------|
 | Catalogue (source of truth) | [`srinivaspadmanabhuni/agentic-ai-test-checklist-110`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110) |
-| Runner (this repo) | `srinivaspadmanabhuni/agentest` |
+| Runner (this repo) | [`srpadmanabhuni/agentest`](https://github.com/srpadmanabhuni/agentest) |
 | Commercial harness | Private (AiEnsured / testAIng) — later |
 
 **Author:** Dr Srinivas Padmanabhuni · srinivas AT testAIng.com · [testAIng.com](https://testaing.com) / [AiEnsured](https://aiensured.com)
@@ -33,15 +33,18 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 ## Quick start (M0)
 
 ```bash
-python -m pip install -e .
-agentest run --suite functional --ids T1-001
+python -m pip install -e ".[dev]"
+agentest run --suite functional --ids T1-001 --agent golden   # exit 0
+agentest run --suite functional --ids T1-001 --agent broken   # exit 1
+pytest
 ```
 
 Every implemented ID must **Pass** a golden agent and **Fail** `examples/broken_agent`.
 
 ## Catalogue pin
 
-See [`catalog/VERSION`](catalog/VERSION). Change packs on Hugging Face first, then sync here. Do not edit Hub CSVs only in this repo.
+See [`catalog/VERSION`](catalog/VERSION) and [`catalog/t1_001.yaml`](catalog/t1_001.yaml).  
+Change packs on Hugging Face first, then sync here. Do not edit Hub CSVs only in this repo.
 
 ## Licence
 

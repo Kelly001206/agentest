@@ -5,12 +5,17 @@
 1. **Hub catalogue** — stable IDs, acceptance criteria, fixtures notes (CC BY 4.0).
 2. **This runner** — CLI, mock gateway, oracles, CI (Apache-2.0).
 
-## Core types
+## Core types (implemented)
 
-- `Env` — fresh mock systems of record (ledger, tickets, …)
-- `Trace` — ordered tool calls + handover events
-- `ToolCall` — name, args, result, allowed?
+- `Env` / `Ledger` — fresh mock systems of record
+- `Trace` / `ToolCall` — ordered tool calls + `claims_success`
+- `ToolGateway` — allowlisted tools (M0: `ledger.set_status`)
 - `Result` — `pass` | `fail` | `unverified` (missing evidence ≠ pass)
+
+## M0 oracle (T1-001)
+
+Terminal postconditions: expected id→status match; `unchanged_except(expected_ids)`;  
+`false_completion` when `claims_success` with unmet postconditions → **Fail**.
 
 ## Oracle rule (explainability, later)
 
