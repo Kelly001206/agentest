@@ -30,7 +30,7 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 | M4 | `v0.5.0` | **Bias / fairness** (3) ✅ |
 | M5 | `v1.0.0-open` | Actions template + Hub cross-links |
 
-## Quick start (M4)
+## Quick start (M6 sample agents)
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
@@ -50,6 +50,20 @@ pytest
 ```
 
 Every implemented ID must **Pass** a golden agent and **Fail** the matching broken behaviour.
+
+
+## Sample agents
+
+Five teaching agents of increasing complexity (`stub` → `reflective`) live in-repo so learners can run the full checklist against real implementations:
+
+```bash
+agentest samples
+agentest run --suite functional --agent stub
+agentest run --suite privacy --agent scripted
+agentest matrix   # all suites × samples (+ golden); stub/eager fails are expected
+```
+
+Details: [`docs/SAMPLE-AGENTS.md`](docs/SAMPLE-AGENTS.md).
 
 ## Explainability
 

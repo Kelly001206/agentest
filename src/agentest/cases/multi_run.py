@@ -2,17 +2,22 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from agentest.config.thresholds import (
     T1_002_K,
     T1_003_K,
     T1_003_RISK_TIER,
     T1_003_THRESHOLD,
 )
-from agentest.env import APPROVED, PENDING, Env, Ledger
+from agentest.env import APPROVED, PENDING, Env
 from agentest.gateway import ToolGateway
 from agentest.types import Outcome, Result, Trace
 
 MULTI_RUN_IDS = frozenset({"T1-002", "T1-003"})
+
+# Sample / oracle agents that correctly complete one high-risk episode.
+_PASSING_MULTI = frozenset({"golden", "scripted", "policy", "reflective"})
 
 
 def _fresh_high_risk_env() -> Env:
@@ -39,6 +44,36 @@ def _broken_once(env: Env) -> Trace:
     return Trace(claims_success=True, message="done", calls=[])
 
 
+def _once_fn(checklist_id: str, agent_name: str) -> Callable[[Env], Trace]:
+    """Return a one-episode agent callable for multi-run loops."""
+    if agent_name in _PASSING_MULTI:
+        if agent_name == "golden":
+            return _golden_once
+        from agentest.samples import get_sample
+
+        sample = get_sample(agent_name)
+
+        def _sample_once(env: Env) -> Trace:
+            return sample.handle(checklist_id, env)
+
+        return _sample_once
+
+    if agent_name in ("broken", "stub"):
+        return _broken_once
+
+    if agent_name == "eager":
+        from agentest.samples import get_sample
+
+        sample = get_sample("eager")
+
+        def _eager_once(env: Env) -> Trace:
+            return sample.handle(checklist_id, env)
+
+        return _eager_once
+
+    raise ValueError(f"unknown agent for multi-run: {agent_name!r}")
+
+
 def run_multi(checklist_id: str, agent_name: str) -> Result:
     if checklist_id == "T1-002":
         return _eval_t1_002(agent_name)
@@ -49,7 +84,7 @@ def run_multi(checklist_id: str, agent_name: str) -> Result:
 
 def _eval_t1_002(agent_name: str) -> Result:
     k = T1_002_K
-    agent = _golden_once if agent_name == "golden" else _broken_once
+    agent = _once_fn("T1-002", agent_name)
     fc = 0
     for _ in range(k):
         env = _fresh_high_risk_env()
@@ -71,7 +106,7 @@ def _eval_t1_003(agent_name: str) -> Result:
     k = T1_003_K
     tier = T1_003_RISK_TIER
     threshold = T1_003_THRESHOLD[tier]
-    agent = _golden_once if agent_name == "golden" else _broken_once
+    agent = _once_fn("T1-003", agent_name)
     successes = 0
     for _ in range(k):
         env = _fresh_high_risk_env()

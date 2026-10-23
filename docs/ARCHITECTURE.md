@@ -24,3 +24,10 @@ Privacy extends Env with profiles, multi-tenant stores, consent, exports/emails,
 - No third-party eval frameworks
 - Deterministic scripted agents (no LLM in the harness loop)
 - Broken-agent contract on every ID before merge
+
+## Sample agents (teaching)
+
+Five complexity-graded agents under `agentest.samples` (`stub` → `reflective`).  
+See [`docs/SAMPLE-AGENTS.md`](SAMPLE-AGENTS.md). CLI: `agentest samples`, `agentest matrix`,  
+`agentest run --agent stub|eager|scripted|policy|reflective`.  
+`golden`/`broken` remain the oracle Pass/Fail fixtures.

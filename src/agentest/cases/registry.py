@@ -12,6 +12,10 @@ AgentFn = Callable[[Env], Trace]
 OracleFn = Callable[[Env, Trace], Result]
 EnvFactory = Callable[[], Env]
 
+ORACLE_AGENTS = ("golden", "broken")
+SAMPLE_AGENTS = ("stub", "eager", "scripted", "policy", "reflective")
+ALL_AGENTS = ORACLE_AGENTS + SAMPLE_AGENTS
+
 
 @dataclass(frozen=True)
 class CaseSpec:
@@ -22,19 +26,24 @@ class CaseSpec:
     oracle: OracleFn
 
     def run(self, agent_name: str) -> Result:
-        if agent_name not in ("golden", "broken"):
-            raise ValueError(f"unknown agent {agent_name!r}")
-        env = self.make_env()
-        agent = self.golden if agent_name == "golden" else self.broken
-        # Multi-run cases (T1-002/003) implement oracle that drives agents internally.
-        # Convention: if oracle ignores the pre-built env/trace pattern, agent fns
-        # still exist for single-shot IDs. For multi-run, we call a special runner.
+        if agent_name not in ALL_AGENTS:
+            raise ValueError(
+                f"unknown agent {agent_name!r}; choose one of: {', '.join(ALL_AGENTS)}"
+            )
         from agentest.cases import multi_run
 
         if self.checklist_id in multi_run.MULTI_RUN_IDS:
             return multi_run.run_multi(self.checklist_id, agent_name)
 
-        trace = agent(env)
+        env = self.make_env()
+        if agent_name == "golden":
+            trace = self.golden(env)
+        elif agent_name == "broken":
+            trace = self.broken(env)
+        else:
+            from agentest.samples import get_sample
+
+            trace = get_sample(agent_name).handle(self.checklist_id, env)
         return self.oracle(env, trace)
 
 

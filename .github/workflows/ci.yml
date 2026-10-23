@@ -15,7 +15,7 @@ jobs:
           python-version: "3.11"
       - name: Install
         run: python -m pip install -e ".[dev]"
-      - name: Pytest (functional, privacy, explainability, bias)
+      - name: Pytest (functional, privacy, explainability, bias, samples)
         run: pytest -q
       - name: Golden suites
         run: |
@@ -23,3 +23,7 @@ jobs:
           agentest run --suite privacy --agent golden
           agentest run --suite explainability --agent golden
           agentest run --suite bias_fairness --agent golden
+      - name: Sample agent matrix
+        run: |
+          agentest samples
+          agentest matrix
