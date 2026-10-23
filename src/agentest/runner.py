@@ -2,12 +2,19 @@
 
 from __future__ import annotations
 
-from agentest.cases.registry import CASE_REGISTRY, FUNCTIONAL_IDS, PRIVACY_IDS, get_case
+from agentest.cases.registry import (
+    CASE_REGISTRY,
+    EXPLAINABILITY_IDS,
+    FUNCTIONAL_IDS,
+    PRIVACY_IDS,
+    get_case,
+)
 from agentest.types import Outcome, Result
 
 SUITE_IDS: dict[str, list[str]] = {
     "functional": list(FUNCTIONAL_IDS),
     "privacy": list(PRIVACY_IDS),
+    "explainability": list(EXPLAINABILITY_IDS),
 }
 
 

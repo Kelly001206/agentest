@@ -39,7 +39,7 @@ class CaseSpec:
 
 
 def _build_registry() -> dict[str, CaseSpec]:
-    from agentest.cases import privacy, t1, t2, t5, t6
+    from agentest.cases import explainability, privacy, t1, t2, t5, t6
 
     specs: list[CaseSpec] = []
     specs.extend(t1.all_cases())
@@ -47,6 +47,7 @@ def _build_registry() -> dict[str, CaseSpec]:
     specs.extend(t5.all_cases())
     specs.extend(t6.all_cases())
     specs.extend(privacy.all_cases())
+    specs.extend(explainability.all_cases())
     return {s.checklist_id: s for s in specs}
 
 
@@ -82,6 +83,14 @@ PRIVACY_IDS: list[str] = [
     "T5-011",
     "T6-004",
     "T7-014",
+]
+
+EXPLAINABILITY_IDS: list[str] = [
+    "T1-018",
+    "T3-006",
+    "T5-015",
+    "T6-007",
+    "T7-009",
 ]
 
 

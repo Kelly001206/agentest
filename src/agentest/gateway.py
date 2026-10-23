@@ -48,6 +48,9 @@ WRITE_TOOLS = frozenset(
         "consent.grant",
         "consent.revoke",
         "share_partner",
+        "db.write",
+        "refund",
+        "memory.read",
     }
 )
 
@@ -73,7 +76,17 @@ class ToolGateway:
         self.env = env
         self.trace = trace if trace is not None else Trace()
 
-    def call(self, name: str, **args: Any) -> Any:
+    def call(
+        self,
+        name: str,
+        *,
+        reason: str | None = None,
+        meta: dict[str, Any] | None = None,
+        **args: Any,
+    ) -> Any:
+        call_meta: dict[str, Any] = dict(meta or {})
+        if reason is not None:
+            call_meta["reason"] = reason
         try:
             result = self._dispatch(name, args)
             succeeded = True
@@ -89,6 +102,7 @@ class ToolGateway:
             result=result,
             allowed=True,
             succeeded=succeeded,
+            meta=call_meta,
         )
         self.trace.record(tc)
         if err is not None:
@@ -306,6 +320,22 @@ class ToolGateway:
         if name == "search_users":
             # Intentionally records args for T5-004 PII inspection
             return {"ok": True, "q": args.get("q", "")}
+
+        if name == "db.write":
+            env.db_ok = True
+            env.extras["db_record"] = dict(args)
+            return {"ok": True}
+
+        if name == "refund":
+            oid = args.get("order_id", "O?")
+            env.extras["refunded"] = oid
+            return {"refunded": oid}
+
+        if name == "memory.read":
+            key = args["key"]
+            env.memory_reads.append(key)
+            found = key in env.memory
+            return {"key": key, "found": found, "value": key if found else None}
 
         raise ValueError(f"unknown tool: {name}")
 

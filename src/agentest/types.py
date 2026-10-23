@@ -34,6 +34,7 @@ class ToolCall:
     result: Any = None
     allowed: bool = True
     succeeded: bool = True
+    meta: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -43,6 +44,11 @@ class Trace:
     calls: list[ToolCall] = field(default_factory=list)
     claims_success: bool = False
     message: str = ""
+    # Explainability pack fields
+    api_success: bool | None = None
+    memory_citations: list[str] = field(default_factory=list)
+    explanation: str = ""
+    cited_steps: list[str] = field(default_factory=list)  # tool/handover names claimed in explanation
 
     def record(self, call: ToolCall) -> None:
         self.calls.append(call)

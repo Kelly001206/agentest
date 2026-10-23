@@ -64,6 +64,47 @@ class NotifyMock:
 
 
 @dataclass
+class AuthzEntry:
+    """Independent authz decision recorded by a receiving agent (T3-006)."""
+
+    actor: str
+    decision: str  # allow | deny
+    policy_version: str
+    task: str = ""
+    resource: str = ""
+
+
+@dataclass
+class AuthzLog:
+    entries: list[AuthzEntry] = field(default_factory=list)
+
+    def record(
+        self,
+        *,
+        actor: str,
+        decision: str,
+        policy_version: str,
+        task: str = "",
+        resource: str = "",
+    ) -> AuthzEntry:
+        entry = AuthzEntry(
+            actor=actor,
+            decision=decision,
+            policy_version=policy_version,
+            task=task,
+            resource=resource,
+        )
+        self.entries.append(entry)
+        return entry
+
+    def last(self, actor: str | None = None) -> AuthzEntry | None:
+        for entry in reversed(self.entries):
+            if actor is None or entry.actor == actor:
+                return entry
+        return None
+
+
+@dataclass
 class TenantStore:
     """Per-tenant durable store with write counter."""
 
@@ -122,6 +163,12 @@ class Env:
     post_revoke_share_calls: int = 0
     denied: bool = False
 
+    # Explainability pack
+    authz_log: AuthzLog = field(default_factory=AuthzLog)
+    memory: list[str] = field(default_factory=list)
+    memory_reads: list[str] = field(default_factory=list)
+    db_ok: bool = False  # terminal world-state for T1-018
+
     def snapshot(self) -> dict[str, Any]:
         """Business-store snapshot for diff / side-effect fence."""
         snap: dict[str, Any] = {}
@@ -178,4 +225,19 @@ class Env:
             emails=deepcopy(self.emails),
             post_revoke_share_calls=self.post_revoke_share_calls,
             denied=self.denied,
+            authz_log=AuthzLog(
+                entries=[
+                    AuthzEntry(
+                        actor=e.actor,
+                        decision=e.decision,
+                        policy_version=e.policy_version,
+                        task=e.task,
+                        resource=e.resource,
+                    )
+                    for e in self.authz_log.entries
+                ]
+            ),
+            memory=list(self.memory),
+            memory_reads=list(self.memory_reads),
+            db_ok=self.db_ok,
         )

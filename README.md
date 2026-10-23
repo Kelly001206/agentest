@@ -26,32 +26,38 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 | M0 | `v0.1.0` | CLI + gateway + **T1-001** |
 | M1 | `v0.2.0` | Full **functional** pack (18 IDs) ✅ |
 | M2 | `v0.3.0` | **Privacy** (8) ✅ |
-| M3 | `v0.4.0` | **Explainability** (5) |
+| M3 | `v0.4.0` | **Explainability** (5) ✅ |
 | M4 | `v0.5.0` | **Bias** (3) + broken_agent suite |
 | M5 | `v1.0.0-open` | Actions template + Hub cross-links |
 
-## Quick start (M2)
+## Quick start (M3)
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
 python -m pip install -e ".[dev]"
 
-# Functional (18) + Privacy (8)
-agentest run --suite functional --agent golden    # exit 0
-agentest run --suite privacy --agent golden       # exit 0
-agentest run --suite privacy --agent broken       # exit 1
+# Functional (18) + Privacy (8) + Explainability (5)
+agentest run --suite functional --agent golden         # exit 0
+agentest run --suite privacy --agent golden            # exit 0
+agentest run --suite explainability --agent golden     # exit 0
+agentest run --suite explainability --agent broken     # exit 1
 
 # Single ID
-agentest run --suite privacy --ids T5-004 --agent golden
+agentest run --suite explainability --ids T7-009 --agent golden
 
 pytest
 ```
 
 Every implemented ID must **Pass** a golden agent and **Fail** the matching broken behaviour.
 
+## Explainability
+
+- Trace-faithful oracles only (fluency does not score): [`docs/EXPLAINABILITY-ORACLE.md`](docs/EXPLAINABILITY-ORACLE.md)
+- Research & algorithm map (TRACE, ReAct, TRAJECT-Bench, AgentDiagnose, RAG-style citations): [`docs/EXPLAINABILITY-RESEARCH.md`](docs/EXPLAINABILITY-RESEARCH.md)
+
 ## Catalogue pin
 
-See [`catalog/VERSION`](catalog/VERSION), [`catalog/functional.csv`](catalog/functional.csv), and [`catalog/privacy.csv`](catalog/privacy.csv) (Hub v1.1 packs).  
+See [`catalog/VERSION`](catalog/VERSION), [`catalog/functional.csv`](catalog/functional.csv), [`catalog/privacy.csv`](catalog/privacy.csv), and [`catalog/explainability.csv`](catalog/explainability.csv) (Hub v1.1 packs).  
 Change packs on Hugging Face first, then sync here.
 
 ## Licence
