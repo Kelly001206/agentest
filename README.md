@@ -8,8 +8,10 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 | Surface | Location |
 |:--------|:---------|
 | Catalogue (source of truth) | [`srinivaspadmanabhuni/agentic-ai-test-checklist-110`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110) |
+| Hub **User guide** | [`USER-GUIDE.md`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md) |
 | Orchestration pack (Hub) | [`packs/orchestration.csv`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/packs/orchestration.csv) |
 | Runner (this repo) | [`srpadmanabhuni/agentest`](https://github.com/srpadmanabhuni/agentest) |
+| Developer guide (GitHub standalone) | [`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md) |
 | Commercial harness | Private (AiEnsured / testAIng) — later |
 
 **Author:** Dr Srinivas Padmanabhuni · srinivas AT testAIng.com · [testAIng.com](https://testaing.com) / [AiEnsured](https://aiensured.com)
@@ -36,7 +38,8 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 
 **Only have this GitHub link?** You can install and test any agent **without Hugging Face**.
 
-→ **[`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md)** — install offline, run suites, bring your own agent, extend cases, CI mirror.
+→ **[`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md)** — install offline, run suites, bring your own agent, extend cases, CI mirror.  
+Hub-first visitors: **[USER-GUIDE.md on Hugging Face](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md)**.
 
 ## Quick start (M6 sample agents)
 
@@ -89,8 +92,8 @@ Details: [`docs/SAMPLE-AGENTS.md`](docs/SAMPLE-AGENTS.md).
 
 ## Catalogue pin
 
-See [`catalog/VERSION`](catalog/VERSION), [`catalog/functional.csv`](catalog/functional.csv), [`catalog/privacy.csv`](catalog/privacy.csv), [`catalog/explainability.csv`](catalog/explainability.csv), and [`catalog/bias_fairness.csv`](catalog/bias_fairness.csv) (Hub v1.1 packs).  
-Change packs on Hugging Face first, then sync here.
+See [`catalog/VERSION`](catalog/VERSION) (pinned Hub **v1.1.2**), plus vendored [`catalog/functional.csv`](catalog/functional.csv), [`catalog/privacy.csv`](catalog/privacy.csv), [`catalog/explainability.csv`](catalog/explainability.csv), [`catalog/bias_fairness.csv`](catalog/bias_fairness.csv), and [`catalog/orchestration.csv`](catalog/orchestration.csv).  
+Change packs on Hugging Face first, then sync here. Hub visitors: start with [USER-GUIDE.md](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md).
 
 ## Licence
 

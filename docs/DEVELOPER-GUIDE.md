@@ -7,8 +7,9 @@ agent, and (optionally) extend suites later.
 
 **Audience:** developers who have only the GitHub link.  
 **Runner version:** `0.7.0a0` (see `pyproject.toml`).  
-**Pinned catalogue:** Hub `v1.1.1` packs vendored under `catalog/` (see
-`catalog/VERSION`).
+**Pinned catalogue:** Hub `v1.1.2` packs vendored under `catalog/` (see
+`catalog/VERSION`).  
+Hub-first narrative (same packs): [USER-GUIDE.md](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md).
 
 Related short docs: [`ARCHITECTURE.md`](ARCHITECTURE.md),
 [`SAMPLE-AGENTS.md`](SAMPLE-AGENTS.md), [`ORCHESTRATION.md`](ORCHESTRATION.md).

@@ -1,10 +1,12 @@
 hub_dataset: srinivaspadmanabhuni/agentic-ai-test-checklist-110
-hub_revision: v1.1.1
+hub_revision: v1.1.2
 hub_url: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110
+hub_user_guide: USER-GUIDE.md
+hub_user_guide_url: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md
 hub_pack_orchestration: packs/orchestration.csv
 hub_pack_orchestration_url: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/packs/orchestration.csv
 hub_pack_orchestration_commit: 27b1f2d664243cd9b971a50ff026a20da6165b7b
-note: Pack CSVs are synced byte-identical from Hub. Never edit pack CSVs only in this repo — sync from Hub.
+note: Pack CSVs are synced byte-identical from Hub. Never edit pack CSVs only in this repo — sync from Hub. Hub USER-GUIDE documents catalogue + runner path for Hub visitors.
 packs_in_scope: functional,privacy,explainability,bias_fairness,orchestration
 packs_parked: security
 runner_note: orchestration is a runner theme pack selecting Hub T3/T2 IDs; Hub has no separate eval_group=orchestration (still 110 rows).
