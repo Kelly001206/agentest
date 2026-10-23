@@ -4,6 +4,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![HF dataset](https://img.shields.io/badge/Hugging%20Face-checklist%20110-yellow.svg)](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+[![HF downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fhuggingface.co%2Fapi%2Fdatasets%2Fsrinivaspadmanabhuni%2Fagentic-ai-test-checklist-110&query=%24.downloads&label=HF%20downloads&color=yellow)](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
 [![Zenodo](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23587407-blue.svg)](https://doi.org/10.5281/zenodo.23587407)
 
 **Offline open-core runner for the [Agentic AI Test Checklist 110](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110).**  
@@ -21,6 +22,20 @@ agentest samples            # 15 teaching agents (1–15)
 agentest run --suite functional --agent golden
 agentest matrix             # green ladder must stay 42/42
 ```
+
+
+## Prefer the Hub catalogue first?
+
+```python
+# pip install datasets — this increments Hub downloads
+from datasets import load_dataset
+ds = load_dataset("srinivaspadmanabhuni/agentic-ai-test-checklist-110", "p0_smoke")
+print(ds["train"][0]["id"], ds["train"][0]["title"])
+```
+
+60s notebook on Hub: [`notebooks/load_checklist_60s.ipynb`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/notebooks/load_checklist_60s.ipynb) · User guide: [`USER-GUIDE.md`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md)
+
+This repo stays the **offline runner** (packs under `catalog/` — no Hub needed at runtime).
 
 Developer guide (GitHub-only path): [`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md) · Launch copy: [`docs/launch/`](docs/launch/)
 
@@ -55,6 +70,7 @@ Developer guide (GitHub-only path): [`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-G
 | M5c | `v0.9.0a0` | Expected-fail scenarios **11–15** (`leaky`…`flaky_plan`) ✅ |
 | M5d | `v0.9.1a0` | Hub↔GitHub sync check (`scripts/check_hub_sync.py`) ✅ |
 | M5e | `v0.9.2a0` | Launch hygiene + `docs/launch/` ready copy ✅ |
+| M5f | `v0.9.3a0` | HF downloads badge + Hub-first CTA (wave 1 sync) ✅ |
 | M6 | `v1.0.0-open` | Actions template + Hub cross-links |
 
 ## Suites
