@@ -22,7 +22,7 @@ class ScriptedAgent(SampleAgent):
     complexity = 3
     description = (
         "Dispatch table: for each checklist ID, run the case golden sequence "
-        "(reference playbook). Passes all 34 IDs — teaching step before policy."
+        "(reference playbook). Passes all checklist IDs (incl. orchestration via golden) — teaching step before policy."
     )
 
     def handle(self, checklist_id: str, env: Env) -> Trace:

@@ -8,6 +8,7 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 | Surface | Location |
 |:--------|:---------|
 | Catalogue (source of truth) | [`srinivaspadmanabhuni/agentic-ai-test-checklist-110`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110) |
+| Orchestration pack (Hub) | [`packs/orchestration.csv`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/packs/orchestration.csv) |
 | Runner (this repo) | [`srpadmanabhuni/agentest`](https://github.com/srpadmanabhuni/agentest) |
 | Commercial harness | Private (AiEnsured / testAIng) — later |
 
@@ -28,7 +29,8 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 | M2 | `v0.3.0` | **Privacy** (8) ✅ |
 | M3 | `v0.4.0` | **Explainability** (5) ✅ |
 | M4 | `v0.5.0` | **Bias / fairness** (3) ✅ |
-| M5 | `v1.0.0-open` | Actions template + Hub cross-links |
+| M5 | `v0.7.0a0` | **Orchestration** theme (8 Hub IDs) + samples 6–7 ✅ |
+| M6 | `v1.0.0-open` | Actions template + Hub cross-links |
 
 ## Quick start (M6 sample agents)
 
@@ -41,6 +43,7 @@ agentest run --suite functional --agent golden         # exit 0
 agentest run --suite privacy --agent golden            # exit 0
 agentest run --suite explainability --agent golden     # exit 0
 agentest run --suite bias_fairness --agent golden      # exit 0 (alias: --suite bias)
+agentest run --suite orchestration --agent golden      # exit 0 (alias: --suite orch)
 agentest run --suite bias --agent broken               # exit 1
 
 # Single ID
@@ -54,10 +57,12 @@ Every implemented ID must **Pass** a golden agent and **Fail** the matching brok
 
 ## Sample agents
 
-Five teaching agents of increasing complexity (`stub` → `reflective`) live in-repo so learners can run the full checklist against real implementations:
+Seven teaching agents of increasing complexity (`stub` → `handoff`) live in-repo so learners can run the full checklist against real implementations:
 
 ```bash
-agentest samples
+agentest samples   # stub…handoff (1–7)
+agentest run --suite orchestration --agent supervisor
+agentest run --suite orchestration --agent handoff
 agentest run --suite functional --agent stub
 agentest run --suite privacy --agent scripted
 agentest matrix   # all suites × samples (+ golden); stub/eager fails are expected

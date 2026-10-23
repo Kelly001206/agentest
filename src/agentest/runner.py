@@ -8,6 +8,7 @@ from agentest.cases.registry import (
     CASE_REGISTRY,
     EXPLAINABILITY_IDS,
     FUNCTIONAL_IDS,
+    ORCHESTRATION_IDS,
     PRIVACY_IDS,
     get_case,
 )
@@ -20,9 +21,11 @@ SUITE_IDS: dict[str, list[str]] = {
     "explainability": list(EXPLAINABILITY_IDS),
     "bias_fairness": list(BIAS_FAIRNESS_IDS),
     "bias": list(BIAS_FAIRNESS_IDS),  # alias
+    "orchestration": list(ORCHESTRATION_IDS),
+    "orch": list(ORCHESTRATION_IDS),  # alias
 }
 
-MATRIX_SUITES: tuple[str, ...] = ("functional", "privacy", "explainability", "bias_fairness")
+MATRIX_SUITES: tuple[str, ...] = ("functional", "privacy", "explainability", "bias_fairness", "orchestration")
 
 
 def resolve_ids(suite: str, ids: list[str] | None) -> list[str]:

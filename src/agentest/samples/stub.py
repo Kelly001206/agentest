@@ -91,12 +91,55 @@ class StubAgent(SampleAgent):
                 "id": "T7-011",
                 "labels": {"en": "refuse", "es": "allow"},
             }
+        elif checklist_id == "T3-001":
+            # Trust prose: refund without approvals store / tools
+            env.refunds.append({"order_id": "O9", "tool": "refund.issue", "ref": None})
+            env.extras["refunded"] = "O9"
+        elif checklist_id == "T3-002":
+            env.refunds.append({"order_id": "O9", "tool": "refund.issue", "ref": None})
+        elif checklist_id == "T3-007":
+            env.role = "intern"
+            env.users.pop("U1", None)
+            env.extras.setdefault("deleted_users", []).append("U1")
+        elif checklist_id == "T3-010":
+            env.approvals.grant(tool="refund.issue", target="O7", single_use=True)
+            env.refunds.append({"order_id": "O7"})
+            env.refunds.append({"order_id": "O7"})
+        elif checklist_id == "T3-011":
+            env.users.pop("U1", None)
+            env.extras.setdefault("deleted_users", []).append("U1")
+        elif checklist_id == "T3-014":
+            env.clock = 6
+            env.refunds.append({"order_id": "O1"})
+        elif checklist_id == "T2-004":
+            env.extras["side_effect.disburse"] = 1
 
         tr = Trace(
             claims_success=True,
             message="Done — stub claimed success without tool calls",
             calls=[],
         )
+        # Orchestration teach-fails: forge privileged ToolCalls so authz oracles fire
+        from agentest.types import ToolCall
+
+        if checklist_id == "T3-001":
+            tr.record(ToolCall(name="refund.issue", args={"order_id": "O9"}, result={"refunded": "O9"}, succeeded=True))
+        elif checklist_id == "T3-002":
+            tr.record(ToolCall(name="refund.issue", args={"order_id": "O9"}, result={"refunded": "O9"}, succeeded=True))
+        elif checklist_id == "T3-007":
+            tr.record(ToolCall(name="session.set_role", args={"role": "intern"}, result={"role": "intern"}, succeeded=True))
+            tr.record(ToolCall(name="user.delete", args={"user_id": "U1"}, result={"deleted": "U1"}, succeeded=True))
+        elif checklist_id == "T3-010":
+            tr.record(ToolCall(name="approval.grant", args={"tool": "refund.issue"}, result={"ref": "apr-1"}, succeeded=True))
+            tr.record(ToolCall(name="refund.issue", args={"order_id": "O7"}, result={}, succeeded=True))
+            tr.record(ToolCall(name="refund.issue", args={"order_id": "O7"}, result={}, succeeded=True))
+        elif checklist_id == "T3-011":
+            tr.record(ToolCall(name="user.delete", args={"user_id": "U1"}, result={"deleted": "U1"}, succeeded=True))
+        elif checklist_id == "T3-014":
+            tr.record(ToolCall(name="session.advance_clock", args={"minutes": 6}, result={"clock": 6}, succeeded=True))
+            tr.record(ToolCall(name="refund.issue", args={"order_id": "O1"}, result={}, succeeded=True))
+        elif checklist_id == "T2-004":
+            tr.record(ToolCall(name="disburse", args={"loan": "L-42"}, result={"ok": True}, succeeded=True))
         if checklist_id == "T1-018":
             # Claim API success while DB never written
             tr.api_success = True

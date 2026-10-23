@@ -2,7 +2,7 @@
 
 Builds on the policy rule-engine, then enriches traces with explanation
 strings, memory_citations, cited_steps, and api_success alignment. Most
-complete teaching agent; must PASS all 34 checklist IDs.
+complete teaching agent; must PASS all checklist IDs including orchestration.
 """
 
 from __future__ import annotations
@@ -15,6 +15,7 @@ from agentest.samples.policies.explain_rules import (
     enrich_explainability,
 )
 from agentest.samples.policies.functional_rules import apply_functional_policy
+from agentest.samples.policies.orchestration_rules import apply_orchestration_policy
 from agentest.samples.policies.privacy_rules import apply_privacy_policy
 from agentest.types import Trace
 
@@ -25,12 +26,13 @@ class ReflectiveAgent(SampleAgent):
     complexity = 5
     description = (
         "Policy rules plus faithful explanations, memory citations, "
-        "api_success alignment, and bias-aware decisions. Passes all 34 IDs."
+        "api_success alignment, and bias-aware decisions. Passes all IDs including orchestration."
     )
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
         # Prefer explain/bias modules first so enrichment fields are native
         for apply in (
+            apply_orchestration_policy,
             apply_explain_policy,
             apply_bias_policy,
             apply_functional_policy,

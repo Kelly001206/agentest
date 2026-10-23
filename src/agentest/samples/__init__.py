@@ -1,13 +1,15 @@
-"""Teaching sample agents (complexity 1–5) for the checklist harness."""
+"""Teaching sample agents (complexity 1–7) for the checklist harness."""
 
 from __future__ import annotations
 
 from agentest.samples.base import SampleAgent, SampleAgentInfo
 from agentest.samples.eager import EagerAgent
+from agentest.samples.handoff import HandoffAgent
 from agentest.samples.policy import PolicyAgent
 from agentest.samples.reflective import ReflectiveAgent
 from agentest.samples.scripted import ScriptedAgent
 from agentest.samples.stub import StubAgent
+from agentest.samples.supervisor import SupervisorAgent
 
 SAMPLE_AGENT_NAMES: tuple[str, ...] = (
     "stub",
@@ -15,10 +17,14 @@ SAMPLE_AGENT_NAMES: tuple[str, ...] = (
     "scripted",
     "policy",
     "reflective",
+    "supervisor",
+    "handoff",
 )
 
-# Agents expected to pass the full 34-ID matrix (oracle reference + teaching).
-MATRIX_MUST_PASS: frozenset[str] = frozenset({"scripted", "policy", "reflective", "golden"})
+# Agents expected to pass the full matrix (oracle reference + teaching).
+MATRIX_MUST_PASS: frozenset[str] = frozenset(
+    {"scripted", "policy", "reflective", "supervisor", "handoff", "golden"}
+)
 
 _REGISTRY: dict[str, SampleAgent] | None = None
 
@@ -30,6 +36,8 @@ def _build() -> dict[str, SampleAgent]:
         ScriptedAgent(),
         PolicyAgent(),
         ReflectiveAgent(),
+        SupervisorAgent(),
+        HandoffAgent(),
     ]
     return {a.name: a for a in agents}
 

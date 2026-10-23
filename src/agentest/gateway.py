@@ -51,6 +51,19 @@ WRITE_TOOLS = frozenset(
         "db.write",
         "refund",
         "memory.read",
+        # orchestration
+        "handover.write",
+        "approval.grant",
+        "approval.consume",
+        "session.set_role",
+        "session.set_ttl",
+        "session.advance_clock",
+        "refund.issue",
+        "issue_refund",
+        "user.delete",
+        "admin_delete",
+        "grant_role",
+        "authz.decide",
     }
 )
 
@@ -87,10 +100,23 @@ class ToolGateway:
         call_meta: dict[str, Any] = dict(meta or {})
         if reason is not None:
             call_meta["reason"] = reason
+        # Optional authz gate (orchestration pack teaching agents set enforce_authz)
+        from agentest.policy import HIGH_PRIV, permits
+
+        blocked = False
+        if self.env.enforce_authz and name in HIGH_PRIV:
+            target = str(args.get("target") or args.get("order_id") or args.get("user_id") or args.get("loan") or "")
+            if not permits(self.env, self.env.actor, name, target):
+                blocked = True
+                result = {"error": "authz_denied", "tool": name, "actor": self.env.actor, "role": self.env.role}
+                succeeded = False
+                err = PermissionError(f"authz denied: {self.env.role}/{self.env.actor} → {name}")
+                call_meta["authz"] = "deny"
         try:
-            result = self._dispatch(name, args)
-            succeeded = True
-            err = None
+            if not blocked:
+                result = self._dispatch(name, args)
+                succeeded = True
+                err = None
         except Exception as exc:  # noqa: BLE001 — record failed tool attempts
             result = {"error": str(exc)}
             succeeded = False
@@ -336,6 +362,94 @@ class ToolGateway:
             env.memory_reads.append(key)
             found = key in env.memory
             return {"key": key, "found": found, "value": key if found else None}
+
+
+        # --- orchestration pack tools ---
+        if name == "handover.write":
+            note = args.get("note") or args.get("text") or ""
+            env.handover_notes = str(note)
+            env.extras["last_handover"] = {
+                "note": note,
+                "task": args.get("task"),
+                "to_role": args.get("to_role"),
+                "contract": args.get("contract"),
+            }
+            return {"ok": True, "note": note}
+
+        if name == "approval.grant":
+            tok = env.approvals.grant(
+                tool=args["tool"],
+                target=args.get("target", ""),
+                single_use=bool(args.get("single_use", True)),
+                granted_by=args.get("granted_by") or env.actor,
+                ref=args.get("ref"),
+            )
+            return {"ref": tok.ref, "tool": tok.tool, "target": tok.target}
+
+        if name == "approval.consume":
+            tok = env.approvals.consume(args["ref"])
+            return {"ref": tok.ref, "consumed": tok.consumed, "tool": tok.tool}
+
+        if name == "session.set_role":
+            env.role = str(args["role"])
+            if "actor" in args:
+                env.actor = str(args["actor"])
+            return {"role": env.role, "actor": env.actor}
+
+        if name == "session.set_ttl":
+            # ttl minutes from current clock
+            ttl = int(args.get("ttl") or args.get("ttl_minutes") or 5)
+            env.session_expires_at = int(env.clock) + ttl
+            return {"session_expires_at": env.session_expires_at, "clock": env.clock}
+
+        if name == "session.advance_clock":
+            delta = int(args.get("minutes") or args.get("delta") or 1)
+            env.clock = int(env.clock) + delta
+            return {"clock": env.clock, "session_expires_at": env.session_expires_at}
+
+        if name in ("refund.issue", "issue_refund"):
+            oid = args.get("order_id") or args.get("target") or args.get("order") or "O?"
+            # Optional consume of approval ref if provided
+            ref = args.get("approval_ref") or args.get("ref")
+            if ref:
+                env.approvals.consume(ref)
+            entry = {"order_id": oid, "tool": name, "ref": ref}
+            env.refunds.append(entry)
+            env.extras["refunded"] = oid
+            return {"refunded": oid, "count": len(env.refunds)}
+
+        if name == "user.delete":
+            uid = args["user_id"]
+            env.users.pop(uid, None)
+            env.extras.setdefault("deleted_users", []).append(uid)
+            return {"deleted": uid}
+
+        if name == "admin_delete":
+            target = args.get("target") or args.get("user_id") or "X"
+            env.extras.setdefault("admin_deletes", []).append(target)
+            return {"admin_deleted": target}
+
+        if name == "grant_role":
+            env.extras.setdefault("roles_granted", []).append(dict(args))
+            return {"granted": args}
+
+        if name == "authz.decide":
+            decision = args.get("decision", "deny")
+            policy_version = args.get("policy_version", "v1")
+            actor = args.get("actor") or env.actor
+            entry = env.authz_log.record(
+                actor=actor,
+                decision=decision,
+                policy_version=policy_version,
+                task=args.get("task", ""),
+                resource=args.get("resource", ""),
+            )
+            return {
+                "decision": entry.decision,
+                "policy_version": entry.policy_version,
+                "actor": entry.actor,
+            }
+
 
         raise ValueError(f"unknown tool: {name}")
 

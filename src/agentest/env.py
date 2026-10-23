@@ -104,6 +104,98 @@ class AuthzLog:
         return None
 
 
+
+
+@dataclass
+class ApprovalToken:
+    """Single-use (or multi) approval record in the durable approvals store."""
+
+    ref: str
+    tool: str
+    target: str = ""
+    single_use: bool = True
+    consumed: bool = False
+    granted_by: str = ""
+
+
+_REFUND_ALIASES = frozenset({"refund.issue", "issue_refund", "refund"})
+
+
+@dataclass
+class ApprovalsStore:
+    """Durable approval tokens — handover prose is NOT a substitute."""
+
+    tokens: dict[str, ApprovalToken] = field(default_factory=dict)
+    _seq: int = 0
+
+    def clear(self) -> None:
+        self.tokens.clear()
+
+    def grant(
+        self,
+        *,
+        tool: str,
+        target: str = "",
+        single_use: bool = True,
+        granted_by: str = "",
+        ref: str | None = None,
+    ) -> ApprovalToken:
+        self._seq += 1
+        token_ref = ref or f"apr-{self._seq}"
+        tok = ApprovalToken(
+            ref=token_ref,
+            tool=tool,
+            target=target,
+            single_use=single_use,
+            consumed=False,
+            granted_by=granted_by,
+        )
+        self.tokens[token_ref] = tok
+        return tok
+
+    def get(self, ref: str) -> ApprovalToken | None:
+        return self.tokens.get(ref)
+
+    @staticmethod
+    def _tool_match(token_tool: str, tool: str) -> bool:
+        if token_tool == tool:
+            return True
+        return token_tool in _REFUND_ALIASES and tool in _REFUND_ALIASES
+
+    def has_valid(self, *, tool: str, target: str = "") -> bool:
+        for tok in self.tokens.values():
+            if tok.consumed:
+                continue
+            if not self._tool_match(tok.tool, tool):
+                continue
+            if target and tok.target and tok.target != target:
+                continue
+            return True
+        return False
+
+    def consume(self, ref: str) -> ApprovalToken:
+        tok = self.tokens.get(ref)
+        if tok is None:
+            raise KeyError(f"unknown approval ref: {ref}")
+        if tok.consumed:
+            raise PermissionError(f"approval token already consumed: {ref}")
+        if tok.single_use:
+            tok.consumed = True
+        return tok
+
+    def clone(self) -> "ApprovalsStore":
+        other = ApprovalsStore(_seq=self._seq)
+        for ref, tok in self.tokens.items():
+            other.tokens[ref] = ApprovalToken(
+                ref=tok.ref,
+                tool=tok.tool,
+                target=tok.target,
+                single_use=tok.single_use,
+                consumed=tok.consumed,
+                granted_by=tok.granted_by,
+            )
+        return other
+
 @dataclass
 class TenantStore:
     """Per-tenant durable store with write counter."""
@@ -168,6 +260,19 @@ class Env:
     memory: list[str] = field(default_factory=list)
     memory_reads: list[str] = field(default_factory=list)
     db_ok: bool = False  # terminal world-state for T1-018
+
+    # Orchestration pack (multi-agent handoff / HITL)
+    approvals: ApprovalsStore = field(default_factory=ApprovalsStore)
+    actor: str = "agent"
+    role: str = "worker"  # supervisor | worker | intern | triage
+    clock: int = 0  # minutes (logical clock)
+    session_expires_at: int | None = None  # exclusive expiry in clock units
+    handover_notes: str = ""
+    refunds: list[dict[str, Any]] = field(default_factory=list)
+    require_approval_for_disburse: bool = True
+    enforce_authz: bool = False  # when True, gateway blocks unpermitted HIGH_PRIV
+    inbox: list[dict[str, Any]] = field(default_factory=list)  # agent-to-agent messages
+
 
     def snapshot(self) -> dict[str, Any]:
         """Business-store snapshot for diff / side-effect fence."""
@@ -240,4 +345,14 @@ class Env:
             memory=list(self.memory),
             memory_reads=list(self.memory_reads),
             db_ok=self.db_ok,
+            approvals=self.approvals.clone(),
+            actor=self.actor,
+            role=self.role,
+            clock=self.clock,
+            session_expires_at=self.session_expires_at,
+            handover_notes=self.handover_notes,
+            refunds=deepcopy(self.refunds),
+            require_approval_for_disburse=self.require_approval_for_disburse,
+            enforce_authz=self.enforce_authz,
+            inbox=deepcopy(self.inbox),
         )

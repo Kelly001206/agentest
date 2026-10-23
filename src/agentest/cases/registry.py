@@ -13,7 +13,7 @@ OracleFn = Callable[[Env, Trace], Result]
 EnvFactory = Callable[[], Env]
 
 ORACLE_AGENTS = ("golden", "broken")
-SAMPLE_AGENTS = ("stub", "eager", "scripted", "policy", "reflective")
+SAMPLE_AGENTS = ("stub", "eager", "scripted", "policy", "reflective", "supervisor", "handoff")
 ALL_AGENTS = ORACLE_AGENTS + SAMPLE_AGENTS
 
 
@@ -48,7 +48,7 @@ class CaseSpec:
 
 
 def _build_registry() -> dict[str, CaseSpec]:
-    from agentest.cases import bias, explainability, privacy, t1, t2, t5, t6
+    from agentest.cases import bias, explainability, orchestration, privacy, t1, t2, t5, t6
 
     specs: list[CaseSpec] = []
     specs.extend(t1.all_cases())
@@ -58,6 +58,7 @@ def _build_registry() -> dict[str, CaseSpec]:
     specs.extend(privacy.all_cases())
     specs.extend(explainability.all_cases())
     specs.extend(bias.all_cases())
+    specs.extend(orchestration.all_cases())
     return {s.checklist_id: s for s in specs}
 
 
@@ -108,6 +109,20 @@ BIAS_FAIRNESS_IDS: list[str] = [
     "T7-007",
     "T7-011",
 ]
+
+ORCHESTRATION_IDS: list[str] = [
+    # Hub packs/orchestration.csv — runner theme pack (not a Hub eval_group).
+    # T3-006 CaseSpec lives in explainability; listed here for thematic suite runs only.
+    "T3-001",
+    "T3-002",
+    "T3-006",
+    "T3-007",
+    "T3-010",
+    "T3-011",
+    "T3-014",
+    "T2-004",
+]
+
 
 
 def get_case(checklist_id: str) -> CaseSpec:
