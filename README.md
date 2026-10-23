@@ -33,6 +33,7 @@ Catalogue lives on Hugging Face; this repo is the runnable open core.
 | M4 | `v0.5.0` | **Bias / fairness** (3) ✅ |
 | M5 | `v0.7.0a0` | **Orchestration** theme (8 Hub IDs) + samples 6–7 ✅ |
 | M5b | `v0.8.0a0` | Sample agents **8–10** (`planner`, `critic`, `federation`) ✅ |
+| M5c | `v0.9.0a0` | Expected-fail scenarios **11–15** (`leaky`…`flaky_plan`) ✅ |
 | M6 | `v1.0.0-open` | Actions template + Hub cross-links |
 
 ## Developer guide (GitHub standalone)
@@ -67,21 +68,22 @@ Every implemented ID must **Pass** a golden agent and **Fail** the matching brok
 
 ## Sample agents
 
-Ten teaching agents of increasing complexity (`stub` → `federation`) live in-repo so learners can run the full checklist against real implementations:
+Fifteen teaching agents (`stub` → `flaky_plan`): complexity **1–10** green ladder,
+**11–15** expected-fail / teaching-negative scenarios (partial fail profiles).
 
 ```bash
-agentest samples   # stub…federation (1–10)
+agentest samples            # stub…flaky_plan (1–15)
+agentest samples --failing  # leaky…flaky_plan only
 agentest run --suite orchestration --agent supervisor
-agentest run --suite orchestration --agent handoff
-agentest run --suite functional --agent planner
-agentest run --suite explainability --agent critic
-agentest run --suite orchestration --agent federation
-agentest run --suite functional --agent stub
-agentest run --suite privacy --agent scripted
-agentest matrix   # all suites × samples (+ golden); stub/eager fails are expected
+agentest run --suite privacy --agent leaky              # expect fails
+agentest run --suite explainability --agent hallucinator
+agentest run --suite bias_fairness --agent biased
+agentest run --suite orchestration --agent overreach
+agentest run --suite functional --ids T2-001 --agent flaky_plan
+agentest matrix   # exit 0 iff scripted…federation/(golden) all-pass
 ```
 
-Details: [`docs/SAMPLE-AGENTS.md`](docs/SAMPLE-AGENTS.md), [`docs/SCENARIOS-8-10.md`](docs/SCENARIOS-8-10.md).
+Details: [`docs/SAMPLE-AGENTS.md`](docs/SAMPLE-AGENTS.md), [`docs/SCENARIOS-8-10.md`](docs/SCENARIOS-8-10.md), [`docs/SCENARIOS-EXPECTED-FAIL.md`](docs/SCENARIOS-EXPECTED-FAIL.md).
 
 ## Explainability
 

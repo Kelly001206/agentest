@@ -74,8 +74,8 @@ def run_matrix(
     """Run all suites × sample agents (and optionally golden).
 
     Returns ``{agent: {"pass": n, "fail": n, "unverified": n, "total": n}}``.
-    Stub/eager are *expected* to fail many IDs — callers should not treat
-    their failures as a process error.
+    Stub/eager and MATRIX_EXPECTED_FAIL agents are *expected* to fail some
+    IDs — callers should not treat their failures as a process error.
     """
     from agentest.samples import SAMPLE_AGENT_NAMES
 
@@ -107,7 +107,7 @@ def run_matrix(
 
 
 def matrix_ok(summary: dict[str, dict[str, int]], *, must_pass: list[str] | None = None) -> bool:
-    """True iff every agent in must_pass has pass == total (stub failures ignored)."""
+    """True iff every agent in must_pass has pass == total (expected-fail ignored)."""
     from agentest.samples import MATRIX_MUST_PASS
 
     required = must_pass if must_pass is not None else [a for a in MATRIX_MUST_PASS if a in summary]

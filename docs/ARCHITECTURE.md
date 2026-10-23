@@ -29,7 +29,10 @@ Privacy extends Env with profiles, multi-tenant stores, consent, exports/emails,
 
 ## Sample agents (teaching)
 
-Seven complexity-graded agents under `agentest.samples` (`stub` → `handoff`).  
-See [`docs/SAMPLE-AGENTS.md`](SAMPLE-AGENTS.md). CLI: `agentest samples`, `agentest matrix`,  
-`agentest run --agent stub|eager|scripted|policy|reflective|supervisor|handoff|planner|critic|federation`.  
-`golden`/`broken` remain the oracle Pass/Fail fixtures.
+Fifteen complexity-graded agents under `agentest.samples` (`stub` → `flaky_plan`).  
+Green ladder 1–10; expected-fail band 11–15 (`leaky`…`flaky_plan`).  
+See [`docs/SAMPLE-AGENTS.md`](SAMPLE-AGENTS.md), [`SCENARIOS-EXPECTED-FAIL.md`](SCENARIOS-EXPECTED-FAIL.md).  
+CLI: `agentest samples [--failing]`, `agentest matrix`,  
+`agentest run --agent stub|…|federation|leaky|hallucinator|biased|overreach|flaky_plan`.  
+`golden`/`broken` remain the oracle Pass/Fail fixtures.  
+`MATRIX_MUST_PASS` ignores expected-fail agents for matrix exit status.

@@ -88,15 +88,20 @@ agentest run --suite functional --ids T1-001,T1-004 --agent golden --json
 
 ```bash
 agentest samples
-# name         cx  title
-# stub          1  Stub (claim-only)
-# …             …
-# handoff       7  …
+# name           cx  title
+# stub            1  Stub (claim-only)
+# …               …
+# federation     10  …
+# leaky          11  Leaky (privacy anti-pattern)
+# … flaky_plan   15  …
+
+agentest samples --failing   # cx 11–15 only
 
 agentest run --suite functional --agent scripted
+agentest run --suite privacy --agent leaky
 agentest matrix
 # Exit 0 iff scripted…federation/(golden) all-pass.
-# stub/eager failures are expected and do not fail the process.
+# stub/eager + expected-fail scenarios (leaky…flaky_plan) do not fail the process.
 ```
 
 ### Pytest (same suites CI runs)
@@ -187,7 +192,7 @@ from agentest.types import Trace
 class MyAgent(SampleAgent):
     name = "myagent"           # CLI --agent value
     title = "My agent"
-    complexity = 3             # teaching scale 1–10 (informational)
+    complexity = 3             # teaching scale 1–15 (11–15 = expected-fail)
     description = "Short learner-facing blurb."
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
@@ -404,14 +409,21 @@ Expected teaching behaviour (full matrix totals sum all five suites;
 | `planner` | 8 | **All PASS** (plan-then-act / DEPENDS_ON + HITL) |
 | `critic` | 9 | **All PASS** (generate–critique–repair) |
 | `federation` | 10 | **All PASS** (tenant + TTL + single-use federation) |
+| `leaky` | 11 | **Partial FAIL** (privacy IDs) — expected-fail |
+| `hallucinator` | 12 | **Partial FAIL** (explainability IDs) — expected-fail |
+| `biased` | 13 | **Partial FAIL** (bias_fairness IDs) — expected-fail |
+| `overreach` | 14 | **Partial FAIL** (orchestration IDs) — expected-fail |
+| `flaky_plan` | 15 | **Partial FAIL** (plan/DEPENDS_ON/HITL subset) — expected-fail |
 | `golden` | — | **All PASS** (oracle fixture) |
 | `broken` | — | **All FAIL** (oracle fixture; not in matrix) |
 
 `MATRIX_MUST_PASS` is
 `{scripted, policy, reflective, supervisor, handoff, planner, critic, federation, golden}`.
-Stub/eager failures never fail `agentest matrix`’s exit status.
+`MATRIX_EXPECTED_FAIL` is
+`{stub, eager, leaky, hallucinator, biased, overreach, flaky_plan}`.
+Expected-fail failures never fail `agentest matrix`’s exit status.
 
-Details: [`SAMPLE-AGENTS.md`](SAMPLE-AGENTS.md), [`SCENARIOS-8-10.md`](SCENARIOS-8-10.md), [`ORCHESTRATION.md`](ORCHESTRATION.md).
+Details: [`SAMPLE-AGENTS.md`](SAMPLE-AGENTS.md), [`SCENARIOS-8-10.md`](SCENARIOS-8-10.md), [`SCENARIOS-EXPECTED-FAIL.md`](SCENARIOS-EXPECTED-FAIL.md), [`ORCHESTRATION.md`](ORCHESTRATION.md).
 
 ---
 
@@ -492,7 +504,7 @@ agentest matrix
 No. Clone GitHub, `pip install -e ".[dev]"`, run. Hub is for catalogue
 authors syncing CSVs.
 
-**Why do stub and eager fail so many IDs?**  
+**Why do stub, eager, and the cx 11–15 agents fail some IDs?**  
 By design. They teach that success flags and ungoverned tool use are not
 enough. Matrix exit status ignores them.
 
@@ -547,7 +559,8 @@ Exit codes: `run` → 0 iff all results Pass; `matrix` → 0 iff every agent in
 | Name | Role |
 |:-----|:-----|
 | `golden` / `broken` | Oracle Pass / Fail fixtures |
-| `stub` … `federation` | Teaching samples, complexity **1–10** |
+| `stub` … `federation` | Green teaching samples, complexity **1–10** |
+| `leaky` … `flaky_plan` | Expected-fail scenarios, complexity **11–15** |
 
 ### Key modules
 
@@ -562,7 +575,7 @@ src/agentest/
   cases/registry.py   # CaseSpec, SAMPLE_AGENTS, ALL_AGENTS, *_IDS
   cases/multi_run.py  # T1-002 / T1-003
   samples/base.py     # SampleAgent protocol
-  samples/__init__.py # get_sample, MATRIX_MUST_PASS
+  samples/__init__.py # get_sample, MATRIX_MUST_PASS, MATRIX_EXPECTED_FAIL
 catalog/              # vendored Hub pack CSVs + VERSION
 ```
 

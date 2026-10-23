@@ -26,19 +26,31 @@ def main(argv: list[str] | None = None) -> int:
         "--agent",
         default="golden",
         choices=list(ALL_AGENTS),
-        help="Agent under test: golden|broken|stub|eager|scripted|policy|reflective|supervisor|handoff|planner|critic|federation",
+        help=(
+            "Agent under test: golden|broken|stub|eager|scripted|policy|reflective|"
+            "supervisor|handoff|planner|critic|federation|"
+            "leaky|hallucinator|biased|overreach|flaky_plan"
+        ),
     )
     run.add_argument("--json", action="store_true", help="Emit machine-readable results")
 
-    samples = sub.add_parser("samples", help="List teaching sample agents (complexity 1–10)")
+    samples = sub.add_parser(
+        "samples",
+        help="List teaching sample agents (complexity 1–15; 11–15 expected-fail)",
+    )
     samples.add_argument("--json", action="store_true", help="Emit JSON")
+    samples.add_argument(
+        "--failing",
+        action="store_true",
+        help="List only expected-fail scenarios (cx 11–15: leaky…flaky_plan)",
+    )
 
     matrix = sub.add_parser(
         "matrix",
         help=(
             "Run all suites × sample agents (and golden). "
             "Exit 0 if scripted…federation/(golden) all-pass; "
-            "stub/eager failures are expected and do not fail the process."
+            "stub/eager and expected-fail scenarios (leaky…flaky_plan) may fail."
         ),
     )
     matrix.add_argument(
@@ -95,9 +107,9 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def _cmd_samples(args: argparse.Namespace) -> int:
-    from agentest.samples import list_samples
+    from agentest.samples import MATRIX_EXPECTED_FAIL, MATRIX_MUST_PASS, list_samples
 
-    infos = list_samples()
+    infos = list_samples(failing_only=args.failing)
     if args.json:
         print(
             json.dumps(
@@ -107,6 +119,8 @@ def _cmd_samples(args: argparse.Namespace) -> int:
                         "title": i.title,
                         "complexity": i.complexity,
                         "description": i.description,
+                        "expected_fail": i.name in MATRIX_EXPECTED_FAIL,
+                        "must_pass": i.name in MATRIX_MUST_PASS,
                     }
                     for i in infos
                 ],
@@ -114,12 +128,16 @@ def _cmd_samples(args: argparse.Namespace) -> int:
             )
         )
     else:
-        print(f"{'name':<12} {'cx':>2}  title")
-        print("-" * 60)
+        print(f"{'name':<14} {'cx':>2}  title")
+        print("-" * 64)
         for i in infos:
-            print(f"{i.name:<12} {i.complexity:>2}  {i.title}")
-            print(f"{'':12}     {i.description}")
+            print(f"{i.name:<14} {i.complexity:>2}  {i.title}")
+            print(f"{'':14}     {i.description}")
             print()
+        if not args.failing:
+            print(
+                "Tip: `agentest samples --failing` lists cx 11–15 expected-fail scenarios only."
+            )
     return 0
 
 
@@ -128,17 +146,18 @@ def _cmd_matrix(args: argparse.Namespace) -> int:
     if args.json:
         print(json.dumps(summary, indent=2))
     else:
-        print(f"{'agent':<12} {'pass':>5} {'fail':>5} {'unv':>5} {'total':>5}")
-        print("-" * 40)
+        print(f"{'agent':<14} {'pass':>5} {'fail':>5} {'unv':>5} {'total':>5}")
+        print("-" * 42)
         for agent, row in summary.items():
             print(
-                f"{agent:<12} {row['pass']:>5} {row['fail']:>5} "
+                f"{agent:<14} {row['pass']:>5} {row['fail']:>5} "
                 f"{row['unverified']:>5} {row['total']:>5}"
             )
         print()
         print(
-            "Note: stub/eager are meant to fail many IDs. "
-            "Exit status reflects scripted…federation/(golden) all-pass only."
+            "Note: stub/eager and expected-fail scenarios (leaky…flaky_plan) are "
+            "meant to fail some IDs. Exit status reflects scripted…federation/"
+            "(golden) all-pass only (MATRIX_MUST_PASS)."
         )
     return 0 if matrix_ok(summary) else 1
 

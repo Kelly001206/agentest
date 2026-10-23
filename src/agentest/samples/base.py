@@ -15,7 +15,7 @@ class SampleAgentInfo:
 
     name: str
     title: str
-    complexity: int  # 1..10
+    complexity: int  # 1..15 (11–15 = expected-fail band)
     description: str
 
 
