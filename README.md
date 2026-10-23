@@ -1,0 +1,48 @@
+# agentest
+
+**Open-core runner for the [Agentic AI Test Checklist 110](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110).**
+
+Thin CLI + harness that executes checklist IDs against a mock tool gateway.  
+Catalogue lives on Hugging Face; this repo is the runnable open core.
+
+| Surface | Location |
+|:--------|:---------|
+| Catalogue (source of truth) | [`srinivaspadmanabhuni/agentic-ai-test-checklist-110`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110) |
+| Runner (this repo) | `srinivaspadmanabhuni/agentest` |
+| Commercial harness | Private (AiEnsured / testAIng) — later |
+
+**Author:** Dr Srinivas Padmanabhuni · srinivas AT testAIng.com · [testAIng.com](https://testaing.com) / [AiEnsured](https://aiensured.com)
+
+## Non-goals
+
+- No DeepEval, Giskard, Langfuse, Promptfoo, Ragas, or similar eval frameworks
+- Not a model leaderboard; not certification
+- Security pack is **parked** until `v0.5.0` (functional → privacy → explainability → bias first)
+
+## Status (solo MVP)
+
+| Milestone | Tag | Scope |
+|:----------|:----|:------|
+| M0 | `v0.1.0` | CLI + gateway + **T1-001** |
+| M1 | `v0.2.0` | Full **functional** pack (18 IDs) |
+| M2 | `v0.3.0` | **Privacy** (8) |
+| M3 | `v0.4.0` | **Explainability** (5) |
+| M4 | `v0.5.0` | **Bias** (3) + broken_agent suite |
+| M5 | `v1.0.0-open` | Actions template + Hub cross-links |
+
+## Quick start (M0)
+
+```bash
+python -m pip install -e .
+agentest run --suite functional --ids T1-001
+```
+
+Every implemented ID must **Pass** a golden agent and **Fail** `examples/broken_agent`.
+
+## Catalogue pin
+
+See [`catalog/VERSION`](catalog/VERSION). Change packs on Hugging Face first, then sync here. Do not edit Hub CSVs only in this repo.
+
+## Licence
+
+Apache-2.0 (runner). Checklist data remains **CC BY 4.0** on Hugging Face.

@@ -1,0 +1,6 @@
+hub_dataset: srinivaspadmanabhuni/agentic-ai-test-checklist-110
+hub_revision: v1.1
+hub_url: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110
+note: Pin exact commit SHA after first sync. Never edit pack CSVs only in this repo.
+packs_in_scope_m1_m4: functional,privacy,explainability,bias_fairness
+packs_parked: security
