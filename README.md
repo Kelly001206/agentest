@@ -4,13 +4,12 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![HF dataset](https://img.shields.io/badge/Hugging%20Face-checklist%20110-yellow.svg)](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
-[![HF downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fhuggingface.co%2Fapi%2Fdatasets%2Fsrinivaspadmanabhuni%2Fagentic-ai-test-checklist-110&query=%24.downloads&label=HF%20downloads&color=yellow)](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
 [![Zenodo](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23587407-blue.svg)](https://doi.org/10.5281/zenodo.23587407)
 
 **Offline open-core runner for the [Agentic AI Test Checklist 110](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110).**  
 Clone → install → run. No Hugging Face account, token, or download required at runtime. Checklist design informed by ISO 42001 themes (not certification).
 
-> **Status: early / stub implementations.** The current tests are stub / reference implementations: deterministic oracles run against **scripted mock agents** and a **mock tool gateway** in an in-memory environment. They are **not production-grade evaluators** and have not been validated against real LLM agents. Individual components (real-agent adapters, richer oracles, more packs such as security) are being added incrementally. Treat results as illustrative.
+> **Status: work in progress; all tests are currently stubs.** Individual components are being added gradually. The current tests are stub / reference implementations: deterministic oracles run against **scripted mock agents** and a **mock tool gateway** in an in-memory environment. They are **not production-grade evaluators** and have not been validated against real LLM agents. Individual components (real-agent adapters, richer oracles, more packs such as security) are being added incrementally. Treat results as illustrative.
 
 ## Clone and run (30 seconds)
 
@@ -39,7 +38,7 @@ print(ds["train"][0]["id"], ds["train"][0]["title"])
 
 This repo stays the **offline runner** (packs under `catalog/` — no Hub needed at runtime).
 
-Developer guide (GitHub-only path): [`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md) · Bibliography: [`docs/REFERENCES.md`](docs/REFERENCES.md) · Per-test sources & audit: [`docs/TEST-SOURCES.md`](docs/TEST-SOURCES.md) · Launch copy: [`docs/launch/`](docs/launch/)
+Developer guide (GitHub-only path): [`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md) · Bibliography: [`docs/REFERENCES.md`](docs/REFERENCES.md) · Per-test sources & audit: [`docs/TEST-SOURCES.md`](docs/TEST-SOURCES.md)
 
 | Surface | Location |
 |:--------|:---------|
