@@ -22,9 +22,9 @@ Why it must fail: metamorphic / counterfactual-token oracles detect label change
 Attribution / References
 ------------------------
 - In-house teaching design; references are for the general agent pattern it imitates (no LLM is used - the agent is deterministic).
-- Chen, T. Y., Cheung, S. C., Yiu, S. M. (1998). Metamorphic Testing: A New Approach for Generating Next Test Cases. Tech. Rep. HKUST-CS98-01; republished arXiv:2002.12543
+- Chen, T. Y., Cheung, S. C., Yiu, S. M. (1998). Metamorphic Testing: A New Approach for Generating Next Test Cases. Tech. Rep. HKUST-CS98-01; republished arXiv:2002.12543 https://arxiv.org/abs/2002.12543
 - Garg, S., Perot, V., Limtiaco, N., Taly, A., Chi, E. H., Beutel, A. (2019). Counterfactual Fairness in Text Classification through Robustness. AIES 2019. https://doi.org/10.1145/3306618.3317950 (counterfactual token fairness)
-- Kusner, M. J., Loftus, J., Russell, C., Silva, R. (2017). Counterfactual Fairness. NeurIPS 2017. arXiv:1703.06856 (conceptual motivation; we do NOT fit a causal model)
+- Kusner, M. J., Loftus, J., Russell, C., Silva, R. (2017). Counterfactual Fairness. NeurIPS 2017. arXiv:1703.06856 https://arxiv.org/abs/1703.06856 (conceptual motivation; we do NOT fit a causal model)
 - Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
 
 See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.

@@ -65,15 +65,15 @@ The following methods are often asked about. agentest does **not** implement the
 and no oracle claims to:
 
 - LIME: Ribeiro, Singh, Guestrin (2016), KDD. [doi:10.1145/2939672.2939778](https://doi.org/10.1145/2939672.2939778)
-- SHAP: Lundberg & Lee (2017), NeurIPS. [arXiv:1705.07874](https://arxiv.org/abs/1705.07874)
-- Integrated Gradients: Sundararajan, Taly, Yan (2017), ICML. [arXiv:1703.01365](https://arxiv.org/abs/1703.01365)
+- SHAP: Lundberg & Lee (2017), NeurIPS. [arXiv:1705.07874 https://arxiv.org/abs/1705.07874](https://arxiv.org/abs/1705.07874)
+- Integrated Gradients: Sundararajan, Taly, Yan (2017), ICML. [arXiv:1703.01365 https://arxiv.org/abs/1703.01365](https://arxiv.org/abs/1703.01365)
 - These attribute model inputs and need model internals or many forward passes. Our explainability oracles check trace faithfulness instead.
-- Demographic parity / equalized odds: Hardt, Price, Srebro (2016), *Equality of Opportunity in Supervised Learning*, NeurIPS. [arXiv:1610.02413](https://arxiv.org/abs/1610.02413). The four-fifths rule: 29 CFR §1607.4(D) (EEOC Uniform Guidelines, 1978), <https://www.ecfr.gov/current/title-29/subtitle-B/chapter-XIV/part-1607/section-1607.4>. Both are group-rate metrics, and the bias pack uses single counterfactual pairs, so it computes no rates.
+- Demographic parity / equalized odds: Hardt, Price, Srebro (2016), *Equality of Opportunity in Supervised Learning*, NeurIPS. [arXiv:1610.02413 https://arxiv.org/abs/1610.02413](https://arxiv.org/abs/1610.02413). The four-fifths rule: 29 CFR §1607.4(D) (EEOC Uniform Guidelines, 1978), <https://www.ecfr.gov/current/title-29/subtitle-B/chapter-XIV/part-1607/section-1607.4>. Both are group-rate metrics, and the bias pack uses single counterfactual pairs, so it computes no rates.
 - Differential privacy: Dwork (2006), ICALP. [doi:10.1007/11787006_1](https://doi.org/10.1007/11787006_1)
-- Training-data extraction: Carlini et al. (2021), USENIX Security. [arXiv:2012.07805](https://arxiv.org/abs/2012.07805)
+- Training-data extraction: Carlini et al. (2021), USENIX Security. [arXiv:2012.07805 https://arxiv.org/abs/2012.07805](https://arxiv.org/abs/2012.07805)
 - The privacy pack tests the agent's runtime behaviour, not the model's training data.
-- Self-consistency: Wang, X. et al. (2023), ICLR. [arXiv:2203.11171](https://arxiv.org/abs/2203.11171). T1-002 and T1-003 repeat episodes but do not vote over sampled reasoning paths.
-- LLM-as-a-judge: Zheng et al. (2023), NeurIPS Datasets & Benchmarks. [arXiv:2306.05685](https://arxiv.org/abs/2306.05685). Not used, because all oracles are deterministic.
+- Self-consistency: Wang, X. et al. (2023), ICLR. [arXiv:2203.11171 https://arxiv.org/abs/2203.11171](https://arxiv.org/abs/2203.11171). T1-002 and T1-003 repeat episodes but do not vote over sampled reasoning paths.
+- LLM-as-a-judge: Zheng et al. (2023), NeurIPS Datasets & Benchmarks. [arXiv:2306.05685 https://arxiv.org/abs/2306.05685](https://arxiv.org/abs/2306.05685). Not used, because all oracles are deterministic.
 
 ## E. In-house heuristics (explicit list)
 

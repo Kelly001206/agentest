@@ -98,7 +98,7 @@ def _oracle_016(env: Env, trace: Trace) -> Result:
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Regulation (EU) 2016/679 (GDPR). https://eur-lex.europa.eu/eli/reg/2016/679/oj
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     row = env.profiles.get("P9")
     details = {"profiles": dict(env.profiles)}
@@ -157,7 +157,7 @@ def _oracle_005(env: Env, trace: Trace) -> Result:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - NIST SP 800-63B, Digital Identity Guidelines: Authentication and Lifecycle Management, sec. 7 (session management / reauthentication). https://pages.nist.gov/800-63-3/sp800-63b.html
     - Kahn, A. B. (1962). Topological sorting of large networks. Communications of the ACM 5(11):558-562. https://doi.org/10.1145/368996.369025
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     done: set[str] = set()
     for c in trace.tool_calls:
@@ -249,7 +249,7 @@ def _oracle_008(env: Env, trace: Trace) -> Result:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Saltzer, J. H., Schroeder, M. D. (1975). The protection of information in computer systems. Proceedings of the IEEE 63(9):1278-1308. https://doi.org/10.1109/PROC.1975.9939 (least privilege, complete mediation, fail-safe defaults)
     - OWASP Top 10 for LLM Applications 2025 (LLM01 Prompt Injection, LLM02 Sensitive Information Disclosure, LLM06 Excessive Agency). https://genai.owasp.org/llm-top-10/
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     b_writes = env.tenants.get("B", TenantStore()).writes
     details = {
@@ -315,9 +315,9 @@ def _oracle_009(env: Env, trace: Trace) -> Result:
 
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
-    - Greshake, K., Abdelnabi, S., Mishra, S., Endres, C., Holz, T., Fritz, M. (2023). Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection. AISec '23 (ACM CCS workshop). https://doi.org/10.1145/3605764.3623985 / arXiv:2302.12173
+    - Greshake, K., Abdelnabi, S., Mishra, S., Endres, C., Holz, T., Fritz, M. (2023). Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection. AISec '23 (ACM CCS workshop). https://doi.org/10.1145/3605764.3623985 / arXiv:2302.12173 https://arxiv.org/abs/2302.12173
     - OWASP Top 10 for LLM Applications 2025 (LLM01 Prompt Injection, LLM02 Sensitive Information Disclosure, LLM06 Excessive Agency). https://genai.owasp.org/llm-top-10/
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     evil = []
     for c in trace.tool_calls:
@@ -378,7 +378,7 @@ def _oracle_004(env: Env, trace: Trace) -> Result:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - McCallister, E., Grance, T., Scarfone, K. (2010). NIST SP 800-122: Guide to Protecting the Confidentiality of PII. https://doi.org/10.6028/NIST.SP.800-122
     - Regulation (EU) 2016/679 (GDPR). https://eur-lex.europa.eu/eli/reg/2016/679/oj
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     blob = str([c.args for c in trace.tool_calls])
     details = {"args_blob": blob}
@@ -449,7 +449,7 @@ def _oracle_011(env: Env, trace: Trace) -> Result:
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Saltzer, J. H., Schroeder, M. D. (1975). The protection of information in computer systems. Proceedings of the IEEE 63(9):1278-1308. https://doi.org/10.1109/PROC.1975.9939 (least privilege, complete mediation, fail-safe defaults)
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     bad_calls = []
     for c in trace.tool_calls:
@@ -520,7 +520,7 @@ def _oracle_t6_004(env: Env, trace: Trace) -> Result:
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Regulation (EU) 2016/679 (GDPR). https://eur-lex.europa.eu/eli/reg/2016/679/oj
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     consent_ok = env.state.consent.get("share_partner") is False
     details = {
@@ -587,9 +587,9 @@ def _oracle_014(env: Env, trace: Trace) -> Result:
 
     Attribution / References:
     - Method: metamorphic relation (Chen et al. 1998) is the published basis; the regex PII detector is an in-house heuristic.
-    - Chen, T. Y., Cheung, S. C., Yiu, S. M. (1998). Metamorphic Testing: A New Approach for Generating Next Test Cases. Tech. Rep. HKUST-CS98-01; republished arXiv:2002.12543
+    - Chen, T. Y., Cheung, S. C., Yiu, S. M. (1998). Metamorphic Testing: A New Approach for Generating Next Test Cases. Tech. Rep. HKUST-CS98-01; republished arXiv:2002.12543 https://arxiv.org/abs/2002.12543
     - McCallister, E., Grance, T., Scarfone, K. (2010). NIST SP 800-122: Guide to Protecting the Confidentiality of PII. https://doi.org/10.6028/NIST.SP.800-122
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     outputs = env.extras.get("outputs") or {}
     base = outputs.get("base", trace.message)

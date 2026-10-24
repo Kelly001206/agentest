@@ -38,8 +38,8 @@ def explanation_cites_only_trace(trace: Trace) -> tuple[bool, list[str]]:
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Jacovi, A., Goldberg, Y. (2020). Towards Faithfully Interpretable NLP Systems: How Should We Define and Evaluate Faithfulness? ACL 2020. https://doi.org/10.18653/v1/2020.acl-main.386
-    - Kim, W., Park, S., In, Y., Kim, S., Lee, D., Park, C. (2025). Beyond the Final Answer: Evaluating the Reasoning Trajectories of Tool-Augmented Agents (proposes the TRACE framework). arXiv:2510.02837. https://arxiv.org/abs/2510.02837
-    - Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., Cao, Y. (2023). ReAct: Synergizing Reasoning and Acting in Language Models. ICLR 2023. arXiv:2210.03629
+    - Kim, W., Park, S., In, Y., Kim, S., Lee, D., Park, C. (2025). Beyond the Final Answer: Evaluating the Reasoning Trajectories of Tool-Augmented Agents (proposes the TRACE framework). arXiv:2510.02837 https://arxiv.org/abs/2510.02837. https://arxiv.org/abs/2510.02837
+    - Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., Cao, Y. (2023). ReAct: Synergizing Reasoning and Acting in Language Models. ICLR 2023. arXiv:2210.03629 https://arxiv.org/abs/2210.03629
 
     Original note: Global freeze: every cited step must appear in the tool/handover trace.
     
@@ -108,7 +108,7 @@ def _oracle_018(env: Env, trace: Trace) -> Result:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Hoare, C. A. R. (1969). An axiomatic basis for computer programming. Communications of the ACM 12(10):576-580. https://doi.org/10.1145/363235.363259
     - Jacovi, A., Goldberg, Y. (2020). Towards Faithfully Interpretable NLP Systems: How Should We Define and Evaluate Faithfulness? ACL 2020. https://doi.org/10.18653/v1/2020.acl-main.386
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     terminal = _postconditions_018(env)
     api = bool(trace.api_success)
@@ -177,7 +177,7 @@ def _oracle_006(env: Env, trace: Trace) -> Result:
     - Saltzer, J. H., Schroeder, M. D. (1975). The protection of information in computer systems. Proceedings of the IEEE 63(9):1278-1308. https://doi.org/10.1109/PROC.1975.9939 (least privilege, complete mediation, fail-safe defaults)
     - ISO/IEC 42001:2023 Information technology - Artificial intelligence - Management system (Annex A controls). https://www.iso.org/standard/81230.html
     - NIST AI 100-1 (2023). Artificial Intelligence Risk Management Framework (AI RMF 1.0). https://doi.org/10.6028/NIST.AI.100-1
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     entry = env.authz_log.last(actor="payments_agent")
     details = {
@@ -247,9 +247,9 @@ def _oracle_015(env: Env, trace: Trace) -> Result:
 
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
-    - Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., Cao, Y. (2023). ReAct: Synergizing Reasoning and Acting in Language Models. ICLR 2023. arXiv:2210.03629
-    - Kim, W., Park, S., In, Y., Kim, S., Lee, D., Park, C. (2025). Beyond the Final Answer: Evaluating the Reasoning Trajectories of Tool-Augmented Agents (proposes the TRACE framework). arXiv:2510.02837. https://arxiv.org/abs/2510.02837
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., Cao, Y. (2023). ReAct: Synergizing Reasoning and Acting in Language Models. ICLR 2023. arXiv:2210.03629 https://arxiv.org/abs/2210.03629
+    - Kim, W., Park, S., In, Y., Kim, S., Lee, D., Park, C. (2025). Beyond the Final Answer: Evaluating the Reasoning Trajectories of Tool-Augmented Agents (proposes the TRACE framework). arXiv:2510.02837 https://arxiv.org/abs/2510.02837. https://arxiv.org/abs/2510.02837
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     missing = [c.name for c in trace.tool_calls if not c.meta.get("reason")]
     details = {
@@ -318,9 +318,9 @@ def _oracle_007(env: Env, trace: Trace) -> Result:
 
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
-    - Lewis, P. et al. (2020). Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. NeurIPS 2020. arXiv:2005.11401 (provenance of retrieved context)
+    - Lewis, P. et al. (2020). Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. NeurIPS 2020. arXiv:2005.11401 https://arxiv.org/abs/2005.11401 (provenance of retrieved context)
     - Jacovi, A., Goldberg, Y. (2020). Towards Faithfully Interpretable NLP Systems: How Should We Define and Evaluate Faithfulness? ACL 2020. https://doi.org/10.18653/v1/2020.acl-main.386
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     reads = list(env.memory_reads)
     citations = list(trace.memory_citations)
@@ -393,7 +393,7 @@ def _oracle_009(env: Env, trace: Trace) -> Result:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Jacovi, A., Goldberg, Y. (2020). Towards Faithfully Interpretable NLP Systems: How Should We Define and Evaluate Faithfulness? ACL 2020. https://doi.org/10.18653/v1/2020.acl-main.386
     - DeYoung, J., Jain, S., Rajani, N. F., Lehman, E., Xiong, C., Socher, R., Wallace, B. C. (2020). ERASER: A Benchmark to Evaluate Rationalized NLP Models. ACL 2020. https://doi.org/10.18653/v1/2020.acl-main.408 (conceptual only: we do NOT compute ERASER comprehensiveness/sufficiency)
-    - Kim, W., Park, S., In, Y., Kim, S., Lee, D., Park, C. (2025). Beyond the Final Answer: Evaluating the Reasoning Trajectories of Tool-Augmented Agents (proposes the TRACE framework). arXiv:2510.02837. https://arxiv.org/abs/2510.02837
+    - Kim, W., Park, S., In, Y., Kim, S., Lee, D., Park, C. (2025). Beyond the Final Answer: Evaluating the Reasoning Trajectories of Tool-Augmented Agents (proposes the TRACE framework). arXiv:2510.02837 https://arxiv.org/abs/2510.02837. https://arxiv.org/abs/2510.02837
     """
     names = [c.name for c in trace.tool_calls]
     details = {

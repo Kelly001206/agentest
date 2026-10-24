@@ -114,9 +114,9 @@ def _eval_t1_002(agent_name: str) -> Result:
 
     Attribution / References:
     - In-house heuristic: counting false completions over k fresh runs with zero tolerance is our own design. tau-bench pass^k (Yao et al. 2024) is background only: pass^k measures all-k task success, a different metric.
-    - Yao, S., Shinn, N., Razavi, P., Narasimhan, K. (2024). tau-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains. arXiv:2406.12045 (background: pass^k repeated-trial reliability; different metric).
+    - Yao, S., Shinn, N., Razavi, P., Narasimhan, K. (2024). tau-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains. arXiv:2406.12045 https://arxiv.org/abs/2406.12045 (background: pass^k repeated-trial reliability; different metric).
     - Hoare, C. A. R. (1969). An axiomatic basis for computer programming. Communications of the ACM 12(10):576-580. https://doi.org/10.1145/363235.363259
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     k = T1_002_K
     agent = _once_fn("T1-002", agent_name)
@@ -162,9 +162,9 @@ def _eval_t1_003(agent_name: str) -> Result:
 
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
-    - Yao, S., Shinn, N., Razavi, P., Narasimhan, K. (2024). tau-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains. arXiv:2406.12045 (background: repeated trials; we compute mean TSR, not pass^k).
+    - Yao, S., Shinn, N., Razavi, P., Narasimhan, K. (2024). tau-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains. arXiv:2406.12045 https://arxiv.org/abs/2406.12045 (background: repeated trials; we compute mean TSR, not pass^k).
     - NIST AI 100-1 (2023). Artificial Intelligence Risk Management Framework (AI RMF 1.0). https://doi.org/10.6028/NIST.AI.100-1
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     k = T1_003_K
     tier = T1_003_RISK_TIER

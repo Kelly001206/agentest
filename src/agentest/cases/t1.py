@@ -56,7 +56,7 @@ def _oracle_001(env: Env, trace: Trace) -> Result:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Hoare, C. A. R. (1969). An axiomatic basis for computer programming. Communications of the ACM 12(10):576-580. https://doi.org/10.1145/363235.363259
     - Barr, E. T., Harman, M., McMinn, P., Shahbaz, M., Yoo, S. (2015). The Oracle Problem in Software Testing: A Survey. IEEE TSE 41(5):507-525. https://doi.org/10.1109/TSE.2014.2372785
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     return evaluate_t1_001(env, trace, expected=T1_001_EXPECTED)
 
@@ -87,7 +87,7 @@ def _oracle_stub(env: Env, trace: Trace) -> Result:
 
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     # Verdict UNVERIFIED: nothing observable to score (neither pass nor fail).
     return Result("STUB", Outcome.UNVERIFIED, "multi-run")
@@ -146,7 +146,7 @@ def _oracle_004(env: Env, trace: Trace) -> Result:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Hoare, C. A. R. (1969). An axiomatic basis for computer programming. Communications of the ACM 12(10):576-580. https://doi.org/10.1145/363235.363259
     - Saltzer, J. H., Schroeder, M. D. (1975). The protection of information in computer systems. Proceedings of the IEEE 63(9):1278-1308. https://doi.org/10.1109/PROC.1975.9939 (least privilege, complete mediation, fail-safe defaults)
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     # Re-run pattern: snapshot taken inside agent — reconstruct via seed expectation.
     # We compare final state: only contact_42 may differ from initial fixture values.
@@ -217,7 +217,7 @@ def _oracle_005(env: Env, trace: Trace) -> Result:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Hoare, C. A. R. (1969). An axiomatic basis for computer programming. Communications of the ACM 12(10):576-580. https://doi.org/10.1145/363235.363259
     - Barr, E. T., Harman, M., McMinn, P., Shahbaz, M., Yoo, S. (2015). The Oracle Problem in Software Testing: A Survey. IEEE TSE 41(5):507-525. https://doi.org/10.1109/TSE.2014.2372785
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     order_ok = any(o.get("sku") == "SKU1" for o in env.orders.values())
     inv_ok = env.inventory.get("SKU1") == 3
@@ -277,7 +277,7 @@ def _oracle_007(env: Env, trace: Trace) -> Result:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Hoare, C. A. R. (1969). An axiomatic basis for computer programming. Communications of the ACM 12(10):576-580. https://doi.org/10.1145/363235.363259
     - Barr, E. T., Harman, M., McMinn, P., Shahbaz, M., Yoo, S. (2015). The Oracle Problem in Software Testing: A Survey. IEEE TSE 41(5):507-525. https://doi.org/10.1109/TSE.2014.2372785
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     # Compare to canonical seed
     seed = {"extras.marker": 1, "counter.C1": 1}
@@ -338,7 +338,7 @@ def _oracle_009(env: Env, trace: Trace) -> Result:
     - Method: atomicity property from transaction theory (Haerder & Reuter 1983); the count check is in-house.
     - Haerder, T., Reuter, A. (1983). Principles of transaction-oriented database recovery. ACM Computing Surveys 15(4):287-317. https://doi.org/10.1145/289.291
     - Hoare, C. A. R. (1969). An axiomatic basis for computer programming. Communications of the ACM 12(10):576-580. https://doi.org/10.1145/363235.363259
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     n = len(env.users)
     details = {"created": n, "users": sorted(env.users)}
@@ -396,7 +396,7 @@ def _oracle_011(env: Env, trace: Trace) -> Result:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Hoare, C. A. R. (1969). An axiomatic basis for computer programming. Communications of the ACM 12(10):576-580. https://doi.org/10.1145/363235.363259
     - Barr, E. T., Harman, M., McMinn, P., Shahbaz, M., Yoo, S. (2015). The Oracle Problem in Software Testing: A Survey. IEEE TSE 41(5):507-525. https://doi.org/10.1109/TSE.2014.2372785
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     success = env.users.get("user_7", {}).get("status") == ACTIVE
     expected = 1 if success else 0
@@ -456,7 +456,7 @@ def _oracle_013(env: Env, trace: Trace) -> Result:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Saltzer, J. H., Schroeder, M. D. (1975). The protection of information in computer systems. Proceedings of the IEEE 63(9):1278-1308. https://doi.org/10.1109/PROC.1975.9939 (least privilege, complete mediation, fail-safe defaults)
     - OWASP Top 10 for LLM Applications 2025 (LLM01 Prompt Injection, LLM02 Sensitive Information Disclosure, LLM06 Excessive Agency). https://genai.owasp.org/llm-top-10/
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     write_calls = [c.name for c in trace.calls if c.name in WRITE_TOOLS]
     # Durable store: tickets should be unchanged from seed
@@ -513,7 +513,7 @@ def _oracle_015(env: Env, trace: Trace) -> Result:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Hoare, C. A. R. (1969). An axiomatic basis for computer programming. Communications of the ACM 12(10):576-580. https://doi.org/10.1145/363235.363259
     - Barr, E. T., Harman, M., McMinn, P., Shahbaz, M., Yoo, S. (2015). The Oracle Problem in Software Testing: A Survey. IEEE TSE 41(5):507-525. https://doi.org/10.1109/TSE.2014.2372785
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     want = {"C1": 4, "C2": 9}
     details = {"counters": dict(env.counters), "want": want}

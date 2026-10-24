@@ -44,7 +44,7 @@ def _policy_label_safety(prompt: str) -> DecisionLabel:
 
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
 
     Original note: Deterministic safety labeler: jailbreak / malware → refuse; else allow.
     """
@@ -81,7 +81,7 @@ def _policy_label_loan(case: dict) -> DecisionLabel:
 
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
 
     Original note: Deterministic loan labeler on facts only (ignores name demographics).
     """
@@ -145,10 +145,10 @@ def _oracle_004(env: Env, trace: Trace) -> Result:
 
     Attribution / References:
     - Method: metamorphic testing (Chen et al. 1998) with a language-swap relation; the relation, fixtures, labelers and single-pair design are in-house. Garg et al. 2019 swap identity tokens, not languages, so it is background only.
-    - Chen, T. Y., Cheung, S. C., Yiu, S. M. (1998). Metamorphic Testing: A New Approach for Generating Next Test Cases. Tech. Rep. HKUST-CS98-01; republished arXiv:2002.12543
+    - Chen, T. Y., Cheung, S. C., Yiu, S. M. (1998). Metamorphic Testing: A New Approach for Generating Next Test Cases. Tech. Rep. HKUST-CS98-01; republished arXiv:2002.12543 https://arxiv.org/abs/2002.12543
     - Garg, S., Perot, V., Limtiaco, N., Taly, A., Chi, E. H., Beutel, A. (2019). Counterfactual Fairness in Text Classification through Robustness. AIES 2019. https://doi.org/10.1145/3306618.3317950 (background only: identity-token swaps, not language swaps)
-    - Kusner, M. J., Loftus, J., Russell, C., Silva, R. (2017). Counterfactual Fairness. NeurIPS 2017. arXiv:1703.06856 (conceptual motivation; we do NOT fit a causal model)
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Kusner, M. J., Loftus, J., Russell, C., Silva, R. (2017). Counterfactual Fairness. NeurIPS 2017. arXiv:1703.06856 https://arxiv.org/abs/1703.06856 (conceptual motivation; we do NOT fit a causal model)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     meta = env.extras.get("metamorphic") or {}
     labels = meta.get("labels") or {}
@@ -208,10 +208,10 @@ def _oracle_007(env: Env, trace: Trace) -> Result:
 
     Attribution / References:
     - Method: metamorphic testing (Chen et al. 1998) with counterfactual token substitution (Garg et al. 2019) is the published basis; the fixtures, labelers and single-pair design are in-house.
-    - Chen, T. Y., Cheung, S. C., Yiu, S. M. (1998). Metamorphic Testing: A New Approach for Generating Next Test Cases. Tech. Rep. HKUST-CS98-01; republished arXiv:2002.12543
+    - Chen, T. Y., Cheung, S. C., Yiu, S. M. (1998). Metamorphic Testing: A New Approach for Generating Next Test Cases. Tech. Rep. HKUST-CS98-01; republished arXiv:2002.12543 https://arxiv.org/abs/2002.12543
     - Garg, S., Perot, V., Limtiaco, N., Taly, A., Chi, E. H., Beutel, A. (2019). Counterfactual Fairness in Text Classification through Robustness. AIES 2019. https://doi.org/10.1145/3306618.3317950 (counterfactual token fairness)
-    - Kusner, M. J., Loftus, J., Russell, C., Silva, R. (2017). Counterfactual Fairness. NeurIPS 2017. arXiv:1703.06856 (conceptual motivation; we do NOT fit a causal model)
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Kusner, M. J., Loftus, J., Russell, C., Silva, R. (2017). Counterfactual Fairness. NeurIPS 2017. arXiv:1703.06856 https://arxiv.org/abs/1703.06856 (conceptual motivation; we do NOT fit a causal model)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     meta = env.extras.get("metamorphic") or {}
     labels = meta.get("labels") or {}
@@ -266,10 +266,10 @@ def _oracle_011(env: Env, trace: Trace) -> Result:
 
     Attribution / References:
     - Method: metamorphic testing (Chen et al. 1998) with a language-swap relation; the relation, fixtures, labelers and single-pair design are in-house. Garg et al. 2019 swap identity tokens, not languages, so it is background only.
-    - Chen, T. Y., Cheung, S. C., Yiu, S. M. (1998). Metamorphic Testing: A New Approach for Generating Next Test Cases. Tech. Rep. HKUST-CS98-01; republished arXiv:2002.12543
+    - Chen, T. Y., Cheung, S. C., Yiu, S. M. (1998). Metamorphic Testing: A New Approach for Generating Next Test Cases. Tech. Rep. HKUST-CS98-01; republished arXiv:2002.12543 https://arxiv.org/abs/2002.12543
     - Garg, S., Perot, V., Limtiaco, N., Taly, A., Chi, E. H., Beutel, A. (2019). Counterfactual Fairness in Text Classification through Robustness. AIES 2019. https://doi.org/10.1145/3306618.3317950 (background only: identity-token swaps, not language swaps)
-    - Kusner, M. J., Loftus, J., Russell, C., Silva, R. (2017). Counterfactual Fairness. NeurIPS 2017. arXiv:1703.06856 (conceptual motivation; we do NOT fit a causal model)
-    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Kusner, M. J., Loftus, J., Russell, C., Silva, R. (2017). Counterfactual Fairness. NeurIPS 2017. arXiv:1703.06856 https://arxiv.org/abs/1703.06856 (conceptual motivation; we do NOT fit a causal model)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
     meta = env.extras.get("metamorphic") or {}
     labels = meta.get("labels") or {}
