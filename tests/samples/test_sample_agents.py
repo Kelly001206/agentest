@@ -1,4 +1,10 @@
-"""Sample agents — green ladder all-pass; expected-fail band partial fails."""
+"""Sample agents — green ladder all-pass; expected-fail band partial fails.
+
+What this module verifies: oracles in this pack accept correct (golden) behaviour and reject
+seeded defects (broken), plus CLI exit-code contracts used in CI. Algorithms, thresholds and
+per-ID references are in the oracle docstrings; background: See docs/SAMPLE-AGENTS.md.
+Full bibliography: docs/REFERENCES.md.
+"""
 
 from __future__ import annotations
 
@@ -36,6 +42,7 @@ GREEN = [
 
 
 def test_list_samples_returns_fifteen():
+    """Registry exposes exactly 15 sample agents with complexities 1..15."""
     infos = list_samples()
     assert len(infos) == 15
     assert [i.name for i in infos] == list(SAMPLE_AGENT_NAMES)
@@ -43,22 +50,26 @@ def test_list_samples_returns_fifteen():
 
 
 def test_list_samples_failing_only():
+    """`--failing` lists only the expected-fail band (cx 11-15)."""
     infos = list_samples(failing_only=True)
     assert [i.name for i in infos] == list(EXPECTED_FAIL_SCENARIOS)
     assert all(11 <= i.complexity <= 15 for i in infos)
 
 
 def test_cli_samples_exit_0():
+    """`agentest samples` CLI exits 0."""
     assert cli_main(["samples"]) == 0
     assert cli_main(["samples", "--failing"]) == 0
 
 
 def test_stub_fails_t1_001():
+    """stub (success flag only) must FAIL T1-001 - a claim is not evidence."""
     results = run_ids(["T1-001"], suite="functional", agent="stub")
     assert results[0].outcome is Outcome.FAIL
 
 
 def test_stub_fails_privacy_soft_delete():
+    """stub must FAIL T1-016 soft delete (no tool calls, so deleted_at never set)."""
     results = run_ids(["T1-016"], suite="privacy", agent="stub")
     assert results[0].outcome is Outcome.FAIL
 
@@ -66,26 +77,31 @@ def test_stub_fails_privacy_soft_delete():
 @pytest.mark.parametrize("agent", GREEN)
 @pytest.mark.parametrize("checklist_id", ALL_IDS)
 def test_passing_samples_pass_every_id(agent: str, checklist_id: str):
+    """Each green-ladder sample (GREEN) passes every implemented ID (parametrised agent x ID)."""
     results = run_ids([checklist_id], suite="functional", agent=agent)
     assert len(results) == 1
     assert results[0].outcome is Outcome.PASS, (agent, checklist_id, results[0])
 
 
 def test_registry_unique_count():
+    """CASE_REGISTRY holds exactly EXPECTED_UNIQUE distinct checklist IDs (dict keyed by ID, so duplicates would shrink it)."""
     assert len(CASE_REGISTRY) == EXPECTED_UNIQUE
 
 
 def test_golden_still_passes_t1_001():
+    """Regression: golden still passes T1-001 alongside samples."""
     results = run_ids(["T1-001"], suite="functional", agent="golden")
     assert results[0].outcome is Outcome.PASS
 
 
 def test_broken_still_fails_t1_001():
+    """Regression: broken still fails T1-001 alongside samples."""
     results = run_ids(["T1-001"], suite="functional", agent="broken")
     assert results[0].outcome is Outcome.FAIL
 
 
 def test_run_agent_choices_include_samples():
+    """CLI accepts each sample agent by name: green-ladder agents exit 0 on a native ID; expected-fail agents exit 1 on a target ID."""
     assert cli_main(["run", "--suite", "functional", "--ids", "T1-007", "--agent", "scripted"]) == 0
     assert cli_main(["run", "--suite", "orchestration", "--ids", "T3-001", "--agent", "supervisor"]) == 0
     assert cli_main(["run", "--suite", "orchestration", "--ids", "T3-001", "--agent", "handoff"]) == 0
@@ -113,6 +129,8 @@ def test_expected_fail_partial_profile(agent: str):
 
 
 def test_matrix_must_pass_agents():
+    """Full matrix: stub fails more than it passes; golden + green ladder (scripted..federation) pass every ID;
+    each expected-fail agent has >=3 fails and >=5 passes; matrix_ok() is True."""
     summary = run_matrix(include_golden=True)
     assert summary["stub"]["pass"] < summary["stub"]["total"]
     assert summary["stub"]["fail"] > summary["stub"]["pass"]
@@ -128,9 +146,11 @@ def test_matrix_must_pass_agents():
 
 
 def test_cli_matrix_exit_0():
+    """`agentest matrix` exits 0 iff all must-pass agents are fully green."""
     assert cli_main(["matrix", "--no-golden"]) == 0
 
 
 def test_get_sample_unknown():
+    """Unknown sample name raises a clear error."""
     with pytest.raises(ValueError, match="unknown sample"):
         get_sample("nope")

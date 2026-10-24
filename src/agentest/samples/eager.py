@@ -3,6 +3,31 @@
 Intentionally wrong patterns: wrong order, hard-delete, disclose-before-verify,
 duplicate single-shot, write on read-only, skip explanations/bias labels.
 Partial accidental passes are OK (teaching signal).
+
+Scenario
+--------
+an act-first agent that calls the right tools but ignores the constraints oracles enforce.
+
+Agent design
+------------
+per-ID hand-written wrong sequences - wrong order (T2-*), hard delete (T1-016), disclose before verify (T2-005), duplicate single-shot (T2-003), writes on read-only (T1-013), trusts handover prose / skips HITL / immortal session (T3-*, T2-004), no explanations or bias labels.
+
+Tests exercised / expected outcome
+----------------------------------
+all suites; expected to FAIL most IDs with some accidental passes.
+
+Why
+---
+shows the classic excessive-agency failure modes.
+
+Attribution / References
+------------------------
+- In-house teaching design; references are for the general agent pattern it imitates (no LLM is used - the agent is deterministic).
+- OWASP Top 10 for LLM Applications 2025 (LLM01 Prompt Injection, LLM02 Sensitive Information Disclosure, LLM06 Excessive Agency). https://genai.owasp.org/llm-top-10/
+- Saltzer, J. H., Schroeder, M. D. (1975). The protection of information in computer systems. Proceedings of the IEEE 63(9):1278-1308. https://doi.org/10.1109/PROC.1975.9939 (least privilege, complete mediation, fail-safe defaults)
+- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+
+See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
 
 from __future__ import annotations

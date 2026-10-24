@@ -11,6 +11,31 @@ Some absence-tolerant oracles (empty DEPENDS_ON graphs, empty single-shot
 counts, no disclose tools, etc.) still Pass accidentally — that is a
 teaching signal: not every oracle fires on "did nothing." Documented in
 ``docs/SAMPLE-AGENTS.md``.
+
+Scenario
+--------
+the minimal 'agent' that only reports success. It never calls a real tool (and for orchestration IDs forges traces), so every oracle that checks terminal state, ordering or authorization should catch it.
+
+Agent design
+------------
+handle() returns a Trace with claims_success=True and no side effects.
+
+Tests exercised / expected outcome
+----------------------------------
+all suites; expected to FAIL most IDs (e.g. T1-001 false completion, T1-016 soft delete, T3-001 handover prose). A few IDs that only forbid actions (e.g. T1-007 no-op, T1-013 read-only) may pass by accident - that is itself a teaching point.
+
+Why
+---
+demonstrates that a success flag is not evidence (test-oracle problem).
+
+Attribution / References
+------------------------
+- In-house teaching design; references are for the general agent pattern it imitates (no LLM is used - the agent is deterministic).
+- Barr, E. T., Harman, M., McMinn, P., Shahbaz, M., Yoo, S. (2015). The Oracle Problem in Software Testing: A Survey. IEEE TSE 41(5):507-525. https://doi.org/10.1109/TSE.2014.2372785
+- Hoare, C. A. R. (1969). An axiomatic basis for computer programming. Communications of the ACM 12(10):576-580. https://doi.org/10.1145/363235.363259
+- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+
+See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
 
 from __future__ import annotations

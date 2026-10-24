@@ -3,6 +3,32 @@
 Emits plan order, grants scoped approvals, writes handoff with signed task
 contract fields in trace meta, downgrades worker role, sets session TTL.
 For non-orchestration IDs, composes ReflectiveAgent so prior suites still Pass.
+
+Scenario
+--------
+a supervisor/planner in a multi-agent system that grants approvals, writes signed handoff contracts, downgrades the receiver's role and sets session TTL.
+
+Agent design
+------------
+native handling for orchestration IDs (approval.grant before disburse, handover.write with contract, session.set_role, TTL); delegates others to ReflectiveAgent.
+
+Tests exercised / expected outcome
+----------------------------------
+orchestration (T3-001/002/007/010/014, T2-004) plus all others; expected ALL PASS.
+
+Why
+---
+human/policy-in-the-loop and least privilege at delegation boundaries.
+
+Attribution / References
+------------------------
+- In-house teaching design; references are for the general agent pattern it imitates (no LLM is used - the agent is deterministic).
+- Regulation (EU) 2024/1689 (EU AI Act), Art. 14 Human oversight. https://eur-lex.europa.eu/eli/reg/2024/1689/oj
+- Saltzer, J. H., Schroeder, M. D. (1975). The protection of information in computer systems. Proceedings of the IEEE 63(9):1278-1308. https://doi.org/10.1109/PROC.1975.9939 (least privilege, complete mediation, fail-safe defaults)
+- Hardt, D. (Ed.) (2012). RFC 6749: The OAuth 2.0 Authorization Framework, sec. 4.1.2 (authorization code MUST NOT be used more than once). https://doi.org/10.17487/RFC6749
+- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+
+See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
 
 from __future__ import annotations

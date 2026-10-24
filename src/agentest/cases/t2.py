@@ -1,4 +1,10 @@
-"""T2 tool-ordering functional cases."""
+"""T2 tool-ordering functional cases.
+
+Each oracle below documents: Hub catalogue ID(s), the algorithm step by step,
+thresholds and rationale, pass/fail interpretation, limitations, and an
+Attribution / References section (published method vs in-house heuristic).
+Full verified bibliography: docs/REFERENCES.md.
+"""
 
 from __future__ import annotations
 
@@ -51,6 +57,27 @@ def _broken_001(env: Env) -> Trace:
 
 
 def _oracle_001(env: Env, trace: Trace) -> Result:
+    """T2-001 oracle: open_account only after sanctions_screen AND verify_identity (DEPENDS_ON).
+
+    Hub catalogue ID(s): T2-001
+
+    Algorithm (step by step):
+    1. Walk trace.tool_calls in order, maintaining the set of tools that succeeded so far.
+    2. For each call, look up its prerequisite set in the DEPENDS_ON graph (thresholds.py).
+    3. If any prerequisite has not yet succeeded -> FAIL with the missing edge.
+    4. If the whole trace is walked without violation -> PASS (trace is a valid linearisation / topological order of the graph).
+
+    Thresholds / rationale: Graph T2_001_DEPENDS_ON; any violated edge fails.
+
+    Pass / fail interpretation: PASS = calls respect the dependency DAG.
+
+    Limitations: Checks order only, not argument correctness.
+
+    Attribution / References:
+    - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
+    - Kahn, A. B. (1962). Topological sorting of large networks. Communications of the ACM 5(11):558-562. https://doi.org/10.1145/368996.369025
+    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    """
     ok, msg = _check_depends(trace, T2_001_DEPENDS_ON)
     details = {"calls": [c.name for c in trace.calls]}
     if ok:
@@ -77,6 +104,26 @@ def _broken_003(env: Env) -> Trace:
 
 
 def _oracle_003(env: Env, trace: Trace) -> Result:
+    """T2-003 oracle: single-shot irreversible tools (disburse, charge_card, send_wire) called at most once.
+
+    Hub catalogue ID(s): T2-003
+
+    Algorithm (step by step):
+    1. Count occurrences of each SINGLE_SHOT tool in the trace.
+    2. Any count > 1 -> FAIL.
+    3. Else PASS.
+
+    Thresholds / rationale: <= 1 per tool: irreversible money movement must never repeat.
+
+    Pass / fail interpretation: FAIL = duplicate charge / wire risk.
+
+    Limitations: Counts attempts, including failed ones.
+
+    Attribution / References:
+    - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
+    - Hardt, D. (Ed.) (2012). RFC 6749: The OAuth 2.0 Authorization Framework, sec. 4.1.2 (authorization code MUST NOT be used more than once). https://doi.org/10.17487/RFC6749
+    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    """
     counts = {n: trace.count(n) for n in T2_003_SINGLE_SHOT}
     details = {"counts": counts}
     bad = {n: c for n, c in counts.items() if c > 1}
@@ -106,6 +153,27 @@ def _broken_009(env: Env) -> Trace:
 
 
 def _oracle_009(env: Env, trace: Trace) -> Result:
+    """T2-009 oracle: write_summary only after both sibling fetches (fetch_profile, fetch_prefs).
+
+    Hub catalogue ID(s): T2-009
+
+    Algorithm (step by step):
+    1. Walk trace.tool_calls in order, maintaining the set of tools that succeeded so far.
+    2. For each call, look up its prerequisite set in the DEPENDS_ON graph (thresholds.py).
+    3. If any prerequisite has not yet succeeded -> FAIL with the missing edge.
+    4. If the whole trace is walked without violation -> PASS (trace is a valid linearisation / topological order of the graph).
+
+    Thresholds / rationale: Graph T2_009_GRAPH; siblings may run in any order.
+
+    Pass / fail interpretation: PASS = any valid topological order is accepted.
+
+    Limitations: Order only.
+
+    Attribution / References:
+    - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
+    - Kahn, A. B. (1962). Topological sorting of large networks. Communications of the ACM 5(11):558-562. https://doi.org/10.1145/368996.369025
+    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    """
     ok, msg = _check_depends(trace, T2_009_GRAPH)
     details = {"calls": [c.name for c in trace.calls]}
     if ok:
@@ -136,6 +204,26 @@ def _broken_013(env: Env) -> Trace:
 
 
 def _oracle_013(env: Env, trace: Trace) -> Result:
+    """T2-013 oracle: hard ordering edges hold while soft (logging) tools may be reordered freely.
+
+    Hub catalogue ID(s): T2-013
+
+    Algorithm (step by step):
+    1. Walk calls; skip tools in T2_013_SOFT (e.g. log_debug).
+    2. For other tools require T2_013_HARD prerequisites (charge needs authorize) already succeeded.
+    3. Violation -> FAIL; else PASS.
+
+    Thresholds / rationale: Hard edge charge<-authorize; soft tools exempt so harmless reordering is not penalised.
+
+    Pass / fail interpretation: FAIL = charge before authorize.
+
+    Limitations: Hard/soft sets are hand-curated.
+
+    Attribution / References:
+    - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
+    - Kahn, A. B. (1962). Topological sorting of large networks. Communications of the ACM 5(11):558-562. https://doi.org/10.1145/368996.369025
+    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    """
     done: set[str] = set()
     for c in trace.tool_calls:
         if c.name not in T2_013_SOFT:

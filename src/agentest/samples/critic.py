@@ -5,6 +5,32 @@ claims_success still False). A critique step forces repair before the agent
 sets ``claims_success``. Explanation, cited_steps, memory_citations, and
 api_success must stay trace-faithful. Composes ReflectiveAgent for non-native
 IDs so the full matrix still Passes.
+
+Scenario
+--------
+generate - critique - repair. A first draft may be incomplete (missing explanation fields or success flag); a critic checks it against the trace and repairs before claims_success is set.
+
+Agent design
+------------
+CRITIC_NATIVE IDs (explainability + T1-013 etc.) run a scripted draft (deliberately incomplete), a logged critique step (log_debug reason=critique naming what is missing, e.g. api_success/explanation, authz_log entry, reason codes, memory citations) and a repair that fills only trace-faithful fields before claims_success=True; others via ReflectiveAgent.
+
+Tests exercised / expected outcome
+----------------------------------
+T1-018, T3-006, T5-015, T6-007, T7-009 and the full matrix; expected ALL PASS.
+
+Why
+---
+pattern follows Self-Refine (Madaan et al. 2023) and Reflexion-style feedback, implemented as rule-based critique rather than LLM self-feedback.
+
+Attribution / References
+------------------------
+- In-house teaching design; references are for the general agent pattern it imitates (no LLM is used - the agent is deterministic).
+- Madaan, A. et al. (2023). Self-Refine: Iterative Refinement with Self-Feedback. NeurIPS 2023. arXiv:2303.17651
+- Shinn, N., Cassano, F., Gopinath, A., Narasimhan, K., Yao, S. (2023). Reflexion: Language Agents with Verbal Reinforcement Learning. NeurIPS 2023. arXiv:2303.11366
+- Jacovi, A., Goldberg, Y. (2020). Towards Faithfully Interpretable NLP Systems: How Should We Define and Evaluate Faithfulness? ACL 2020. https://doi.org/10.18653/v1/2020.acl-main.386
+- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+
+See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
 
 from __future__ import annotations

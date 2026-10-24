@@ -6,6 +6,30 @@ teaching step before building a rule engine (policy) or reflective layer.
 
 Multi-run IDs (T1-002/T1-003): case golden is a noop stub; we play the
 canonical high-risk episode (approve R1) so multi_run can loop k times.
+
+Scenario
+--------
+a hard-coded playbook that replays each case's golden sequence.
+
+Agent design
+------------
+handle() looks up CASE_REGISTRY[id].golden(env) (see playbook.py).
+
+Tests exercised / expected outcome
+----------------------------------
+every ID; expected ALL PASS (in MATRIX_MUST_PASS).
+
+Why
+---
+baseline proving the oracles accept a correct trajectory.
+
+Attribution / References
+------------------------
+- In-house teaching design; references are for the general agent pattern it imitates (no LLM is used - the agent is deterministic).
+
+- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+
+See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
 
 from __future__ import annotations

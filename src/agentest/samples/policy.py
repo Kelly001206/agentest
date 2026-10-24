@@ -4,6 +4,31 @@ Consults shared policy modules (DEPENDS_ON graphs, WRITE fences, soft_delete,
 verify-before-disclose, single-shot, PII masking, bias labelers) rather than
 blindly copying golden function bodies. Passes all suites when rules cover
 functional + privacy + explainability + bias.
+
+Scenario
+--------
+a rule-engine agent driven by samples/policies/* (functional, privacy, explainability, bias, orchestration rules).
+
+Agent design
+------------
+dispatches each checklist ID to the matching apply_*_policy function, which encodes the rule (e.g. verify before disclose, tenant fence, approvals store) rather than replaying goldens.
+
+Tests exercised / expected outcome
+----------------------------------
+every ID; expected ALL PASS.
+
+Why
+---
+shows that explicit, auditable policy rules satisfy the catalogue - least privilege and complete mediation in code.
+
+Attribution / References
+------------------------
+- In-house teaching design; references are for the general agent pattern it imitates (no LLM is used - the agent is deterministic).
+- Saltzer, J. H., Schroeder, M. D. (1975). The protection of information in computer systems. Proceedings of the IEEE 63(9):1278-1308. https://doi.org/10.1109/PROC.1975.9939 (least privilege, complete mediation, fail-safe defaults)
+- ISO/IEC 42001:2023 Information technology - Artificial intelligence - Management system (Annex A controls). https://www.iso.org/standard/81230.html
+- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+
+See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
 
 from __future__ import annotations

@@ -1,4 +1,9 @@
-"""Wrapper: complexity-graded sample agent `scripted`."""
+"""Wrapper: complexity-graded sample agent `scripted`.
+
+The full scenario, agent design, tests exercised, expected pass/fail and
+literature references are documented in the module docstring of
+src/agentest/samples/scripted.py and in docs/SAMPLE-AGENTS.md / docs/REFERENCES.md.
+"""
 
 from agentest.samples import get_sample
 

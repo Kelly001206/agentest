@@ -37,7 +37,7 @@ print(ds["train"][0]["id"], ds["train"][0]["title"])
 
 This repo stays the **offline runner** (packs under `catalog/` — no Hub needed at runtime).
 
-Developer guide (GitHub-only path): [`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md) · Launch copy: [`docs/launch/`](docs/launch/)
+Developer guide (GitHub-only path): [`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md) · Bibliography: [`docs/REFERENCES.md`](docs/REFERENCES.md) · Launch copy: [`docs/launch/`](docs/launch/)
 
 | Surface | Location |
 |:--------|:---------|
@@ -108,7 +108,7 @@ agentest run --suite functional --ids T2-001 --agent flaky_plan
 agentest matrix   # exit 0 iff scripted…federation/(golden) all-pass
 ```
 
-Details: [`docs/SAMPLE-AGENTS.md`](docs/SAMPLE-AGENTS.md), [`docs/SCENARIOS-8-10.md`](docs/SCENARIOS-8-10.md), [`docs/SCENARIOS-EXPECTED-FAIL.md`](docs/SCENARIOS-EXPECTED-FAIL.md).
+Details: [`docs/SAMPLE-AGENTS.md`](docs/SAMPLE-AGENTS.md), references & attribution: [`docs/REFERENCES.md`](docs/REFERENCES.md), [`docs/SCENARIOS-8-10.md`](docs/SCENARIOS-8-10.md), [`docs/SCENARIOS-EXPECTED-FAIL.md`](docs/SCENARIOS-EXPECTED-FAIL.md).
 
 ## Explainability
 

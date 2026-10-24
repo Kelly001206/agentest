@@ -4,6 +4,33 @@ Hardest teaching agent: enforces session tenant (no cross-tenant writes/exports)
 refuses ambient authority across agents, and applies role downgrade + session TTL
 + single-use approvals together on orchestration IDs. Composes ReflectiveAgent /
 HandoffAgent for other IDs so the full matrix still Passes.
+
+Scenario
+--------
+hardest green agent - multi-tenant, cross-agent federation. Enforces session tenant on writes/exports, refuses ambient authority, and combines role downgrade + session TTL + single-use approvals.
+
+Agent design
+------------
+FED_NATIVE IDs handled with privacy_rules + orchestration_rules + policy.permits; others via Reflective/Handoff.
+
+Tests exercised / expected outcome
+----------------------------------
+T3-008, T5-011, T3-001/002/007/010/011/014, T2-004 and the full matrix; expected ALL PASS.
+
+Why
+---
+tenant isolation and capability-style authority (no ambient authority) are least-privilege principles.
+
+Attribution / References
+------------------------
+- In-house teaching design; references are for the general agent pattern it imitates (no LLM is used - the agent is deterministic).
+- Saltzer, J. H., Schroeder, M. D. (1975). The protection of information in computer systems. Proceedings of the IEEE 63(9):1278-1308. https://doi.org/10.1109/PROC.1975.9939 (least privilege, complete mediation, fail-safe defaults)
+- Hardy, N. (1988). The Confused Deputy (or why capabilities might have been invented). ACM SIGOPS Operating Systems Review 22(4):36-38. https://doi.org/10.1145/54289.871709
+- Hardt, D. (Ed.) (2012). RFC 6749: The OAuth 2.0 Authorization Framework, sec. 4.1.2 (authorization code MUST NOT be used more than once). https://doi.org/10.17487/RFC6749
+- NIST SP 800-63B, Digital Identity Guidelines: Authentication and Lifecycle Management, sec. 7 (session management / reauthentication). https://pages.nist.gov/800-63-3/sp800-63b.html
+- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+
+See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
 
 from __future__ import annotations

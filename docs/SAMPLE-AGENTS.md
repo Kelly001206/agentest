@@ -64,6 +64,36 @@ See [`SCENARIOS-EXPECTED-FAIL.md`](SCENARIOS-EXPECTED-FAIL.md).
 
 See [`SCENARIOS-8-10.md`](SCENARIOS-8-10.md) for teaching notes on planner / critic / federation.
 
+## Per-agent detail (scenario · design · tests · why · references)
+
+Each agent's module docstring in `src/agentest/samples/<name>.py` has the full text. Citations are verified in [`REFERENCES.md`](REFERENCES.md). All agents are deterministic code with no LLM, so a reference names the *pattern* the agent imitates. It does not mean the paper's method is reproduced.
+
+| # | agent | scenario & design | tests exercised → expected | why / references |
+|--:|:--|:--|:--|:--|
+| 1 | `stub` | Returns `claims_success=True` with no tool calls. Forges traces for orchestration IDs. | All suites → mostly FAIL. A few "do nothing" IDs (T1-007, T1-013) may pass by accident. | A success flag is not evidence. See the test-oracle problem (Barr et al. 2015) and postconditions (Hoare 1969). |
+| 2 | `eager` | Calls real tools but breaks the constraints: wrong order, hard delete, disclose before verify, duplicate single-shot calls, writes on read-only tasks, trusts handover prose, skips HITL. | All suites → mostly FAIL. | Shows excessive agency (OWASP LLM06) and broken least privilege (Saltzer & Schroeder 1975). |
+| 3 | `scripted` | Replays each case's golden trajectory (`playbook.py`). | Every ID → PASS. | Baseline that proves the oracles accept correct behaviour. |
+| 4 | `policy` | A rule engine over `samples/policies/*` for the functional, privacy, explain, bias and orchestration rules. | Every ID → PASS. | Explicit, auditable rules (least privilege, complete mediation; ISO/IEC 42001 Annex A). |
+| 5 | `reflective` | Runs the policy rules, then `enrich_explainability()` fills explanation, cited_steps and memory_citations **only from steps that actually ran**. | Every ID → PASS, including all explainability and bias IDs. | Faithful by construction (Jacovi & Goldberg 2020). The post-hoc self-inspection loosely mirrors Reflexion (Shinn et al. 2023). |
+| 6 | `supervisor` | A planner/grantor that issues approvals, writes a signed handoff contract, downgrades the receiver's role and sets the session TTL. | Orchestration natively, everything else via reflective → PASS. | Human oversight (EU AI Act Art. 14) and single-use grants (RFC 6749 §4.1.2). |
+| 7 | `handoff` | The receiving worker. It ignores approval claims in prose, checks the approvals store, logs an independent `authz.decide`, refuses ambient authority, and enforces TTL and single-use tokens. | T3-001/002/006/007/010/011/014 and T2-004 → PASS. | Confused deputy (Hardy 1988), indirect prompt injection (Greshake et al. 2023), session management (NIST SP 800-63B). |
+| 8 | `planner` | Records a `todo.plan` whose step order is a valid DEPENDS_ON linearisation **before** acting. A guard refuses irreversible tools until a plan exists. | T2-001/003/009/013, T6-006, T2-004 natively → PASS. | Plan-and-Solve (Wang et al. 2023) as code. Ordering is a topological sort (Kahn 1962). |
+| 9 | `critic` | Writes a deliberately incomplete draft, logs a critique step that names what is missing, then repairs only trace-faithful fields before claiming success. | T1-018, T3-006, T5-015, T6-007, T7-009 → PASS. | Self-Refine (Madaan et al. 2023) and Reflexion-style feedback, done as rule-based critique. |
+| 10 | `federation` | Multi-tenant federation: session-tenant fence on writes and exports, no ambient authority, role downgrade, TTL and single-use approvals combined. | T3-008, T5-011 and orchestration IDs → PASS. | Least privilege and capability-style authority (Saltzer & Schroeder; Hardy). |
+| 11 | `leaky` | Golden everywhere except `PRIVACY_IDS`, where the broken sequence runs. | Fails 8 privacy IDs, passes the rest. | Shows privacy oracles fire on their own. NIST SP 800-122, GDPR, Greshake et al. 2023. |
+| 12 | `hallucinator` | Broken sequence on `EXPLAINABILITY_IDS`: api_success without the write, missing reasons, silent memory use, invented tools. | Fails 5 explainability IDs (T3-006 is double-counted). | Unfaithful explanations are caught against the trace (Jacovi & Goldberg 2020; ReAct). |
+| 13 | `biased` | Broken sequence on `BIAS_FAIRNESS_IDS`: Hinglish bypass, name flip, Spanish asymmetry. | Fails 3 bias IDs. | Metamorphic testing (Chen et al. 1998) and counterfactual token fairness (Garg et al. 2019). |
+| 14 | `overreach` | Broken sequence on `ORCHESTRATION_IDS`. | Fails 8 orchestration IDs. | Confused deputy, excessive agency, missing human oversight. |
+| 15 | `flaky_plan` | Broken sequence on T2-001/003/009/013, T6-006, T2-004 and T3-010 (deterministic half-done planning). | Fails that subset. | Plan ordering and HITL-before-act are checked separately from final success. |
+
+### Reading an oracle
+
+Every oracle function in `src/agentest/cases/*.py` has a docstring with these parts:
+**Hub catalogue ID(s) → Algorithm (step by step) → Thresholds / rationale →
+Pass / fail interpretation → Limitations → Attribution / References**. The first
+reference line states whether the check applies a published method or is an
+in-house heuristic.
+
 ## How to run
 
 ```bash

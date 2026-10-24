@@ -1,4 +1,10 @@
-"""T6 multi-turn state functional cases."""
+"""T6 multi-turn state functional cases.
+
+Each oracle below documents: Hub catalogue ID(s), the algorithm step by step,
+thresholds and rationale, pass/fail interpretation, limitations, and an
+Attribution / References section (published method vs in-house heuristic).
+Full verified bibliography: docs/REFERENCES.md.
+"""
 
 from __future__ import annotations
 
@@ -36,6 +42,25 @@ def _broken_003(env: Env) -> Trace:
 
 
 def _oracle_003(env: Env, trace: Trace) -> Result:
+    """T6-003 oracle: entity binding (ticket_id) stays stable across turns.
+
+    Hub catalogue ID(s): T6-003
+
+    Algorithm (step by step):
+    1. Read env.state.binding_history['ticket_id'].
+    2. Empty -> FAIL (nothing bound).
+    3. If all bindings identical -> PASS; else FAIL (binding switched).
+
+    Thresholds / rationale: Exactly one distinct value allowed.
+
+    Pass / fail interpretation: FAIL = agent drifted to another ticket mid-conversation.
+
+    Limitations: Only tracks the ticket_id slot.
+
+    Attribution / References:
+    - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
+    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    """
     hist = env.state.binding_history.get("ticket_id", [])
     details = {"binding_history": hist, "bindings": dict(env.state.bindings)}
     if not hist:
@@ -77,6 +102,25 @@ def _broken_006(env: Env) -> Trace:
 
 
 def _oracle_006(env: Env, trace: Trace) -> Result:
+    """T6-006 oracle: the set of completed plan steps grows monotonically.
+
+    Hub catalogue ID(s): T6-006
+
+    Algorithm (step by step):
+    1. Read completed_snapshots recorded per turn (fallback: final set).
+    2. For consecutive snapshots require prev subset-of cur.
+    3. Any shrink -> FAIL; else PASS.
+
+    Thresholds / rationale: Monotonic (subset) ordering; no completed step may be dropped.
+
+    Pass / fail interpretation: FAIL = agent 'forgot' completed work.
+
+    Limitations: Relies on snapshots the agent records.
+
+    Attribution / References:
+    - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
+    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    """
     snaps = env.extras.get("completed_snapshots")
     if not snaps:
         # Fall back: single final set is trivially monotonic
@@ -120,6 +164,24 @@ def _broken_010(env: Env) -> Trace:
 
 
 def _oracle_010(env: Env, trace: Trace) -> Result:
+    """T6-010 oracle: user-selected locale (hi) persists across later turns.
+
+    Hub catalogue ID(s): T6-010
+
+    Algorithm (step by step):
+    1. Read env.state.locale at end of run.
+    2. == 'hi' -> PASS, else FAIL.
+
+    Thresholds / rationale: Exact match.
+
+    Pass / fail interpretation: FAIL = silent locale drift.
+
+    Limitations: Does not check message language itself.
+
+    Attribution / References:
+    - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
+    - Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    """
     details = {"locale": env.state.locale}
     if env.state.locale == "hi":
         return Result("T6-010", Outcome.PASS, "locale persisted as hi", details)

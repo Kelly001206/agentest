@@ -5,6 +5,32 @@ irreversible side effect. Refuses to call high-impact tools until a plan is
 recorded on the trace. Strong on T2-* ordering and orchestration HITL (T2-004).
 Composes ReflectiveAgent (and Supervisor for orch IDs) so the full matrix still
 Passes.
+
+Scenario
+--------
+plan-then-act. The agent records an explicit todo.plan / DEPENDS_ON linearisation before any irreversible side effect.
+
+Agent design
+------------
+records a per-ID plan (todo.plan) whose step order is a valid linearisation of the T2 dependency graphs in thresholds.py, then executes via a guard that refuses high-impact tools until a plan exists; HITL approval before disburse (T2-004).
+
+Tests exercised / expected outcome
+----------------------------------
+T2-001/003/009/013, T6-006, T2-004 natively; others via Reflective/Supervisor; expected ALL PASS.
+
+Why
+---
+the plan-first structure mirrors Plan-and-Solve prompting (Wang et al. 2023), here as deterministic code; ordering correctness is classic topological sorting (Kahn 1962).
+
+Attribution / References
+------------------------
+- In-house teaching design; references are for the general agent pattern it imitates (no LLM is used - the agent is deterministic).
+- Wang, L., Xu, W., Lan, Y., Hu, Z., Lan, Y., Lee, R. K.-W., Lim, E.-P. (2023). Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models. ACL 2023. arXiv:2305.04091
+- Kahn, A. B. (1962). Topological sorting of large networks. Communications of the ACM 5(11):558-562. https://doi.org/10.1145/368996.369025
+- Regulation (EU) 2024/1689 (EU AI Act), Art. 14 Human oversight. https://eur-lex.europa.eu/eli/reg/2024/1689/oj
+- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+
+See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
 
 from __future__ import annotations
