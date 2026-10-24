@@ -1,19 +1,19 @@
 hub_dataset: srinivaspadmanabhuni/agentic-ai-test-checklist-110
-hub_revision: v1.1.2
-hub_main_sha_at_sync: 989c89823315d8084c379ff23d902e4dad8d9d32
+hub_revision: v1.2.1
+hub_main_sha_at_sync: 43b80a3aba6c907483d3c86eb16c949289f7e0b5
 sync_check: python scripts/check_hub_sync.py  # offline CI; add --live optionally
 hub_url: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110
 hub_user_guide: USER-GUIDE.md
 hub_user_guide_url: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md
 hub_pack_orchestration: packs/orchestration.csv
 hub_pack_orchestration_url: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/packs/orchestration.csv
-hub_pack_orchestration_commit: 27b1f2d664243cd9b971a50ff026a20da6165b7b
+hub_pack_orchestration_commit: 43b80a3aba6c907483d3c86eb16c949289f7e0b5
 note: Pack CSVs are synced byte-identical from Hub. Never edit pack CSVs only in this repo — sync from Hub. Hub USER-GUIDE documents catalogue + runner path for Hub visitors.
 packs_in_scope: functional,privacy,explainability,bias_fairness,orchestration
-sha256_functional: 34ae380371e7629f22b83944c1ca21682458171aaca1044740499cd6be2a152f
-sha256_privacy: 039b82d90b647d39926b0ee829f666eb1d03c7286c41ed7be77ba367b41082de
-sha256_explainability: c7a42bd36a6d5dd1353fa52897cdd84fe475c791d3c2cbfbde73d4adde07c15d
-sha256_bias_fairness: 69cd6f11200a0ca3922fa437f9e86ef8f442e2f9dfd41ca3557b534adb6e83e4
-sha256_orchestration: fed88b313e7e0ec6376789187b4b2933b00940f38ce0d4daecf87d2d6be7a804
+sha256_functional: 9dfaa52f0ae2dd60eee58a1d4e2a4b988d3d00779307fe8c0c66ea37fe889133
+sha256_privacy: 67b4148459343e46768f228b959373fc960cb3df7920bd3a89ee10075c7b2d9e
+sha256_explainability: c15051582b7be6a3fc2484cbeb0dd0cb24e1a91b6e7bd28de1600537dc7be7e4
+sha256_bias_fairness: 0990295aa70c503d70ad076a913b70afb939a196005c46ac795b85c9cb65d419
+sha256_orchestration: dd01cc25c89ba66ab707bfae2aa1e2c08c87d8661166e2573b6ce2c62cd896db
 packs_parked: security
 runner_note: orchestration is a runner theme pack selecting Hub T3/T2 IDs; Hub has no separate eval_group=orchestration (still 110 rows).

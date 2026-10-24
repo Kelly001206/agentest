@@ -126,7 +126,7 @@ def _oracle_018(env: Env, trace: Trace) -> Result:
 
 
 # --- T3-006 Receiving agent logs independent authz decision ---
-# Related: OWASP ASI PrivilegeCompromise / AgenticHandoff; ISO 42001 A.8; NIST AI RMF MEASURE
+# Related: OWASP Agentic 2026 ASI03 / ASI07; NIST AI RMF MEASURE
 def _env_006() -> Env:
     return Env()
 

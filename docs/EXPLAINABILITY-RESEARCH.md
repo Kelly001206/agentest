@@ -16,7 +16,7 @@ taxonomy DOI [10.5281/zenodo.23587407](https://doi.org/10.5281/zenodo.23587407).
 | ID | Oracle focus in agentest | Research / algorithm anchors |
 |:---|:-------------------------|:-----------------------------|
 | **T1-018** | `api_success == terminal postconditions(env)` | Same family as false-completion (**T1-002**): declared outcome must match world state. Catalogue mapping (in-house check; no third-party source): Padmanabhuni taxonomy, Zenodo [10.5281/zenodo.23587407](https://doi.org/10.5281/zenodo.23587407); Pulse / checklist framing for agentic terminal-state assurance. |
-| **T3-006** | Receiving agent writes `authz_log` with `decision` ∈ {allow,deny} + `policy_version` | OWASP Agentic / ASI themes (PrivilegeCompromise, AgenticHandoff) from Hub `control_refs`. Auditability practice: **policy-versioned decision logs** (ISO/IEC 42001 A.8; NIST AI RMF **MEASURE**). |
+| **T3-006** | Receiving agent writes `authz_log` with `decision` ∈ {allow,deny} + `policy_version` | OWASP Agentic 2026 **ASI03** (Identity and Privilege Abuse) and **ASI07** (Insecure Inter-Agent Communication) from Hub `control_refs`. Auditability practice: **policy-versioned decision logs** (ISO/IEC 42001 theme "Traceability, transparency and reliability"; NIST AI RMF **MEASURE**). |
 | **T5-015** | Every `ToolCall.meta["reason"]` non-empty | **ReAct** (Yao et al., 2023) interleaved reason+act — our `meta.reason` operationalizes the “reason” slot per tool step. Trajectory diagnostics: **TRACE** (Kim et al., 2025, [arXiv:2510.02837](https://arxiv.org/abs/2510.02837)); **TRAJECT-Bench** ([arXiv 2510.04550](https://arxiv.org/abs/2510.04550)); **AgentDiagnose** ([EMNLP 2025 demos PDF](https://aclanthology.org/2025.emnlp-demos.15/)). |
 | **T6-007** | If `memory_reads` then `memory_citations` ≥ 1 and **citations ⊆ reads** | RAG-style **citation / provenance** faithfulness (attribution must point at retrieved items). Deterministic analogue of attribution faithfulness; Hub taxonomy Zenodo above + EXPLAINABILITY-ORACLE freeze. |
 | **T7-009** | Action tag (e.g. `refund`) appears in explanation; cited steps ⊆ trace | TRACE / TRAJECT-Bench / AgentDiagnose for action↔trajectory consistency. Global trace-faithful rule (no invented tools). |
@@ -47,7 +47,7 @@ taxonomy DOI [10.5281/zenodo.23587407](https://doi.org/10.5281/zenodo.23587407).
 ### 3. Authz / handover transparency (T3-006)
 
 - OWASP Agentic Security Initiative themes already listed in Hub `control_refs` for this ID.
-- Independent **policy-versioned** authz logs on the *receiving* agent after handover support auditability under ISO/IEC 42001 **A.8** and NIST AI RMF **MEASURE**.
+- Independent **policy-versioned** authz logs on the *receiving* agent after handover support auditability under the ISO/IEC 42001 theme "Traceability, transparency and reliability" and NIST AI RMF **MEASURE**.
 
 ### 4. Memory citation (T6-007)
 
