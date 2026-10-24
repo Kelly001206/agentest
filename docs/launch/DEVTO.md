@@ -38,7 +38,8 @@ agentest matrix
 - Suites: functional, privacy, explainability, bias_fairness, orchestration
 - 15 sample agents (10 green ladder + 5 expected-fail teaching scenarios)
 - Deterministic oracles against a mock tool gateway
-- ISO 42001 / assurance-taxonomy aligned checklist design (not certification)
+- Checklist design informed by the assurance taxonomy and ISO 42001 themes (not certification)
+- Status: early — stub/reference oracles run against scripted mock agents and a mock tool gateway; components are added incrementally
 
 ## Context
 

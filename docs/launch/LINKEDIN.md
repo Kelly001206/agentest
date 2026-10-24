@@ -38,7 +38,7 @@ Built from:
 • Zenodo taxonomy: https://doi.org/10.5281/zenodo.23587407
 • Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110
 
-Not a certification. Not a model leaderboard. Assurance test design you can actually run in CI.
+Not a certification. Not a model leaderboard. Early stage: the runnable tests are stub/reference oracles against scripted mock agents, with real-agent adapters and more packs being added incrementally.
 
 —
 Dr Srinivas Padmanabhuni · srinivas AT testAIng.com · testAIng.com / AiEnsured

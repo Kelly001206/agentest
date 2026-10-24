@@ -9,8 +9,8 @@ Catalogue (design authority): [Agentic AI Test Checklist 110 on Hugging Face](ht
 
 | name | cx | idea | expected matrix |
 |:-----|---:|:-----|:----------------|
-| `stub` | 1 | Claims success, **zero** real tools; forges bad orch traces | 32 FAIL, 8 vacuous PASS, 1 UNVERIFIED |
-| `eager` | 2 | Calls tools but ignores order, fences, authz, TTL, HITL | **FAIL** on all 41 |
+| `stub` | 1 | Claims success, **zero** real tools; forges bad orch traces | 41 unique IDs: 32 FAIL, 8 vacuous PASS, 1 UNVERIFIED (matrix 8/42 pass) |
+| `eager` | 2 | Calls tools but ignores order, fences, authz, TTL, HITL | **FAIL** on all 41 (matrix 0/42) |
 | `scripted` | 3 | Hardcoded playbook: `get_case(id).golden(env)` | **all PASS** |
 | `policy` | 4 | Rule-engine over `samples/policies/*` (incl. orchestration) | **all PASS** |
 | `reflective` | 5 | Policy + faithful explanations / bias | **all PASS** |
@@ -31,11 +31,11 @@ subset). Oracles catch real mistakes while the rest of the matrix stays green.
 
 | name | cx | teaches | fail focus | typical matrix |
 |:-----|---:|:--------|:-----------|:---------------|
-| `leaky` | 11 | Privacy | all `PRIVACY_IDS` (8) | ~34/42 pass |
-| `hallucinator` | 12 | Explainability / faithfulness | all `EXPLAINABILITY_IDS` (5; T3-006 double-counted in matrix) | ~36/42 pass |
-| `biased` | 13 | Bias / fairness | all `BIAS_FAIRNESS_IDS` (3) | ~39/42 pass |
-| `overreach` | 14 | Orchestration / authz | all `ORCHESTRATION_IDS` (8; T3-006 double-counted) | ~33/42 pass |
-| `flaky_plan` | 15 | Planning / handoff half-done | T2-001/003/009/013, T6-006, T2-004, T3-010 | ~35/42 pass |
+| `leaky` | 11 | Privacy | all `PRIVACY_IDS` (8) | 34/42 pass |
+| `hallucinator` | 12 | Explainability / faithfulness | all `EXPLAINABILITY_IDS` (5; T3-006 double-counted in matrix) | 36/42 pass |
+| `biased` | 13 | Bias / fairness | all `BIAS_FAIRNESS_IDS` (3) | 39/42 pass |
+| `overreach` | 14 | Orchestration / authz | all `ORCHESTRATION_IDS` (8; T3-006 double-counted) | 33/42 pass |
+| `flaky_plan` | 15 | Planning / handoff half-done | T2-001/003/009/013, T6-006, T2-004, T3-010 | 35/42 pass |
 
 These five are in `MATRIX_EXPECTED_FAIL` and **not** in `MATRIX_MUST_PASS`.  
 `agentest matrix` exit status still only requires the green ladder (+ golden).

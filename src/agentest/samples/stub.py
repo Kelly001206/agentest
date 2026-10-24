@@ -22,7 +22,7 @@ handle() returns a Trace with claims_success=True and no gateway tool calls; for
 
 Tests exercised / expected outcome
 ----------------------------------
-all suites; measured: 32 FAIL, 8 PASS (vacuous: T2-001, T2-003, T2-009, T2-013, T5-012, T2-005, T4-009, T5-004), 1 UNVERIFIED (T5-015) over the 41 IDs. The vacuous passes are themselves a teaching point.
+all suites; measured: 32 FAIL, 8 PASS (vacuous: T2-001, T2-003, T2-009, T2-013, T5-012, T2-005, T4-009, T5-004), 1 UNVERIFIED (T5-015) over the 41 unique IDs (agentest matrix counts T3-006 twice: 8 pass / 33 fail / 1 unverified of 42). The vacuous passes are themselves a teaching point.
 
 Why
 ---

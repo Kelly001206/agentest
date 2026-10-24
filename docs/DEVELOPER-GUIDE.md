@@ -1,4 +1,6 @@
-# Developer guide — test any agent from GitHub alone
+# Developer guide — run the checklist runner from GitHub alone
+
+> **Status: early / stub implementations.** Oracles are reference implementations exercised against scripted mock agents and a mock tool gateway; they are not production-grade evaluators. Real-agent adapters, richer oracles and more packs (e.g. security) are being added incrementally.
 
 This guide is for engineers who clone
 [`srpadmanabhuni/agentest`](https://github.com/srpadmanabhuni/agentest)
@@ -6,7 +8,7 @@ and want to run checklist tests **without Hugging Face**, plug in their own
 agent, and (optionally) extend suites later.
 
 **Audience:** developers who have only the GitHub link.  
-**Runner version:** `0.9.1a0` (see `pyproject.toml`).  
+**Runner version:** `0.9.3a0` (see `pyproject.toml`).  
 **Pinned catalogue:** Hub `v1.1.2` packs vendored under `catalog/` (see
 `catalog/VERSION`).  
 Hub-first narrative (same packs): [USER-GUIDE.md](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md).
@@ -179,6 +181,8 @@ Vendored pack CSVs under `catalog/` mirror Hub for documentation and sync;
 ## 5. Bring your own agent
 
 This is the core workflow if you want to test **your** implementation.
+
+> Note: there is no ready-made adapter for live LLM agent frameworks yet. Your wrapper must drive the in-memory `Env` and mock `ToolGateway` for each checklist ID; real-agent adapters are planned.
 
 ### 5.1 Protocol
 
@@ -399,8 +403,8 @@ Expected teaching behaviour (full matrix totals sum all five suites;
 
 | Agent | cx | Expected |
 |:------|---:|:---------|
-| `stub` | 1 | 32 FAIL / 8 vacuous PASS / 1 UNVERIFIED (claims success, no real tools) |
-| `eager` | 2 | FAIL on all 41 (tools without rules / HITL / TTL) |
+| `stub` | 1 | matrix 8/42 pass (32 FAIL, 8 vacuous PASS, 1 UNVERIFIED over 41 unique IDs) (claims success, no real tools) |
+| `eager` | 2 | FAIL on all 41, matrix 0/42 (tools without rules / HITL / TTL) |
 | `scripted` | 3 | **All PASS** (case goldens) |
 | `policy` | 4 | **All PASS** (rule engine) |
 | `reflective` | 5 | **All PASS** (+ explain / bias fields) |

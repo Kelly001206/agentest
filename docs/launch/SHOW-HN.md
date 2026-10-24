@@ -27,7 +27,7 @@ Clone and run:
   agentest run --suite functional --agent golden
   agentest matrix
 
-Fifteen teaching agents (10 green ladder + 5 expected-fail). Suites today: functional, privacy, explainability, bias_fairness, orchestration. ISO 42001 / assurance-taxonomy aligned checklist — not a certification and not a model leaderboard.
+Fifteen teaching agents (10 green ladder + 5 expected-fail). Suites today: functional, privacy, explainability, bias_fairness, orchestration. Checklist design informed by the assurance taxonomy and ISO 42001 themes — not a certification and not a model leaderboard. Status: early — the oracles are stub/reference implementations run against scripted mock agents; real-agent adapters and more packs are being added incrementally.
 
 Catalogue + taxonomy:
   HF: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110

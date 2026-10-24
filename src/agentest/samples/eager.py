@@ -2,7 +2,7 @@
 
 Intentionally wrong patterns: wrong order, hard-delete, disclose-before-verify,
 duplicate single-shot, write on read-only, skip explanations/bias labels.
-Measured: it FAILs all 41 implemented IDs.
+Measured: it FAILs all 41 implemented IDs (matrix: 0/42).
 
 Scenario
 --------
