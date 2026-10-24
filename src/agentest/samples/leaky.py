@@ -53,4 +53,5 @@ class LeakyAgent(SampleAgent):
     )
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
+        # Golden trajectory for most IDs, broken trajectory for FAIL_IDS: a deterministic expected-fail profile.
         return play_selective(checklist_id, env, fail_ids=FAIL_IDS)

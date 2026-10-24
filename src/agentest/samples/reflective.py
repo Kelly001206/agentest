@@ -56,7 +56,7 @@ class ReflectiveAgent(SampleAgent):
     )
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
-        # Prefer explain/bias modules first so enrichment fields are native
+        # Same rule engine as PolicyAgent, but explain/bias modules first so their native fields are produced.
         for apply in (
             apply_orchestration_policy,
             apply_explain_policy,
@@ -66,5 +66,7 @@ class ReflectiveAgent(SampleAgent):
         ):
             trace = apply(checklist_id, env)
             if trace is not None:
+                # Reflection step: derive explanation/cited_steps/memory_citations from the executed trace only (faithful by construction; loosely Reflexion-style self-inspection, Shinn et al. 2023).
                 return enrich_explainability(checklist_id, env, trace)
+        # Fallback: unknown ID - oracles will FAIL this claim.
         return Trace(claims_success=True, message=f"reflective: no rule for {checklist_id}")

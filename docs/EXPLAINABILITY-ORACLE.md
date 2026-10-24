@@ -10,7 +10,7 @@ Fluency / prose quality is out of scope for v0.x.
 
 ## Related research
 
-Algorithm and paper mapping for each explainability ID (TRACE, ReAct, TRAJECT-Bench, AgentDiagnose, RAG-style citation faithfulness, OWASP ASI / ISO 42001 / NIST AI RMF notes, and why SHAP/LIME alone are insufficient for multi-step tool agents):
+Algorithm and paper mapping for each explainability ID (TRACE [Kim et al. 2025], ReAct, TRAJECT-Bench, AgentDiagnose, RAG-style citation faithfulness, OWASP ASI / ISO 42001 / NIST AI RMF notes, and why SHAP/LIME alone are insufficient for multi-step tool agents):
 
 → **[`EXPLAINABILITY-RESEARCH.md`](EXPLAINABILITY-RESEARCH.md)**
 

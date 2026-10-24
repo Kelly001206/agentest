@@ -113,7 +113,7 @@ Details: [`docs/SAMPLE-AGENTS.md`](docs/SAMPLE-AGENTS.md), references & attribut
 ## Explainability
 
 - Trace-faithful oracles only (fluency does not score): [`docs/EXPLAINABILITY-ORACLE.md`](docs/EXPLAINABILITY-ORACLE.md)
-- Research & algorithm map (TRACE, ReAct, TRAJECT-Bench, AgentDiagnose, RAG-style citations): [`docs/EXPLAINABILITY-RESEARCH.md`](docs/EXPLAINABILITY-RESEARCH.md)
+- Research & algorithm map (TRACE [Kim et al. 2025], ReAct, TRAJECT-Bench, AgentDiagnose, RAG-style citations): [`docs/EXPLAINABILITY-RESEARCH.md`](docs/EXPLAINABILITY-RESEARCH.md)
 
 ## Bias / fairness
 

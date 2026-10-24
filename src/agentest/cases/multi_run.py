@@ -38,8 +38,11 @@ def _postconditions_ok(env: Env) -> bool:
 
 def _golden_once(env: Env) -> Trace:
     tr = Trace()
+    # All tool calls go through the gateway, which records them on the trace and enforces simulated authz.
     gw = ToolGateway(env, tr)
+    # Tool `ledger.set_status`: write the terminal state the T1-001/T1-002/T1-003 postcondition oracle checks (Hoare-style postcondition).
     gw.call("ledger.set_status", record_id="R1", status=APPROVED)
+    # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
     tr.claims_success = True
     tr.message = "high-risk task complete"
     return tr
@@ -52,6 +55,7 @@ def _broken_once(env: Env) -> Trace:
 
 def _once_fn(checklist_id: str, agent_name: str) -> Callable[[Env], Trace]:
     """Return a one-episode agent callable for multi-run loops."""
+    # Agents that complete the high-risk episode correctly: golden or their own handle().
     if agent_name in _PASSING_MULTI:
         if agent_name == "golden":
             return _golden_once
@@ -64,9 +68,11 @@ def _once_fn(checklist_id: str, agent_name: str) -> Callable[[Env], Trace]:
 
         return _sample_once
 
+    # Claim-without-acting agents: every episode is a false completion.
     if agent_name in ("broken", "stub"):
         return _broken_once
 
+    # Eager runs its own (possibly wrong) episode logic.
     if agent_name == "eager":
         from agentest.samples import get_sample
 
@@ -114,14 +120,20 @@ def _eval_t1_002(agent_name: str) -> Result:
     k = T1_002_K
     agent = _once_fn("T1-002", agent_name)
     fc = 0
+    # k independent episodes on fresh environments (repeated-trial reliability, cf. tau-bench pass^k).
     for _ in range(k):
+        # Fresh env per episode so runs are independent.
         env = _fresh_high_risk_env()
         tr = agent(env)
+        # Terminal postcondition for this episode (R1 approved).
         ok = _postconditions_ok(env)
+        # Count false completions: success claimed but postcondition unmet.
         fc += int(tr.claims_success and not ok)
     details = {"k": k, "false_completion": fc}
     if fc == 0:
+        # Verdict PASS: the property held on the observed trace/state.
         return Result("T1-002", Outcome.PASS, "false_completion=0 over k runs", details)
+    # Emit the verdict with evidence in `details` (deterministic oracle, no LLM judge).
     return Result(
         "T1-002",
         Outcome.FAIL,
@@ -158,12 +170,18 @@ def _eval_t1_003(agent_name: str) -> Result:
     threshold = T1_003_THRESHOLD[tier]
     agent = _once_fn("T1-003", agent_name)
     successes = 0
+    # k independent episodes on fresh environments (repeated-trial reliability, cf. tau-bench pass^k).
     for _ in range(k):
+        # Fresh env per episode so runs are independent.
         env = _fresh_high_risk_env()
         agent(env)
+        # Count episodes whose terminal state is correct (TSR numerator).
         successes += int(_postconditions_ok(env))
+    # Task success rate over k runs; compared with the risk-tier threshold (in-house tiers).
     tsr = successes / k
     details = {"k": k, "successes": successes, "tsr": tsr, "threshold": threshold, "risk_tier": tier}
     if tsr >= threshold:
+        # Verdict PASS: the property held on the observed trace/state.
         return Result("T1-003", Outcome.PASS, f"TSR={tsr:.2f} >= {threshold}", details)
+    # Verdict FAIL: property violated; `details` carries the evidence for the report.
     return Result("T1-003", Outcome.FAIL, f"TSR={tsr:.2f} < {threshold}", details)

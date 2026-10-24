@@ -24,7 +24,7 @@ Attribution / References
 ------------------------
 - In-house teaching design; references are for the general agent pattern it imitates (no LLM is used - the agent is deterministic).
 - Jacovi, A., Goldberg, Y. (2020). Towards Faithfully Interpretable NLP Systems: How Should We Define and Evaluate Faithfulness? ACL 2020. https://doi.org/10.18653/v1/2020.acl-main.386
-- Beyond the Final Answer: Evaluating the Reasoning Trajectories of Tool-Augmented Agents (2025). arXiv:2510.02837 (trajectory-level evaluation, referred to as TRACE in these docs)
+- Kim, W., Park, S., In, Y., Kim, S., Lee, D., Park, C. (2025). Beyond the Final Answer: Evaluating the Reasoning Trajectories of Tool-Augmented Agents (proposes the TRACE framework). arXiv:2510.02837. https://arxiv.org/abs/2510.02837
 - Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., Cao, Y. (2023). ReAct: Synergizing Reasoning and Acting in Language Models. ICLR 2023. arXiv:2210.03629
 - Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
 
@@ -52,4 +52,5 @@ class HallucinatorAgent(SampleAgent):
     )
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
+        # Golden trajectory for most IDs, broken trajectory for FAIL_IDS: a deterministic expected-fail profile.
         return play_selective(checklist_id, env, fail_ids=FAIL_IDS)

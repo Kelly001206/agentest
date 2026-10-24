@@ -32,18 +32,23 @@ class CaseSpec:
             )
         from agentest.cases import multi_run
 
+        # Multi-run IDs bypass the single-episode path (k repeated episodes).
         if self.checklist_id in multi_run.MULTI_RUN_IDS:
             return multi_run.run_multi(self.checklist_id, agent_name)
 
+        # Fresh, seeded environment per run: oracles are deterministic and isolated.
         env = self.make_env()
         if agent_name == "golden":
+            # Replay the case's golden (correct) trajectory.
             trace = self.golden(env)
         elif agent_name == "broken":
+            # Replay the case's broken (seeded-defect) trajectory.
             trace = self.broken(env)
         else:
             from agentest.samples import get_sample
 
             trace = get_sample(agent_name).handle(self.checklist_id, env)
+        # Oracle judges final env state + trace; the agent's own claims are just one input.
         return self.oracle(env, trace)
 
 
@@ -127,6 +132,7 @@ ORCHESTRATION_IDS: list[str] = [
 
 def get_case(checklist_id: str) -> CaseSpec:
     try:
+        # Look up the case spec to replay its reference trajectory.
         return CASE_REGISTRY[checklist_id]
     except KeyError as exc:
         raise ValueError(f"checklist ID not implemented: {checklist_id}") from exc

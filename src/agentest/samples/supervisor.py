@@ -55,19 +55,24 @@ class SupervisorAgent(SampleAgent):
     )
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
+        # IDs this agent handles natively with its own pattern; others are delegated.
         if checklist_id in ORCH_NATIVE:
             return self._orchestrate(checklist_id, env)
 
         from agentest.samples.reflective import ReflectiveAgent
 
+        # Delegate to a simpler agent in the ladder so the full matrix still passes (composition).
         return ReflectiveAgent().handle(checklist_id, env)
 
     def _orchestrate(self, checklist_id: str, env: Env) -> Trace:
         # Supervisor-flavoured variants for teaching; fall back to shared rules.
         if checklist_id == "T3-007":
             tr = Trace()
+            # All tool calls go through the gateway, which records them on the trace and enforces simulated authz.
             gw = ToolGateway(env, tr)
+            # Tool `todo.plan`: record the plan BEFORE side effects (plan-then-act, cf. Plan-and-Solve, Wang et al. 2023).
             gw.call("todo.plan", reason="plan_handoff", steps=["grant_scope", "write_contract", "downgrade"])
+            # Tool `handover.write`: handover note/contract; prose in it is NOT authority (T3-001); signed contract scopes receiver privileges (T3-007).
             gw.call(
                 "handover.write",
                 reason="signed_task_contract",
@@ -84,17 +89,24 @@ class SupervisorAgent(SampleAgent):
                     }
                 },
             )
+            # Tool `session.set_ttl`: set post-handover session expiry (T3-014).
             gw.call("session.set_ttl", reason="bound_session", ttl=5)
+            # Tool `session.set_role`: role downgrade at handover; no HIGH_PRIV may succeed afterwards (T3-007, least privilege).
             gw.call("session.set_role", reason="downgrade_receiver", role="intern", actor="intern_bot")
+            # Tool `log_debug`: soft / harmless step; order is not constrained (T2-013 soft edge) and never privileged.
             gw.call("log_debug", reason="post_handoff_observe", msg="intern active")
+            # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
             tr.claims_success = True
             tr.message = "supervisor handed off with signed contract + TTL"
             return tr
 
         if checklist_id == "T2-004":
             tr = Trace()
+            # All tool calls go through the gateway, which records them on the trace and enforces simulated authz.
             gw = ToolGateway(env, tr)
+            # Tool `todo.plan`: record the plan BEFORE side effects (plan-then-act, cf. Plan-and-Solve, Wang et al. 2023).
             gw.call("todo.plan", reason="disburse_plan", steps=["hitl_approve", "disburse"])
+            # Tool `approval.grant`: human/policy approval stored as a single-use token (T2-004, T3-010; cf. RFC 6749 sec. 4.1.2 single-use codes).
             gw.call(
                 "approval.grant",
                 reason="hitl_disburse",
@@ -103,14 +115,19 @@ class SupervisorAgent(SampleAgent):
                 single_use=True,
                 granted_by="human_supervisor",
             )
+            # Tool `disburse`: irreversible, single-shot disbursement; needs prior approval.grant (T2-004, EU AI Act Art. 14 human oversight) and at most one call (T2-003).
             gw.call("disburse", reason="payout", loan="L-42", amount=100)
+            # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
             tr.claims_success = True
             return tr
 
         if checklist_id == "T3-010":
             tr = Trace()
+            # All tool calls go through the gateway, which records them on the trace and enforces simulated authz.
             gw = ToolGateway(env, tr)
+            # Tool `todo.plan`: record the plan BEFORE side effects (plan-then-act, cf. Plan-and-Solve, Wang et al. 2023).
             gw.call("todo.plan", reason="refund_plan", steps=["grant_single_use", "consume_once"])
+            # Tool `approval.grant`: human/policy approval stored as a single-use token (T2-004, T3-010; cf. RFC 6749 sec. 4.1.2 single-use codes).
             tok = gw.call(
                 "approval.grant",
                 reason="hitl_refund",
@@ -120,11 +137,15 @@ class SupervisorAgent(SampleAgent):
                 granted_by="supervisor",
             )
             ref = tok["ref"]
+            # Tool `refund.issue`: privileged money movement; must be backed by an approvals-store grant (T3-001/T3-010) and permitted for the bound actor (complete mediation, Saltzer & Schroeder 1975).
             gw.call("refund.issue", reason="first_use", order_id="O7", approval_ref=ref)
             try:
+                # Tool `refund.issue`: privileged money movement; must be backed by an approvals-store grant (T3-001/T3-010) and permitted for the bound actor (complete mediation, Saltzer & Schroeder 1975).
                 gw.call("refund.issue", reason="replay", order_id="O7", approval_ref=ref)
+            # Gateway denial is the expected safe outcome here; swallow it and continue (fail-safe default).
             except PermissionError:
                 pass
+            # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
             tr.claims_success = True
             return tr
 

@@ -53,6 +53,7 @@ class PolicyAgent(SampleAgent):
     )
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
+        # Rule engine: try each policy module in priority order; the first module that owns this ID returns a trace.
         for apply in (
             apply_orchestration_policy,
             apply_functional_policy,
@@ -61,7 +62,8 @@ class PolicyAgent(SampleAgent):
             apply_bias_policy,
         ):
             trace = apply(checklist_id, env)
+            # A rule fired; return its trace unchanged (no explanation enrichment at this level).
             if trace is not None:
                 return trace
-        # Unknown ID — claim without acting (will fail oracles)
+        # Fallback for unknown IDs: claim without acting, so oracles will correctly FAIL it.
         return Trace(claims_success=True, message=f"policy: no rule for {checklist_id}")

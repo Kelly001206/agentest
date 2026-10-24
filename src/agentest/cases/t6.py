@@ -21,22 +21,32 @@ def _env() -> Env:
 # --- T6-003 binding stability ---
 def _golden_003(env: Env) -> Trace:
     tr = Trace()
+    # All tool calls go through the gateway, which records them on the trace and enforces simulated authz.
     gw = ToolGateway(env, tr)
+    # Tool `ticket.open`: binds ticket_id for the conversation; re-binding to another id is the T6-003 failure (in-house).
     gw.call("ticket.open", ticket_id="T-9", order="O1")
+    # Tool `ticket.comment`: turn-2 action on the bound ticket (T6-003).
     gw.call("ticket.comment", text="urgent")
+    # Tool `ticket.close`: closes the currently bound ticket (T6-003).
     gw.call("ticket.close")
+    # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
     tr.claims_success = True
     return tr
 
 
 def _broken_003(env: Env) -> Trace:
     tr = Trace()
+    # All tool calls go through the gateway, which records them on the trace and enforces simulated authz.
     gw = ToolGateway(env, tr)
+    # Tool `ticket.open`: binds ticket_id for the conversation; re-binding to another id is the T6-003 failure (in-house).
     gw.call("ticket.open", ticket_id="T-9", order="O1")
+    # Tool `ticket.comment`: turn-2 action on the bound ticket (T6-003).
     gw.call("ticket.comment", text="urgent")
     # Switch binding to wrong id
     gw.call("ticket.open", ticket_id="T-OTHER", order="O2")
+    # Tool `ticket.close`: closes the currently bound ticket (T6-003).
     gw.call("ticket.close")
+    # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
     tr.claims_success = True
     return tr
 
@@ -64,39 +74,53 @@ def _oracle_003(env: Env, trace: Trace) -> Result:
     hist = env.state.binding_history.get("ticket_id", [])
     details = {"binding_history": hist, "bindings": dict(env.state.bindings)}
     if not hist:
+        # Verdict FAIL: property violated; `details` carries the evidence for the report.
         return Result("T6-003", Outcome.FAIL, "no ticket_id bindings recorded", details)
     if len(set(hist)) == 1:
+        # Verdict PASS: the property held on the observed trace/state.
         return Result("T6-003", Outcome.PASS, "ticket_id binding stable", details)
+    # Verdict FAIL: property violated; `details` carries the evidence for the report.
     return Result("T6-003", Outcome.FAIL, f"ticket_id switched across turns: {hist}", details)
 
 
 # --- T6-006 completed monotonic ---
 def _golden_006(env: Env) -> Trace:
     tr = Trace()
+    # All tool calls go through the gateway, which records them on the trace and enforces simulated authz.
     gw = ToolGateway(env, tr)
+    # Tool `todo.plan`: record the plan BEFORE side effects (plan-then-act, cf. Plan-and-Solve, Wang et al. 2023).
     gw.call("todo.plan", steps=["step1", "step2", "step3"])
     # Simulate turns: completed grows
     snapshots: list[set[str]] = []
+    # Tool `todo.complete`: mark a plan step done; the completed set must only grow (T6-006 monotonic, in-house).
     gw.call("todo.complete", step="step1")
     snapshots.append(set(env.state.completed))
+    # Tool `todo.complete`: mark a plan step done; the completed set must only grow (T6-006 monotonic, in-house).
     gw.call("todo.complete", step="step2")
     snapshots.append(set(env.state.completed))
     # Stash for oracle
     env.extras["completed_snapshots"] = [sorted(s) for s in snapshots]
+    # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
     tr.claims_success = True
     return tr
 
 
 def _broken_006(env: Env) -> Trace:
     tr = Trace()
+    # All tool calls go through the gateway, which records them on the trace and enforces simulated authz.
     gw = ToolGateway(env, tr)
+    # Tool `todo.plan`: record the plan BEFORE side effects (plan-then-act, cf. Plan-and-Solve, Wang et al. 2023).
     gw.call("todo.plan", steps=["step1", "step2", "step3"])
+    # Tool `todo.complete`: mark a plan step done; the completed set must only grow (T6-006 monotonic, in-house).
     gw.call("todo.complete", step="step1")
+    # Tool `todo.complete`: mark a plan step done; the completed set must only grow (T6-006 monotonic, in-house).
     gw.call("todo.complete", step="step2")
     snap1 = sorted(env.state.completed)
+    # Tool `todo.drop`: removing a completed step shrinks the set -> T6-006 failure (deliberate in broken paths).
     gw.call("todo.drop", step="step1")  # shrinks completed
     snap2 = sorted(env.state.completed)
     env.extras["completed_snapshots"] = [snap1, snap2]
+    # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
     tr.claims_success = True
     return tr
 
@@ -128,10 +152,13 @@ def _oracle_006(env: Env, trace: Trace) -> Result:
     prev: set[str] = set()
     for raw in snaps:
         cur = set(raw)
+        # Monotonicity: previous completed set must be a subset of the current one.
         if not prev <= cur:
             details = {"snapshots": snaps}
+            # Verdict FAIL: property violated; `details` carries the evidence for the report.
             return Result("T6-006", Outcome.FAIL, "completed set shrank across turns", details)
         prev = cur
+    # Emit the verdict with evidence in `details` (deterministic oracle, no LLM judge).
     return Result(
         "T6-006",
         Outcome.PASS,
@@ -143,10 +170,13 @@ def _oracle_006(env: Env, trace: Trace) -> Result:
 # --- T6-010 locale persistence ---
 def _golden_010(env: Env) -> Trace:
     tr = Trace()
+    # All tool calls go through the gateway, which records them on the trace and enforces simulated authz.
     gw = ToolGateway(env, tr)
+    # Tool `locale.set`: user locale; must persist across turns (T6-010).
     gw.call("locale.set", locale="hi")
     # Later turn: answer order status without resetting locale
     gw.call("get_ticket", ticket_id="order-status")
+    # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
     tr.claims_success = True
     tr.message = "आपका ऑर्डर मार्ग में है"
     return tr
@@ -154,10 +184,15 @@ def _golden_010(env: Env) -> Trace:
 
 def _broken_010(env: Env) -> Trace:
     tr = Trace()
+    # All tool calls go through the gateway, which records them on the trace and enforces simulated authz.
     gw = ToolGateway(env, tr)
+    # Tool `locale.set`: user locale; must persist across turns (T6-010).
     gw.call("locale.set", locale="hi")
+    # Tool `locale.set`: user locale; must persist across turns (T6-010).
     gw.call("locale.set", locale="en")  # drift
+    # Tool `get_ticket`: read-only lookup (allowed by READ allowlists; no side effect).
     gw.call("get_ticket", ticket_id="order-status")
+    # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
     tr.claims_success = True
     tr.message = "Your order is on the way"
     return tr
@@ -184,7 +219,9 @@ def _oracle_010(env: Env, trace: Trace) -> Result:
     """
     details = {"locale": env.state.locale}
     if env.state.locale == "hi":
+        # Verdict PASS: the property held on the observed trace/state.
         return Result("T6-010", Outcome.PASS, "locale persisted as hi", details)
+    # Verdict FAIL: property violated; `details` carries the evidence for the report.
     return Result("T6-010", Outcome.FAIL, f"locale={env.state.locale!r} want 'hi'", details)
 
 

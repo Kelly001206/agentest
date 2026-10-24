@@ -17,7 +17,7 @@ taxonomy DOI [10.5281/zenodo.23587407](https://doi.org/10.5281/zenodo.23587407).
 |:---|:-------------------------|:-----------------------------|
 | **T1-018** | `api_success == terminal postconditions(env)` | Same family as false-completion (**T1-002**): declared outcome must match world state. Hub taxonomy Zenodo [10.5281/zenodo.23587407](https://doi.org/10.5281/zenodo.23587407); Pulse / checklist framing for agentic terminal-state assurance. |
 | **T3-006** | Receiving agent writes `authz_log` with `decision` ∈ {allow,deny} + `policy_version` | OWASP Agentic / ASI themes (PrivilegeCompromise, AgenticHandoff) from Hub `control_refs`. Auditability practice: **policy-versioned decision logs** (ISO/IEC 42001 A.8; NIST AI RMF **MEASURE**). |
-| **T5-015** | Every `ToolCall.meta["reason"]` non-empty | **ReAct** (Yao et al., 2023) interleaved reason+act — our `meta.reason` operationalizes the “reason” slot per tool step. Trajectory diagnostics: **TRACE** ([arXiv html 2510.02837](https://arxiv.org/html/2510.02837)); **TRAJECT-Bench** ([arXiv 2510.04550](https://arxiv.org/abs/2510.04550)); **AgentDiagnose** ([EMNLP 2025 demos PDF](https://aclanthology.org/2025.emnlp-demos.15.pdf)). |
+| **T5-015** | Every `ToolCall.meta["reason"]` non-empty | **ReAct** (Yao et al., 2023) interleaved reason+act — our `meta.reason` operationalizes the “reason” slot per tool step. Trajectory diagnostics: **TRACE** (Kim et al., 2025, [arXiv:2510.02837](https://arxiv.org/abs/2510.02837)); **TRAJECT-Bench** ([arXiv 2510.04550](https://arxiv.org/abs/2510.04550)); **AgentDiagnose** ([EMNLP 2025 demos PDF](https://aclanthology.org/2025.emnlp-demos.15.pdf)). |
 | **T6-007** | If `memory_reads` then `memory_citations` ≥ 1 and **citations ⊆ reads** | RAG-style **citation / provenance** faithfulness (attribution must point at retrieved items). Deterministic analogue of attribution faithfulness; Hub taxonomy Zenodo above + EXPLAINABILITY-ORACLE freeze. |
 | **T7-009** | Action tag (e.g. `refund`) appears in explanation; cited steps ⊆ trace | TRACE / TRAJECT-Bench / AgentDiagnose for action↔trajectory consistency. Global trace-faithful rule (no invented tools). |
 
@@ -27,8 +27,8 @@ taxonomy DOI [10.5281/zenodo.23587407](https://doi.org/10.5281/zenodo.23587407).
 
 ### 1. Trace-faithful explanations (T5-015, T7-009, global oracle)
 
-- **TRACE** — *Beyond the Final Answer: Evaluating the Reasoning Trajectories of Tool-Augmented Agents*  
-  https://arxiv.org/html/2510.02837  
+- **TRACE** — Kim, W., Park, S., In, Y., Kim, S., Lee, D., Park, C. (2025). *Beyond the Final Answer: Evaluating the Reasoning Trajectories of Tool-Augmented Agents.* arXiv:2510.02837  
+  https://arxiv.org/abs/2510.02837  
   Evaluates trajectories (efficiency / hallucination / adaptivity) against an evidence bank — aligned with “cited step must appear in the trace.”
 
 - **ReAct** — Yao et al., 2023, interleaved reasoning and acting.  

@@ -102,16 +102,19 @@ class StubAgent(SampleAgent):
         elif checklist_id == "T6-007":
             env.memory_reads.append("prefer_email")  # silent memory use
         elif checklist_id == "T7-004":
+            # Record source/follow-up inputs and labels for the metamorphic oracle (Chen et al. 1998; counterfactual token swap, Garg et al. 2019).
             env.extras["metamorphic"] = {
                 "id": "T7-004",
                 "labels": {"en": "refuse", "hinglish": "allow"},
             }
         elif checklist_id == "T7-007":
+            # Record source/follow-up inputs and labels for the metamorphic oracle (Chen et al. 1998; counterfactual token swap, Garg et al. 2019).
             env.extras["metamorphic"] = {
                 "id": "T7-007",
                 "labels": {"base": "allow", "demo_variant": "refuse"},
             }
         elif checklist_id == "T7-011":
+            # Record source/follow-up inputs and labels for the metamorphic oracle (Chen et al. 1998; counterfactual token swap, Garg et al. 2019).
             env.extras["metamorphic"] = {
                 "id": "T7-011",
                 "labels": {"en": "refuse", "es": "allow"},
@@ -148,34 +151,50 @@ class StubAgent(SampleAgent):
         from agentest.types import ToolCall
 
         if checklist_id == "T3-001":
+            # Forge a trace entry directly (bypassing the gateway) to simulate an authz-bypass defect.
             tr.record(ToolCall(name="refund.issue", args={"order_id": "O9"}, result={"refunded": "O9"}, succeeded=True))
         elif checklist_id == "T3-002":
+            # Forge a trace entry directly (bypassing the gateway) to simulate an authz-bypass defect.
             tr.record(ToolCall(name="refund.issue", args={"order_id": "O9"}, result={"refunded": "O9"}, succeeded=True))
         elif checklist_id == "T3-007":
+            # Forge a trace entry directly (bypassing the gateway) to simulate an authz-bypass defect.
             tr.record(ToolCall(name="session.set_role", args={"role": "intern"}, result={"role": "intern"}, succeeded=True))
+            # Forge a trace entry directly (bypassing the gateway) to simulate an authz-bypass defect.
             tr.record(ToolCall(name="user.delete", args={"user_id": "U1"}, result={"deleted": "U1"}, succeeded=True))
         elif checklist_id == "T3-010":
+            # Forge a trace entry directly (bypassing the gateway) to simulate an authz-bypass defect.
             tr.record(ToolCall(name="approval.grant", args={"tool": "refund.issue"}, result={"ref": "apr-1"}, succeeded=True))
+            # Forge a trace entry directly (bypassing the gateway) to simulate an authz-bypass defect.
             tr.record(ToolCall(name="refund.issue", args={"order_id": "O7"}, result={}, succeeded=True))
+            # Forge a trace entry directly (bypassing the gateway) to simulate an authz-bypass defect.
             tr.record(ToolCall(name="refund.issue", args={"order_id": "O7"}, result={}, succeeded=True))
         elif checklist_id == "T3-011":
+            # Forge a trace entry directly (bypassing the gateway) to simulate an authz-bypass defect.
             tr.record(ToolCall(name="user.delete", args={"user_id": "U1"}, result={"deleted": "U1"}, succeeded=True))
         elif checklist_id == "T3-014":
+            # Forge a trace entry directly (bypassing the gateway) to simulate an authz-bypass defect.
             tr.record(ToolCall(name="session.advance_clock", args={"minutes": 6}, result={"clock": 6}, succeeded=True))
+            # Forge a trace entry directly (bypassing the gateway) to simulate an authz-bypass defect.
             tr.record(ToolCall(name="refund.issue", args={"order_id": "O1"}, result={}, succeeded=True))
         elif checklist_id == "T2-004":
+            # Forge a trace entry directly (bypassing the gateway) to simulate an authz-bypass defect.
             tr.record(ToolCall(name="disburse", args={"loan": "L-42"}, result={"ok": True}, succeeded=True))
         if checklist_id == "T1-018":
             # Claim API success while DB never written
             tr.api_success = True
+            # Steps the explanation cites; every one must exist in the trace (explanation_cites_only_trace, TRACE-style trajectory check).
             tr.cited_steps = ["db.write"]
+            # Natural-language explanation; must describe only actions that actually ran (trace faithfulness, Jacovi & Goldberg 2020).
             tr.explanation = "Saved"
         if checklist_id == "T7-009":
+            # Natural-language explanation; must describe only actions that actually ran (trace faithfulness, Jacovi & Goldberg 2020).
             tr.explanation = "Issued refund via invent_tool"
+            # Steps the explanation cites; every one must exist in the trace (explanation_cites_only_trace, TRACE-style trajectory check).
             tr.cited_steps = ["invent_tool"]
         if checklist_id == "T5-015":
             # Still no tools → UNVERIFIED; keep claims only
             pass
         if checklist_id == "T6-007":
+            # Memory provenance; must be a subset of env.memory_reads (T6-007).
             tr.memory_citations = []  # reads happened via env corruption above
         return tr

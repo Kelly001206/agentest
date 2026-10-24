@@ -52,13 +52,18 @@ class ScriptedAgent(SampleAgent):
     def handle(self, checklist_id: str, env: Env) -> Trace:
         if checklist_id in MULTI_RUN_EPISODE_IDS:
             tr = Trace()
+            # All tool calls go through the gateway, which records them on the trace and enforces simulated authz.
             gw = ToolGateway(env, tr)
+            # Tool `ledger.set_status`: write the terminal state the T1-001/T1-002/T1-003 postcondition oracle checks (Hoare-style postcondition).
             gw.call("ledger.set_status", record_id="R1", status=APPROVED)
+            # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
             tr.claims_success = True
             tr.message = "high-risk task complete"
             return tr
 
         from agentest.cases.registry import get_case
 
+        # Look up the case spec to replay its reference trajectory.
         case = get_case(checklist_id)
+        # Replay the case's golden (correct) trajectory.
         return case.golden(env)
