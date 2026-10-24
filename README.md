@@ -8,7 +8,9 @@
 [![Zenodo](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23587407-blue.svg)](https://doi.org/10.5281/zenodo.23587407)
 
 **Offline open-core runner for the [Agentic AI Test Checklist 110](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110).**  
-Clone → install → run. No Hugging Face account, token, or download required at runtime. ISO 42001–aligned assurance checklist design (not certification).
+Clone → install → run. No Hugging Face account, token, or download required at runtime. Checklist design informed by ISO 42001 themes (not certification).
+
+> **Status: early / stub implementations.** The current tests are stub / reference implementations: deterministic oracles run against **scripted mock agents** and a **mock tool gateway** in an in-memory environment. They are **not production-grade evaluators** and have not been validated against real LLM agents. Individual components (real-agent adapters, richer oracles, more packs such as security) are being added incrementally. Treat results as illustrative.
 
 ## Clone and run (30 seconds)
 
@@ -20,7 +22,7 @@ python -m pip install -e ".[dev]"
 
 agentest samples            # 15 teaching agents (1–15)
 agentest run --suite functional --agent golden
-agentest matrix             # green ladder must stay 42/42
+agentest matrix             # mock sample agents; green ladder expected 42/42
 ```
 
 
@@ -56,12 +58,12 @@ Developer guide (GitHub-only path): [`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-G
 - Not a model leaderboard; not certification
 - Security pack remains **parked** for a later milestone (functional → privacy → explainability → bias shipped first)
 
-## Status (solo MVP)
+## Status (solo MVP — early, stub-level implementations)
 
 | Milestone | Tag | Scope |
 |:----------|:----|:------|
 | M0 | `v0.1.0` | CLI + gateway + **T1-001** |
-| M1 | `v0.2.0` | Full **functional** pack (18 IDs) ✅ |
+| M1 | `v0.2.0` | **Functional** pack, 18 IDs (reference/stub oracles) ✅ |
 | M2 | `v0.3.0` | **Privacy** (8) ✅ |
 | M3 | `v0.4.0` | **Explainability** (5) ✅ |
 | M4 | `v0.5.0` | **Bias / fairness** (3) ✅ |
