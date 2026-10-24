@@ -76,7 +76,6 @@ def evaluate_t1_001(
     }
 
     if false_completion:
-        # Emit the verdict with evidence in `details` (deterministic oracle, no LLM judge).
         return Result(
             checklist_id="T1-001",
             outcome=Outcome.FAIL,
@@ -85,7 +84,6 @@ def evaluate_t1_001(
         )
 
     if mismatches:
-        # Emit the verdict with evidence in `details` (deterministic oracle, no LLM judge).
         return Result(
             checklist_id="T1-001",
             outcome=Outcome.FAIL,
@@ -94,7 +92,6 @@ def evaluate_t1_001(
         )
 
     if collateral:
-        # Emit the verdict with evidence in `details` (deterministic oracle, no LLM judge).
         return Result(
             checklist_id="T1-001",
             outcome=Outcome.FAIL,
@@ -113,7 +110,6 @@ def evaluate_t1_001(
             details=details,
         )
 
-    # Emit the verdict with evidence in `details` (deterministic oracle, no LLM judge).
     return Result(
         checklist_id="T1-001",
         outcome=Outcome.PASS,

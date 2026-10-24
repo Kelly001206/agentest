@@ -10,13 +10,14 @@ background.
 > agentest does not depend on any third-party evaluation framework. The papers are
 > cited for ideas only. All checks are deterministic, trace-based Python.
 
+Per-test source table with audit status: [TEST-SOURCES.md](TEST-SOURCES.md).
+
 ## A. Methods directly applied
 
 | Used in | Reference |
 |:--|:--|
 | T7-004, T7-007, T7-011, T7-014 (metamorphic relations) | Chen, T. Y., Cheung, S. C., Yiu, S. M. (1998). *Metamorphic Testing: A New Approach for Generating Next Test Cases.* Tech. Rep. HKUST-CS98-01. Republished: [arXiv:2002.12543](https://arxiv.org/abs/2002.12543) |
-| T7-007 (name swap), T7-004/T7-011 (language swap) | Garg, S., Perot, V., Limtiaco, N., Taly, A., Chi, E. H., Beutel, A. (2019). *Counterfactual Fairness in Text Classification through Robustness.* AIES 2019. [doi:10.1145/3306618.3317950](https://doi.org/10.1145/3306618.3317950) |
-| T1-002 (k runs, zero false completions), T1-003 (TSR over k) | Yao, S., Shinn, N., Razavi, P., Narasimhan, K. (2024). *τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains.* [arXiv:2406.12045](https://arxiv.org/abs/2406.12045) (pass^k repeated-trial reliability) |
+| T7-007 (name swap; counterfactual token substitution) | Garg, S., Perot, V., Limtiaco, N., Taly, A., Chi, E. H., Beutel, A. (2019). *Counterfactual Fairness in Text Classification through Robustness.* AIES 2019. [doi:10.1145/3306618.3317950](https://doi.org/10.1145/3306618.3317950) |
 | T1-009 (all-or-none batch) | Haerder, T., Reuter, A. (1983). *Principles of transaction-oriented database recovery.* ACM Computing Surveys 15(4). [doi:10.1145/289.291](https://doi.org/10.1145/289.291) (atomicity) |
 
 ## B. Conceptual background (checks are in-house heuristics)
@@ -28,11 +29,13 @@ background.
 | DEPENDS_ON ordering (T2-001/009/013, T2-005) | Kahn, A. B. (1962). *Topological sorting of large networks.* CACM 5(11). [doi:10.1145/368996.369025](https://doi.org/10.1145/368996.369025) |
 | Least privilege, complete mediation (T1-013, T5-012, T3-002/007/008, T5-011) | Saltzer, J. H., Schroeder, M. D. (1975). *The protection of information in computer systems.* Proc. IEEE 63(9). [doi:10.1109/PROC.1975.9939](https://doi.org/10.1109/PROC.1975.9939) |
 | Ambient authority (T3-011) | Hardy, N. (1988). *The Confused Deputy.* ACM SIGOPS OSR 22(4). [doi:10.1145/54289.871709](https://doi.org/10.1145/54289.871709) |
-| Single-use tokens (T3-010, T2-003) | RFC 6749 *The OAuth 2.0 Authorization Framework*, §4.1.2. [doi:10.17487/RFC6749](https://doi.org/10.17487/RFC6749) |
+| Single-use tokens (T3-010; analogy only) | RFC 6749 *The OAuth 2.0 Authorization Framework*, §4.1.2. [doi:10.17487/RFC6749](https://doi.org/10.17487/RFC6749) |
 | Session TTL (T3-014), verify before disclose (T2-005) | NIST SP 800-63B, §7 Session management. <https://pages.nist.gov/800-63-3/sp800-63b.html> |
 | PII regex detection (T5-004, T7-014) | McCallister, Grance, Scarfone (2010). NIST SP 800-122 *Guide to Protecting the Confidentiality of PII.* [doi:10.6028/NIST.SP.800-122](https://doi.org/10.6028/NIST.SP.800-122) |
 | Consent withdrawal (T6-004), minimisation (T5-004), erasure context (T1-016) | Regulation (EU) 2016/679 (GDPR), Art. 5(1)(c), 7(3), 17. <https://eur-lex.europa.eu/eli/reg/2016/679/oj> |
 | Indirect prompt injection (T4-009, T3-001) | Greshake, K. et al. (2023). *Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection.* AISec '23. [doi:10.1145/3605764.3623985](https://doi.org/10.1145/3605764.3623985) · [arXiv:2302.12173](https://arxiv.org/abs/2302.12173) |
+| Repeated trials (T1-002, T1-003): background only; pass^k is all-k success, whereas we count false completions (T1-002) and mean TSR (T1-003) | Yao, S., Shinn, N., Razavi, P., Narasimhan, K. (2024). *τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains.* [arXiv:2406.12045](https://arxiv.org/abs/2406.12045) (pass^k repeated-trial reliability) |
+| Language-swap fairness (T7-004, T7-011) | Garg et al. (2019), above, is background only: it swaps identity tokens, not languages; the language-swap relation is in-house. |
 | Excessive agency, sensitive info disclosure | OWASP Top 10 for LLM Applications 2025 (LLM01, LLM02, LLM06). <https://genai.owasp.org/llm-top-10/> |
 | Human oversight (T2-004) | Regulation (EU) 2024/1689 (EU AI Act), Art. 14. <https://eur-lex.europa.eu/eli/reg/2024/1689/oj> |
 | AI management system controls (T3-006, T3-002, T2-004) | ISO/IEC 42001:2023, Annex A. <https://www.iso.org/standard/81230.html> |
@@ -75,9 +78,9 @@ and no oracle claims to:
 ## E. In-house heuristics (explicit list)
 
 These checks are our own design. They are cited only to the catalogue and to background ideas:
-T1-001, T1-004, T1-005, T1-007, T1-011, T1-013, T1-015, T1-016, T1-018, T2-001,
+T1-001, T1-002 (k-run false-completion count), T1-003 (mean TSR vs tier), T1-004, T1-005, T1-007, T1-011, T1-013, T1-015, T1-016, T1-018, T2-001,
 T2-003, T2-004, T2-005, T2-009, T2-013, T3-001, T3-002, T3-006, T3-007, T3-008,
 T3-010, T3-011, T3-014, T4-009, T5-004 (regex PII), T5-011, T5-012, T5-015, T6-003,
 T6-006, T6-007, T6-010, T7-009 (keyword consistency + trace-cited steps), the
-T7-014 regex detector, the bias-pack labelers, and the risk-tier thresholds in
+T7-014 regex detector, the language-swap relations of T7-004/T7-011, the bias-pack labelers, and the risk-tier thresholds in
 `config/thresholds.py`.

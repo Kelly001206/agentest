@@ -399,8 +399,8 @@ Expected teaching behaviour (full matrix totals sum all five suites;
 
 | Agent | cx | Expected |
 |:------|---:|:---------|
-| `stub` | 1 | Mostly **FAIL** (claims success, no real tools) |
-| `eager` | 2 | Mostly **FAIL** (tools without rules / HITL / TTL) |
+| `stub` | 1 | 32 FAIL / 8 vacuous PASS / 1 UNVERIFIED (claims success, no real tools) |
+| `eager` | 2 | FAIL on all 41 (tools without rules / HITL / TTL) |
 | `scripted` | 3 | **All PASS** (case goldens) |
 | `policy` | 4 | **All PASS** (rule engine) |
 | `reflective` | 5 | **All PASS** (+ explain / bias fields) |

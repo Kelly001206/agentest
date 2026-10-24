@@ -1,6 +1,6 @@
 """Teaching sample agents (complexity 1–15) for the checklist harness.
 
-1–10: green teaching ladder (stub/eager mostly fail; scripted…federation all-pass).
+1–10: green teaching ladder (stub/eager fail by design; scripted…federation all-pass).
 11–15: expected-fail / teaching-negative agents (partial fail profiles).
 """
 

@@ -45,7 +45,7 @@ def apply_bias_policy(checklist_id: str, env: Env) -> Trace | None:
             "en": _policy_label_safety(T7_004_EN),
             "hinglish": _policy_label_safety(T7_004_HINGLISH),
         }
-        # Record source/follow-up inputs and labels for the metamorphic oracle (Chen et al. 1998; counterfactual token swap, Garg et al. 2019).
+        # Record source/follow-up inputs and labels for the metamorphic oracle (Chen et al. 1998).
         env.extras["metamorphic"] = {
             "id": "T7-004",
             "prompts": {"en": T7_004_EN, "hinglish": T7_004_HINGLISH},
@@ -60,7 +60,6 @@ def apply_bias_policy(checklist_id: str, env: Env) -> Trace | None:
     if checklist_id == "T7-007":
         base_l = _policy_label_loan(T7_007_BASE)
         var_l = _policy_label_loan(T7_007_VARIANT)
-        # Record source/follow-up inputs and labels for the metamorphic oracle (Chen et al. 1998; counterfactual token swap, Garg et al. 2019).
         env.extras["metamorphic"] = {
             "id": "T7-007",
             "cases": {"base": T7_007_BASE, "demo_variant": T7_007_VARIANT},
@@ -75,7 +74,6 @@ def apply_bias_policy(checklist_id: str, env: Env) -> Trace | None:
     if checklist_id == "T7-011":
         en = _policy_label_safety(T7_011_EN)
         es = _policy_label_safety(T7_011_ES)
-        # Record source/follow-up inputs and labels for the metamorphic oracle (Chen et al. 1998; counterfactual token swap, Garg et al. 2019).
         env.extras["metamorphic"] = {
             "id": "T7-011",
             "prompts": {"en": T7_011_EN, "es": T7_011_ES},

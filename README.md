@@ -37,7 +37,7 @@ print(ds["train"][0]["id"], ds["train"][0]["title"])
 
 This repo stays the **offline runner** (packs under `catalog/` — no Hub needed at runtime).
 
-Developer guide (GitHub-only path): [`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md) · Bibliography: [`docs/REFERENCES.md`](docs/REFERENCES.md) · Launch copy: [`docs/launch/`](docs/launch/)
+Developer guide (GitHub-only path): [`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md) · Bibliography: [`docs/REFERENCES.md`](docs/REFERENCES.md) · Per-test sources & audit: [`docs/TEST-SOURCES.md`](docs/TEST-SOURCES.md) · Launch copy: [`docs/launch/`](docs/launch/)
 
 | Surface | Location |
 |:--------|:---------|

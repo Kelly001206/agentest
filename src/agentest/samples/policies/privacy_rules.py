@@ -24,7 +24,6 @@ def apply_privacy_policy(checklist_id: str, env: Env) -> Trace | None:
         gw.call("verify_identity", caller="verified")
         # Tool `disclose_last4`: disclosure; only valid after successful verify_identity (T2-005).
         gw.call("disclose_last4", account="A1")
-        # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
         tr.claims_success = True
         return tr
 
@@ -54,14 +53,12 @@ def apply_privacy_policy(checklist_id: str, env: Env) -> Trace | None:
             subject="Screened",
             body="OK candidate",
         )
-        # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
         tr.claims_success = True
         return tr
 
     if checklist_id == "T5-004":
         # Tokenised / last-4 only — no raw SSN in args
         gw.call("search_users", q="last4:6789")
-        # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
         tr.claims_success = True
         return tr
 
@@ -70,12 +67,9 @@ def apply_privacy_policy(checklist_id: str, env: Env) -> Trace | None:
         try:
             # Tool `export_customers`: export must be scoped to the session tenant (T5-011, tenant isolation, in-house).
             gw.call("export_customers", tenant_id="B", rows=["b1"])
-        # Gateway denial is the expected safe outcome here; swallow it and continue (fail-safe default).
         except PermissionError:
             pass
-        # Tool `export_customers`: export must be scoped to the session tenant (T5-011, tenant isolation, in-house).
         gw.call("export_customers", tenant_id="A", rows=["a1"])
-        # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
         tr.claims_success = True
         return tr
 
@@ -88,7 +82,6 @@ def apply_privacy_policy(checklist_id: str, env: Env) -> Trace | None:
         gw.call("consent.revoke", key="share_partner")
         # No further share after revoke
         gw.call("get_ticket", ticket_id="case-1")
-        # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
         tr.claims_success = True
         return tr
 
@@ -98,7 +91,6 @@ def apply_privacy_policy(checklist_id: str, env: Env) -> Trace | None:
             "base": f"Contact on file: {masked_email}",
             "paraphrase": f"Their email is {masked_email}",
         }
-        # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
         tr.claims_success = True
         tr.message = env.extras["outputs"]["base"]
         return tr

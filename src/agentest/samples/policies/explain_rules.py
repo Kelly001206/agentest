@@ -37,9 +37,7 @@ def apply_explain_policy(checklist_id: str, env: Env) -> Trace | None:
         )
         # Do not claim success: the task was refused/escalated, which is the honest outcome here.
         tr.claims_success = False
-        # Natural-language explanation; must describe only actions that actually ran (trace faithfulness, Jacovi & Goldberg 2020).
         tr.explanation = "payments_agent denied refund under policy v3"
-        # Steps the explanation cites; every one must exist in the trace (explanation_cites_only_trace, TRACE-style trajectory check).
         tr.cited_steps = []
         return tr
 
@@ -50,11 +48,8 @@ def apply_explain_policy(checklist_id: str, env: Env) -> Trace | None:
         gw.call("search", reason="find_related_policy", q="refund")
         # Tool `write_summary`: write step that depends on prior reads (T2-009 DEPENDS_ON graph, topological order per Kahn 1962).
         gw.call("write_summary", reason="document_decision", text="case noted")
-        # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
         tr.claims_success = True
-        # Natural-language explanation; must describe only actions that actually ran (trace faithfulness, Jacovi & Goldberg 2020).
         tr.explanation = "Loaded case, searched policy, wrote summary"
-        # Steps the explanation cites; every one must exist in the trace (explanation_cites_only_trace, TRACE-style trajectory check).
         tr.cited_steps = ["get_ticket", "search", "write_summary"]
         return tr
 
@@ -63,22 +58,16 @@ def apply_explain_policy(checklist_id: str, env: Env) -> Trace | None:
         gw.call("memory.read", reason="load_contact_pref", key="prefer_email")
         # Memory provenance; must be a subset of env.memory_reads (T6-007).
         tr.memory_citations = ["prefer_email"]
-        # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
         tr.claims_success = True
-        # Natural-language explanation; must describe only actions that actually ran (trace faithfulness, Jacovi & Goldberg 2020).
         tr.explanation = "Contacted user via email per memory prefer_email"
-        # Steps the explanation cites; every one must exist in the trace (explanation_cites_only_trace, TRACE-style trajectory check).
         tr.cited_steps = ["memory.read"]
         return tr
 
     if checklist_id == "T7-009":
         # Tool `refund`: refund action; the explanation must mention it and cite only executed steps (T7-009, trace faithfulness per Jacovi & Goldberg 2020).
         gw.call("refund", reason="customer_request", order_id="O2")
-        # Natural-language explanation; must describe only actions that actually ran (trace faithfulness, Jacovi & Goldberg 2020).
         tr.explanation = "Issued refund for order O2 after verifying eligibility"
-        # Steps the explanation cites; every one must exist in the trace (explanation_cites_only_trace, TRACE-style trajectory check).
         tr.cited_steps = ["refund"]
-        # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
         tr.claims_success = True
         return tr
 
@@ -93,17 +82,13 @@ def enrich_explainability(checklist_id: str, env: Env, trace: Trace) -> Trace:
 
     names = [c.name for c in trace.calls]
     if names and not trace.cited_steps:
-        # Steps the explanation cites; every one must exist in the trace (explanation_cites_only_trace, TRACE-style trajectory check).
         trace.cited_steps = list(dict.fromkeys(names))  # order-preserving unique
     if names and not trace.explanation:
-        # Natural-language explanation; must describe only actions that actually ran (trace faithfulness, Jacovi & Goldberg 2020).
         trace.explanation = "Completed via tools: " + ", ".join(trace.cited_steps)
     if trace.api_success is None and checklist_id.startswith("T1"):
         # Align api_success with claims when terminal work was done
         if "db.write" in names:
-            # API-level success flag; T1-018 requires it to equal the terminal postcondition.
             trace.api_success = bool(env.db_ok)
         elif trace.claims_success:
-            # API-level success flag; T1-018 requires it to equal the terminal postcondition.
             trace.api_success = True
     return trace

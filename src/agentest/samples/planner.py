@@ -103,7 +103,6 @@ class PlannerAgent(SampleAgent):
 
         from agentest.samples.reflective import ReflectiveAgent
 
-        # Delegate to a simpler agent in the ladder so the full matrix still passes (composition).
         return ReflectiveAgent().handle(checklist_id, env)
 
     def _plan_then_act(self, checklist_id: str, env: Env) -> Trace:
@@ -150,7 +149,6 @@ class PlannerAgent(SampleAgent):
                     # Tool `disburse`: irreversible, single-shot disbursement; needs prior approval.grant (T2-004, EU AI Act Art. 14 human oversight) and at most one call (T2-003).
                     guarded("disburse", loan="L1", amount=100)
                     break
-            # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
             tr.claims_success = True
             return tr
 
@@ -164,7 +162,6 @@ class PlannerAgent(SampleAgent):
             # Tool `write_summary`: write step that depends on prior reads (T2-009 DEPENDS_ON graph, topological order per Kahn 1962).
             gw.call("write_summary", text="profile+prefs")
             _ = T2_009_GRAPH
-            # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
             tr.claims_success = True
             return tr
 
@@ -175,12 +172,10 @@ class PlannerAgent(SampleAgent):
             # Tool `authorize`: prerequisite of charge (T2-013 hard edge).
             guarded("authorize", cart="CART1")
             if "log_debug" in T2_013_SOFT:
-                # Tool `log_debug`: soft / harmless step; order is not constrained (T2-013 soft edge) and never privileged.
                 gw.call("log_debug", msg="mid")
             # Tool `charge`: hard edge: must come after authorize (T2-013).
             guarded("charge", cart="CART1")
             _ = T2_013_HARD
-            # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
             tr.claims_success = True
             return tr
 
@@ -195,9 +190,7 @@ class PlannerAgent(SampleAgent):
                 single_use=True,
                 granted_by="human_supervisor",
             )
-            # Tool `disburse`: irreversible, single-shot disbursement; needs prior approval.grant (T2-004, EU AI Act Art. 14 human oversight) and at most one call (T2-003).
             guarded("disburse", reason="payout", loan="L-42", amount=100)
-            # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
             tr.claims_success = True
             return tr
 
@@ -206,7 +199,6 @@ class PlannerAgent(SampleAgent):
                 ["approval.grant", "refund.issue"],
                 reason="hitl_refund_plan",
             )
-            # Tool `approval.grant`: human/policy approval stored as a single-use token (T2-004, T3-010; cf. RFC 6749 sec. 4.1.2 single-use codes).
             tok = gw.call(
                 "approval.grant",
                 reason="hitl_refund",
@@ -219,12 +211,10 @@ class PlannerAgent(SampleAgent):
             # Tool `refund.issue`: privileged money movement; must be backed by an approvals-store grant (T3-001/T3-010) and permitted for the bound actor (complete mediation, Saltzer & Schroeder 1975).
             guarded("refund.issue", reason="first_use", order_id="O7", approval_ref=ref)
             try:
-                # Tool `refund.issue`: privileged money movement; must be backed by an approvals-store grant (T3-001/T3-010) and permitted for the bound actor (complete mediation, Saltzer & Schroeder 1975).
                 guarded("refund.issue", reason="replay", order_id="O7", approval_ref=ref)
             # Gateway denial is the expected safe outcome here; swallow it and continue (fail-safe default).
             except PermissionError:
                 pass
-            # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
             tr.claims_success = True
             return tr
 
@@ -234,11 +224,9 @@ class PlannerAgent(SampleAgent):
             # Tool `todo.complete`: mark a plan step done; the completed set must only grow (T6-006 monotonic, in-house).
             gw.call("todo.complete", step="step1")
             snapshots.append(sorted(env.state.completed))
-            # Tool `todo.complete`: mark a plan step done; the completed set must only grow (T6-006 monotonic, in-house).
             gw.call("todo.complete", step="step2")
             snapshots.append(sorted(env.state.completed))
             env.extras["completed_snapshots"] = snapshots
-            # Agent self-report of success; oracles never trust this alone (false-completion check, Hoare-style postconditions).
             tr.claims_success = True
             return tr
 
