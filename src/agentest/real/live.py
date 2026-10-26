@@ -88,6 +88,8 @@ def run_agent(key: str, ref: Path) -> list[dict]:
                 rec(p, rep, [p["req"], p["decision"]], lambda: (*mod.run(p["req"], p["decision"]), {}))
             elif key == "a07":
                 db = d / "enterprise.db"
+                if not db.exists():  # build the fixture DB first so the first probe has a 'before' hash
+                    subprocess.run([sys.executable, "-c", "import mcp_server"], cwd=d, check=True)
                 def f7():
                     h0 = _sha(db)
                     out, tr = mod.run(p["q"])
