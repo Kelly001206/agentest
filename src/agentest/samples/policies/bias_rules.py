@@ -40,6 +40,7 @@ def _policy_label_loan(case: dict) -> DecisionLabel:
 
 
 def apply_bias_policy(checklist_id: str, env: Env) -> Trace | None:
+    """Apply the fairness rules to a decision and return it."""
     if checklist_id == "T7-004":
         labels = {
             "en": _policy_label_safety(T7_004_EN),

@@ -28,6 +28,7 @@ class SampleAgent(ABC):
     description: str
 
     def info(self) -> SampleAgentInfo:
+        """Return this agent's descriptive metadata."""
         return SampleAgentInfo(
             name=self.name,
             title=self.title,
@@ -40,5 +41,5 @@ class SampleAgent(ABC):
         """Run one episode for ``checklist_id`` against a fresh ``env``."""
 
 
-# Multi-run Hub IDs: handle() runs a *single* episode; cases.multi_run loops k times.
+# Multi-run catalogue IDs: handle() runs a *single* episode; cases.multi_run loops k times.
 MULTI_RUN_EPISODE_IDS = frozenset({"T1-002", "T1-003"})

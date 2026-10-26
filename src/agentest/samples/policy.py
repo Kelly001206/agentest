@@ -26,7 +26,7 @@ Attribution / References
 - In-house teaching design; references are for the general agent pattern it imitates (no LLM is used - the agent is deterministic).
 - Saltzer, J. H., Schroeder, M. D. (1975). The protection of information in computer systems. Proceedings of the IEEE 63(9):1278-1308. https://doi.org/10.1109/PROC.1975.9939 (least privilege, complete mediation, fail-safe defaults)
 - ISO/IEC 42001:2023 Information technology - Artificial intelligence - Management system (Annex A controls). https://www.iso.org/standard/81230.html
-- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+- catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
 
 See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
@@ -44,6 +44,8 @@ from agentest.types import Trace
 
 
 class PolicyAgent(SampleAgent):
+    """Sample agent; behaviour and defect profile described in the module docstring."""
+
     name = "policy"
     title = "Policy rule-engine"
     complexity = 4
@@ -54,6 +56,7 @@ class PolicyAgent(SampleAgent):
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
         # Rule engine: try each policy module in priority order; the first module that owns this ID returns a trace.
+        """Run one episode for ``checklist_id`` with this agent's behaviour profile."""
         for apply in (
             apply_orchestration_policy,
             apply_functional_policy,

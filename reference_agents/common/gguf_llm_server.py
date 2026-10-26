@@ -4,11 +4,11 @@ Zero cost, no API keys, no account. Same API as local_llm_server.py, which stays
 fallback (Qwen2.5-1.5B-Instruct via transformers).
 
 Tool calling uses Qwen2.5's native <tool_call>{...}</tool_call> format (chat template from the
-Hugging Face tokenizer). tool_choice="required" pre-fills only '<tool_call>' so the MODEL picks the
+the model tokenizer). tool_choice="required" pre-fills only '<tool_call>' so the MODEL picks the
 tool; a named tool_choice pre-fills that name (standard OpenAI semantics). The constrained
 log-likelihood tool picker used for the 1.5B model is NOT used here.
 
-Get the model:  hf download bartowski/Qwen2.5-7B-Instruct-GGUF Qwen2.5-7B-Instruct-Q4_K_M.gguf --local-dir gguf
+Get the model:  download a Qwen2.5-7B-Instruct Q4_K_M GGUF file and set REF_GGUF
 Run:            REF_GGUF=gguf/Qwen2.5-7B-Instruct-Q4_K_M.gguf python common/gguf_llm_server.py   (port 8008)
 """
 import json, os, re, time, uuid, threading

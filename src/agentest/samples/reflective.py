@@ -26,7 +26,7 @@ Attribution / References
 - Jacovi, A., Goldberg, Y. (2020). Towards Faithfully Interpretable NLP Systems: How Should We Define and Evaluate Faithfulness? ACL 2020. https://doi.org/10.18653/v1/2020.acl-main.386
 - Shinn, N., Cassano, F., Gopinath, A., Narasimhan, K., Yao, S. (2023). Reflexion: Language Agents with Verbal Reinforcement Learning. NeurIPS 2023. arXiv:2303.11366 https://arxiv.org/abs/2303.11366
 - Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., Cao, Y. (2023). ReAct: Synergizing Reasoning and Acting in Language Models. ICLR 2023. arXiv:2210.03629 https://arxiv.org/abs/2210.03629
-- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+- catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
 
 See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
@@ -47,6 +47,8 @@ from agentest.types import Trace
 
 
 class ReflectiveAgent(SampleAgent):
+    """Sample agent; behaviour and defect profile described in the module docstring."""
+
     name = "reflective"
     title = "Reflective (policy + explain + bias)"
     complexity = 5
@@ -57,6 +59,7 @@ class ReflectiveAgent(SampleAgent):
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
         # Same rule engine as PolicyAgent, but explain/bias modules first so their native fields are produced.
+        """Run one episode for ``checklist_id`` with this agent's behaviour profile."""
         for apply in (
             apply_orchestration_policy,
             apply_explain_policy,

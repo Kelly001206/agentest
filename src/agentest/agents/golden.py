@@ -16,6 +16,7 @@ _ACTIONS: list[tuple[str, str]] = [
 
 
 def run(env: Env) -> Trace:
+    """Run the case (or agent) and return its result."""
     trace = Trace()
     # All tool calls go through the gateway, which records them on the trace and enforces simulated authz.
     gw = ToolGateway(env, trace)

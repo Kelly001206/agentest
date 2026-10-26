@@ -25,7 +25,7 @@ Attribution / References
 - In-house teaching design; references are for the general agent pattern it imitates (no LLM is used - the agent is deterministic).
 - OWASP Top 10 for LLM Applications 2025 (LLM01 Prompt Injection, LLM02 Sensitive Information Disclosure, LLM06 Excessive Agency). https://genai.owasp.org/llm-top-10/
 - Saltzer, J. H., Schroeder, M. D. (1975). The protection of information in computer systems. Proceedings of the IEEE 63(9):1278-1308. https://doi.org/10.1109/PROC.1975.9939 (least privilege, complete mediation, fail-safe defaults)
-- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+- catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
 
 See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
@@ -39,6 +39,8 @@ from agentest.types import ToolCall, Trace
 
 
 class EagerAgent(SampleAgent):
+    """Sample agent; behaviour and defect profile described in the module docstring."""
+
     name = "eager"
     title = "Eager (act-first)"
     complexity = 2
@@ -48,6 +50,7 @@ class EagerAgent(SampleAgent):
     )
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
+        """Run one episode for ``checklist_id`` with this agent's behaviour profile."""
         tr = Trace()
         gw = ToolGateway(env, tr)
 

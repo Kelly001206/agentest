@@ -1,6 +1,6 @@
 """Teaching sample agents (complexity 1–15) for the checklist harness.
 
-1–10: green teaching ladder (stub/eager fail by design; scripted…federation all-pass).
+1–10: green teaching ladder (noop/eager fail by design; scripted…federation all-pass).
 11–15: expected-fail / teaching-negative agents (partial fail profiles).
 """
 
@@ -15,16 +15,16 @@ from agentest.samples.flaky_plan import FlakyPlanAgent
 from agentest.samples.hallucinator import HallucinatorAgent
 from agentest.samples.handoff import HandoffAgent
 from agentest.samples.leaky import LeakyAgent
+from agentest.samples.noop import NoopAgent
 from agentest.samples.overreach import OverreachAgent
 from agentest.samples.planner import PlannerAgent
 from agentest.samples.policy import PolicyAgent
 from agentest.samples.reflective import ReflectiveAgent
 from agentest.samples.scripted import ScriptedAgent
-from agentest.samples.stub import StubAgent
 from agentest.samples.supervisor import SupervisorAgent
 
 SAMPLE_AGENT_NAMES: tuple[str, ...] = (
-    "stub",
+    "noop",
     "eager",
     "scripted",
     "policy",
@@ -57,10 +57,10 @@ MATRIX_MUST_PASS: frozenset[str] = frozenset(
 )
 
 # Teaching-negative agents: allowed/expected to fail some IDs (partial profiles).
-# stub/eager are legacy mostly-fail agents; the five below are category-focused.
+# noop/eager are legacy mostly-fail agents; the five below are category-focused.
 MATRIX_EXPECTED_FAIL: frozenset[str] = frozenset(
     {
-        "stub",
+        "noop",
         "eager",
         "leaky",
         "hallucinator",
@@ -70,7 +70,7 @@ MATRIX_EXPECTED_FAIL: frozenset[str] = frozenset(
     }
 )
 
-# Category-focused expected-fail band (cx 11–15), excluding stub/eager.
+# Category-focused expected-fail band (cx 11–15), excluding noop/eager.
 EXPECTED_FAIL_SCENARIOS: tuple[str, ...] = (
     "leaky",
     "hallucinator",
@@ -84,7 +84,7 @@ _REGISTRY: dict[str, SampleAgent] | None = None
 
 def _build() -> dict[str, SampleAgent]:
     agents: list[SampleAgent] = [
-        StubAgent(),
+        NoopAgent(),
         EagerAgent(),
         ScriptedAgent(),
         PolicyAgent(),
@@ -104,6 +104,7 @@ def _build() -> dict[str, SampleAgent]:
 
 
 def get_sample(name: str) -> SampleAgent:
+    """Return a sample agent instance by name."""
     global _REGISTRY
     if _REGISTRY is None:
         _REGISTRY = _build()
@@ -115,6 +116,7 @@ def get_sample(name: str) -> SampleAgent:
 
 
 def list_samples(*, failing_only: bool = False) -> list[SampleAgentInfo]:
+    """Return info for all sample agents in complexity order."""
     global _REGISTRY
     if _REGISTRY is None:
         _REGISTRY = _build()
@@ -123,6 +125,7 @@ def list_samples(*, failing_only: bool = False) -> list[SampleAgentInfo]:
 
 
 def is_sample_agent(name: str) -> bool:
+    """True when ``name`` is a sample agent."""
     return name in SAMPLE_AGENT_NAMES
 
 

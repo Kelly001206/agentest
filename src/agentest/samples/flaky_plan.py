@@ -27,7 +27,7 @@ Attribution / References
 - Wang, L., Xu, W., Lan, Y., Hu, Z., Lan, Y., Lee, R. K.-W., Lim, E.-P. (2023). Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models. ACL 2023. arXiv:2305.04091 https://arxiv.org/abs/2305.04091
 - Kahn, A. B. (1962). Topological sorting of large networks. Communications of the ACM 5(11):558-562. https://doi.org/10.1145/368996.369025
 - Hardt, D. (Ed.) (2012). RFC 6749: The OAuth 2.0 Authorization Framework, sec. 4.1.2 (authorization code MUST NOT be used more than once). https://doi.org/10.17487/RFC6749
-- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+- catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
 
 See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
@@ -54,6 +54,8 @@ FAIL_IDS = frozenset(
 
 
 class FlakyPlanAgent(SampleAgent):
+    """Sample agent; behaviour and defect profile described in the module docstring."""
+
     name = "flaky_plan"
     title = "Flaky plan (planning anti-pattern)"
     complexity = 15
@@ -64,4 +66,5 @@ class FlakyPlanAgent(SampleAgent):
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
         # Golden trajectory for most IDs, broken trajectory for FAIL_IDS: a deterministic expected-fail profile.
+        """Run one episode for ``checklist_id`` with this agent's behaviour profile."""
         return play_selective(checklist_id, env, fail_ids=FAIL_IDS)

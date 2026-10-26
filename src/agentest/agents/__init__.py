@@ -22,6 +22,7 @@ AGENTS: dict[str, AgentFn] = {
 
 
 def get_agent(name: str) -> AgentFn:
+    """Return a golden/broken fixture agent by name."""
     try:
         return AGENTS[name]
     except KeyError as exc:

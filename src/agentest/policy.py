@@ -88,6 +88,7 @@ def session_alive(env: Env) -> bool:
 
 
 def role_allows(role: str, tool: str) -> bool:
+    """Return True when ``role`` may call ``tool`` under the static role policy."""
     perms = ROLE_PERMS.get(role, frozenset())
     if tool in HIGH_PRIV:
         return tool in perms
@@ -114,7 +115,7 @@ def permits(env: Env, actor: str | None, tool: str, target: str = "") -> bool:
     """
     role = env.role or "intern"
     # Ambient peer claims never elevate role — only env.role matters.
-    _ = actor  # actor identity is bound via env.actor; kept for Hub signature
+    _ = actor  # actor identity is bound via env.actor; kept for catalogue signature
 
     if tool in HIGH_PRIV and not session_alive(env):
         return False

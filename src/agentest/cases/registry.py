@@ -13,12 +13,13 @@ OracleFn = Callable[[Env, Trace], Result]
 EnvFactory = Callable[[], Env]
 
 ORACLE_AGENTS = ("golden", "broken")
-SAMPLE_AGENTS = ("stub", "eager", "scripted", "policy", "reflective", "supervisor", "handoff", "planner", "critic", "federation", "leaky", "hallucinator", "biased", "overreach", "flaky_plan")
+SAMPLE_AGENTS = ("noop", "eager", "scripted", "policy", "reflective", "supervisor", "handoff", "planner", "critic", "federation", "leaky", "hallucinator", "biased", "overreach", "flaky_plan")
 ALL_AGENTS = ORACLE_AGENTS + SAMPLE_AGENTS
 
 
 @dataclass(frozen=True)
 class CaseSpec:
+    """One checklist case: env factory, golden/broken agents and oracle."""
     checklist_id: str
     make_env: EnvFactory
     golden: AgentFn
@@ -26,6 +27,7 @@ class CaseSpec:
     oracle: OracleFn
 
     def run(self, agent_name: str) -> Result:
+        """Run the case (or agent) and return its result."""
         if agent_name not in ALL_AGENTS:
             raise ValueError(
                 f"unknown agent {agent_name!r}; choose one of: {', '.join(ALL_AGENTS)}"
@@ -125,7 +127,7 @@ BIAS_FAIRNESS_IDS: list[str] = [
 ]
 
 ORCHESTRATION_IDS: list[str] = [
-    # Hub packs/orchestration.csv — runner theme pack (not a Hub eval_group).
+    # catalogue packs/orchestration.csv — runner theme pack (not a catalogue eval_group).
     # T3-006 CaseSpec lives in explainability; listed here for thematic suite runs only.
     "T3-001",
     "T3-002",
@@ -140,6 +142,7 @@ ORCHESTRATION_IDS: list[str] = [
 
 
 def get_case(checklist_id: str) -> CaseSpec:
+    """Return the CaseSpec for a checklist ID."""
     try:
         # Look up the case spec to replay its reference trajectory.
         return CASE_REGISTRY[checklist_id]

@@ -27,7 +27,7 @@ Attribution / References
 - Greshake, K., Abdelnabi, S., Mishra, S., Endres, C., Holz, T., Fritz, M. (2023). Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection. AISec '23 (ACM CCS workshop). https://doi.org/10.1145/3605764.3623985 / arXiv:2302.12173 https://arxiv.org/abs/2302.12173
 - Hardt, D. (Ed.) (2012). RFC 6749: The OAuth 2.0 Authorization Framework, sec. 4.1.2 (authorization code MUST NOT be used more than once). https://doi.org/10.17487/RFC6749
 - NIST SP 800-63B, Digital Identity Guidelines: Authentication and Lifecycle Management, sec. 7 (session management / reauthentication). https://pages.nist.gov/800-63-3/sp800-63b.html
-- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+- catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
 
 See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
@@ -47,6 +47,8 @@ ORCH_NATIVE = frozenset(
 
 
 class HandoffAgent(SampleAgent):
+    """Sample agent; behaviour and defect profile described in the module docstring."""
+
     name = "handoff"
     title = "Handoff receiver (authz + TTL)"
     complexity = 7
@@ -58,6 +60,7 @@ class HandoffAgent(SampleAgent):
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
         # IDs this agent handles natively with its own pattern; others are delegated.
+        """Run one episode for ``checklist_id`` with this agent's behaviour profile."""
         if checklist_id in ORCH_NATIVE:
             return self._receive(checklist_id, env)
 

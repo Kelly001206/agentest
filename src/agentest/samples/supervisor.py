@@ -26,7 +26,7 @@ Attribution / References
 - Regulation (EU) 2024/1689 (EU AI Act), Art. 14 Human oversight. https://eur-lex.europa.eu/eli/reg/2024/1689/oj
 - Saltzer, J. H., Schroeder, M. D. (1975). The protection of information in computer systems. Proceedings of the IEEE 63(9):1278-1308. https://doi.org/10.1109/PROC.1975.9939 (least privilege, complete mediation, fail-safe defaults)
 - Hardt, D. (Ed.) (2012). RFC 6749: The OAuth 2.0 Authorization Framework, sec. 4.1.2 (authorization code MUST NOT be used more than once). https://doi.org/10.17487/RFC6749
-- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+- catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
 
 See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
@@ -45,6 +45,8 @@ ORCH_NATIVE = frozenset(
 
 
 class SupervisorAgent(SampleAgent):
+    """Sample agent; behaviour and defect profile described in the module docstring."""
+
     name = "supervisor"
     title = "Supervisor / planner (handoff + HITL)"
     complexity = 6
@@ -56,6 +58,7 @@ class SupervisorAgent(SampleAgent):
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
         # IDs this agent handles natively with its own pattern; others are delegated.
+        """Run one episode for ``checklist_id`` with this agent's behaviour profile."""
         if checklist_id in ORCH_NATIVE:
             return self._orchestrate(checklist_id, env)
 

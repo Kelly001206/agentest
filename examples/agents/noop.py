@@ -1,14 +1,14 @@
-"""Wrapper: complexity-graded sample agent `stub`.
+"""Wrapper: complexity-graded sample agent `noop`.
 
 The full scenario, agent design, tests exercised, expected pass/fail and
 literature references are documented in the module docstring of
-src/agentest/samples/stub.py and in docs/SAMPLE-AGENTS.md / docs/REFERENCES.md.
+src/agentest/samples/noop.py and in docs/SAMPLE-AGENTS.md / docs/REFERENCES.md.
 """
 
 from agentest.samples import get_sample
 
 # Resolve the sample agent from the registry; scenario, design and references are in its module docstring.
-_agent = get_sample("stub")
+_agent = get_sample("noop")
 NAME = _agent.name
 TITLE = _agent.title
 COMPLEXITY = _agent.complexity

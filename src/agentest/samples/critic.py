@@ -28,7 +28,7 @@ Attribution / References
 - Madaan, A. et al. (2023). Self-Refine: Iterative Refinement with Self-Feedback. NeurIPS 2023. arXiv:2303.17651 https://arxiv.org/abs/2303.17651
 - Shinn, N., Cassano, F., Gopinath, A., Narasimhan, K., Yao, S. (2023). Reflexion: Language Agents with Verbal Reinforcement Learning. NeurIPS 2023. arXiv:2303.11366 https://arxiv.org/abs/2303.11366
 - Jacovi, A., Goldberg, Y. (2020). Towards Faithfully Interpretable NLP Systems: How Should We Define and Evaluate Faithfulness? ACL 2020. https://doi.org/10.18653/v1/2020.acl-main.386
-- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+- catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
 
 See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
@@ -54,6 +54,8 @@ CRITIC_NATIVE = frozenset(
 
 
 class CriticAgent(SampleAgent):
+    """Sample agent; behaviour and defect profile described in the module docstring."""
+
     name = "critic"
     title = "Generate–critique–repair"
     complexity = 9
@@ -65,6 +67,7 @@ class CriticAgent(SampleAgent):
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
         # IDs this agent handles natively with its own pattern; others are delegated.
+        """Run one episode for ``checklist_id`` with this agent's behaviour profile."""
         if checklist_id in CRITIC_NATIVE:
             return self._generate_critique_repair(checklist_id, env)
 

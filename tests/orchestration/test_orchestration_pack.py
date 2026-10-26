@@ -1,4 +1,4 @@
-"""Orchestration pack — Pass golden / Fail broken for Hub theme IDs.
+"""Orchestration pack — Pass golden / Fail broken for catalogue theme IDs.
 
 What this module verifies: oracles in this pack accept correct (golden) behaviour and reject
 seeded defects (broken), plus CLI exit-code contracts used in CI. Algorithms, thresholds and
@@ -67,9 +67,9 @@ def test_passing_samples_pass_orchestration_suite(agent: str):
     assert all(r.ok for r in results), [(r.checklist_id, r.reason) for r in results if not r.ok]
 
 
-def test_stub_fails_handover_prose():
-    """The stub agent must FAIL T3-001 (handover prose is not an approval token)."""
-    results = run_ids(["T3-001"], suite="orchestration", agent="stub")
+def test_noop_fails_handover_prose():
+    """The noop agent must FAIL T3-001 (handover prose is not an approval token)."""
+    results = run_ids(["T3-001"], suite="orchestration", agent="noop")
     assert results[0].outcome is Outcome.FAIL
 
 

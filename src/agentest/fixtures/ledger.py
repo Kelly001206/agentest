@@ -22,4 +22,5 @@ def fresh_ledger_t1_001() -> Ledger:
 
 
 def fresh_env_t1_001() -> Env:
+    """Fresh Env seeded for T1-001."""
     return Env(ledger=fresh_ledger_t1_001())

@@ -98,6 +98,7 @@ class ToolGateway:
         meta: dict[str, Any] | None = None,
         **args: Any,
     ) -> Any:
+        """Invoke a mock tool by name, enforcing the gateway policy and recording the call."""
         call_meta: dict[str, Any] = dict(meta or {})
         if reason is not None:
             call_meta["reason"] = reason

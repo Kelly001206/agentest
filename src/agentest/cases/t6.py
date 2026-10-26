@@ -1,6 +1,6 @@
 """T6 multi-turn state functional cases.
 
-Each oracle below documents: Hub catalogue ID(s), the algorithm step by step,
+Each oracle below documents: catalogue ID(s), the algorithm step by step,
 thresholds and rationale, pass/fail interpretation, limitations, and an
 Attribution / References section (published method vs in-house heuristic).
 Full verified bibliography: docs/REFERENCES.md.
@@ -50,7 +50,7 @@ def _broken_003(env: Env) -> Trace:
 def _oracle_003(env: Env, trace: Trace) -> Result:
     """T6-003 oracle: entity binding (ticket_id) stays stable across turns.
 
-    Hub catalogue ID(s): T6-003
+    catalogue ID(s): T6-003
 
     Algorithm (step by step):
     1. Read env.state.binding_history['ticket_id'].
@@ -65,7 +65,7 @@ def _oracle_003(env: Env, trace: Trace) -> Result:
 
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
-    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
     """
     hist = env.state.binding_history.get("ticket_id", [])
     details = {"binding_history": hist, "bindings": dict(env.state.bindings)}
@@ -115,7 +115,7 @@ def _broken_006(env: Env) -> Trace:
 def _oracle_006(env: Env, trace: Trace) -> Result:
     """T6-006 oracle: the set of completed plan steps grows monotonically.
 
-    Hub catalogue ID(s): T6-006
+    catalogue ID(s): T6-006
 
     Algorithm (step by step):
     1. Read completed_snapshots recorded per turn (fallback: final set).
@@ -130,7 +130,7 @@ def _oracle_006(env: Env, trace: Trace) -> Result:
 
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
-    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
     """
     snaps = env.extras.get("completed_snapshots")
     if not snaps:
@@ -181,7 +181,7 @@ def _broken_010(env: Env) -> Trace:
 def _oracle_010(env: Env, trace: Trace) -> Result:
     """T6-010 oracle: user-selected locale (hi) persists across later turns.
 
-    Hub catalogue ID(s): T6-010
+    catalogue ID(s): T6-010
 
     Algorithm (step by step):
     1. Read env.state.locale at end of run.
@@ -195,7 +195,7 @@ def _oracle_010(env: Env, trace: Trace) -> Result:
 
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
-    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
     """
     details = {"locale": env.state.locale}
     if env.state.locale == "hi":
@@ -204,6 +204,7 @@ def _oracle_010(env: Env, trace: Trace) -> Result:
 
 
 def all_cases() -> list[CaseSpec]:
+    """Return this module's CaseSpecs keyed by checklist ID."""
     return [
         CaseSpec("T6-003", _env, _golden_003, _broken_003, _oracle_003),
         CaseSpec("T6-006", _env, _golden_006, _broken_006, _oracle_006),

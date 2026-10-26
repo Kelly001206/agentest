@@ -1,6 +1,6 @@
 """T2 tool-ordering functional cases.
 
-Each oracle below documents: Hub catalogue ID(s), the algorithm step by step,
+Each oracle below documents: catalogue ID(s), the algorithm step by step,
 thresholds and rationale, pass/fail interpretation, limitations, and an
 Attribution / References section (published method vs in-house heuristic).
 Full verified bibliography: docs/REFERENCES.md.
@@ -65,7 +65,7 @@ def _broken_001(env: Env) -> Trace:
 def _oracle_001(env: Env, trace: Trace) -> Result:
     """T2-001 oracle: open_account only after sanctions_screen AND verify_identity (DEPENDS_ON).
 
-    Hub catalogue ID(s): T2-001
+    catalogue ID(s): T2-001
 
     Algorithm (step by step):
     1. Walk trace.tool_calls in order, maintaining the set of tools that succeeded so far.
@@ -82,7 +82,7 @@ def _oracle_001(env: Env, trace: Trace) -> Result:
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Kahn, A. B. (1962). Topological sorting of large networks. Communications of the ACM 5(11):558-562. https://doi.org/10.1145/368996.369025
-    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
     """
     # Check the trace is a valid linearisation of the DEPENDS_ON DAG (Kahn 1962).
     ok, msg = _check_depends(trace, T2_001_DEPENDS_ON)
@@ -117,7 +117,7 @@ def _broken_003(env: Env) -> Trace:
 def _oracle_003(env: Env, trace: Trace) -> Result:
     """T2-003 oracle: single-shot irreversible tools (disburse, charge_card, send_wire) called at most once.
 
-    Hub catalogue ID(s): T2-003
+    catalogue ID(s): T2-003
 
     Algorithm (step by step):
     1. Count occurrences of each SINGLE_SHOT tool in the trace.
@@ -132,7 +132,7 @@ def _oracle_003(env: Env, trace: Trace) -> Result:
 
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
-    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
     """
     counts = {n: trace.count(n) for n in T2_003_SINGLE_SHOT}
     details = {"counts": counts}
@@ -169,7 +169,7 @@ def _broken_009(env: Env) -> Trace:
 def _oracle_009(env: Env, trace: Trace) -> Result:
     """T2-009 oracle: write_summary only after both sibling fetches (fetch_profile, fetch_prefs).
 
-    Hub catalogue ID(s): T2-009
+    catalogue ID(s): T2-009
 
     Algorithm (step by step):
     1. Walk trace.tool_calls in order, maintaining the set of tools that succeeded so far.
@@ -186,7 +186,7 @@ def _oracle_009(env: Env, trace: Trace) -> Result:
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Kahn, A. B. (1962). Topological sorting of large networks. Communications of the ACM 5(11):558-562. https://doi.org/10.1145/368996.369025
-    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
     """
     ok, msg = _check_depends(trace, T2_009_GRAPH)
     details = {"calls": [c.name for c in trace.calls]}
@@ -224,7 +224,7 @@ def _broken_013(env: Env) -> Trace:
 def _oracle_013(env: Env, trace: Trace) -> Result:
     """T2-013 oracle: hard ordering edges hold while soft (logging) tools may be reordered freely.
 
-    Hub catalogue ID(s): T2-013
+    catalogue ID(s): T2-013
 
     Algorithm (step by step):
     1. Walk calls; skip tools in T2_013_SOFT (e.g. log_debug).
@@ -240,7 +240,7 @@ def _oracle_013(env: Env, trace: Trace) -> Result:
     Attribution / References:
     - In-house heuristic: this check is our own deterministic design (not a published algorithm); references below are conceptual background only.
     - Kahn, A. B. (1962). Topological sorting of large networks. Communications of the ACM 5(11):558-562. https://doi.org/10.1145/368996.369025
-    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+    - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
     """
     done: set[str] = set()
     for c in trace.tool_calls:
@@ -267,6 +267,7 @@ def _oracle_013(env: Env, trace: Trace) -> Result:
 
 
 def all_cases() -> list[CaseSpec]:
+    """Return this module's CaseSpecs keyed by checklist ID."""
     return [
         CaseSpec("T2-001", _env, _golden_001, _broken_001, _oracle_001),
         CaseSpec("T2-003", _env, _golden_003, _broken_003, _oracle_003),

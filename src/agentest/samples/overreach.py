@@ -26,7 +26,7 @@ Attribution / References
 - Hardy, N. (1988). The Confused Deputy (or why capabilities might have been invented). ACM SIGOPS Operating Systems Review 22(4):36-38. https://doi.org/10.1145/54289.871709
 - OWASP Top 10 for LLM Applications 2025 (LLM01 Prompt Injection, LLM02 Sensitive Information Disclosure, LLM06 Excessive Agency). https://genai.owasp.org/llm-top-10/
 - Regulation (EU) 2024/1689 (EU AI Act), Art. 14 Human oversight. https://eur-lex.europa.eu/eli/reg/2024/1689/oj
-- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+- catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
 
 See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
@@ -43,6 +43,8 @@ FAIL_IDS = frozenset(ORCHESTRATION_IDS)
 
 
 class OverreachAgent(SampleAgent):
+    """Sample agent; behaviour and defect profile described in the module docstring."""
+
     name = "overreach"
     title = "Overreach (orchestration anti-pattern)"
     complexity = 14
@@ -53,4 +55,5 @@ class OverreachAgent(SampleAgent):
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
         # Golden trajectory for most IDs, broken trajectory for FAIL_IDS: a deterministic expected-fail profile.
+        """Run one episode for ``checklist_id`` with this agent's behaviour profile."""
         return play_selective(checklist_id, env, fail_ids=FAIL_IDS)

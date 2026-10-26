@@ -20,24 +20,30 @@ class Ledger:
     _seed: dict[str, str] = field(default_factory=dict, repr=False)
 
     def seed(self, statuses: dict[str, str]) -> None:
+        """Seed rows into the store."""
         self.records = dict(statuses)
         self._seed = dict(statuses)
 
     def get(self, record_id: str) -> str | None:
+        """Return the stored value for a key (None if absent)."""
         return self.records.get(record_id)
 
     def set_status(self, record_id: str, status: str) -> None:
+        """Set the status of one row."""
         if record_id not in self.records:
             raise KeyError(f"unknown ledger id: {record_id}")
         self.records[record_id] = status
 
     def snapshot(self) -> dict[str, str]:
+        """Return a copy of the current rows."""
         return dict(self.records)
 
     def seed_snapshot(self) -> dict[str, str]:
+        """Return the rows as they were seeded."""
         return dict(self._seed)
 
     def unchanged_except(self, expected_ids: set[str]) -> bool:
+        """True when no row outside ``ids`` differs from the seed."""
         seed = self._seed
         for rid, seeded in seed.items():
             if rid in expected_ids:
@@ -47,6 +53,7 @@ class Ledger:
         return True
 
     def clone(self) -> Ledger:
+        """Return an independent deep copy."""
         other = Ledger()
         other.seed(deepcopy(self._seed))
         other.records = deepcopy(self.records)
@@ -55,9 +62,11 @@ class Ledger:
 
 @dataclass
 class NotifyMock:
+    """In-memory notification sink recording every message sent."""
     call_count: int = 0
 
     def send(self, **_kwargs: Any) -> dict[str, Any]:
+        """Record one outbound message."""
         self.call_count += 1
         return {"ok": True, "n": self.call_count}
 
@@ -75,6 +84,7 @@ class AuthzEntry:
 
 @dataclass
 class AuthzLog:
+    """Append-only authorisation decision log (allow/deny + policy version)."""
     entries: list[AuthzEntry] = field(default_factory=list)
 
     def record(
@@ -86,6 +96,7 @@ class AuthzLog:
         task: str = "",
         resource: str = "",
     ) -> AuthzEntry:
+        """Append one entry."""
         entry = AuthzEntry(
             actor=actor,
             decision=decision,
@@ -97,6 +108,7 @@ class AuthzLog:
         return entry
 
     def last(self, actor: str | None = None) -> AuthzEntry | None:
+        """Return the most recent entry (None if empty)."""
         for entry in reversed(self.entries):
             if actor is None or entry.actor == actor:
                 return entry
@@ -128,6 +140,7 @@ class ApprovalsStore:
     _seq: int = 0
 
     def clear(self) -> None:
+        """Remove all entries."""
         self.tokens.clear()
 
     def grant(
@@ -139,6 +152,7 @@ class ApprovalsStore:
         granted_by: str = "",
         ref: str | None = None,
     ) -> ApprovalToken:
+        """Grant an approval token."""
         self._seq += 1
         token_ref = ref or f"apr-{self._seq}"
         tok = ApprovalToken(
@@ -153,6 +167,7 @@ class ApprovalsStore:
         return tok
 
     def get(self, ref: str) -> ApprovalToken | None:
+        """Return the stored value for a key (None if absent)."""
         return self.tokens.get(ref)
 
     @staticmethod
@@ -162,6 +177,7 @@ class ApprovalsStore:
         return token_tool in _REFUND_ALIASES and tool in _REFUND_ALIASES
 
     def has_valid(self, *, tool: str, target: str = "") -> bool:
+        """True when a non-expired, unconsumed approval exists."""
         for tok in self.tokens.values():
             if tok.consumed:
                 continue
@@ -173,6 +189,7 @@ class ApprovalsStore:
         return False
 
     def consume(self, ref: str) -> ApprovalToken:
+        """Consume an approval; return True on success."""
         tok = self.tokens.get(ref)
         if tok is None:
             raise KeyError(f"unknown approval ref: {ref}")
@@ -183,6 +200,7 @@ class ApprovalsStore:
         return tok
 
     def clone(self) -> ApprovalsStore:
+        """Return an independent deep copy."""
         other = ApprovalsStore(_seq=self._seq)
         for ref, tok in self.tokens.items():
             other.tokens[ref] = ApprovalToken(
@@ -206,6 +224,7 @@ class TenantStore:
 
 @dataclass
 class AgentState:
+    """Multi-turn agent state: bound slots, completion flag, constraints."""
     bindings: dict[str, str] = field(default_factory=dict)
     binding_history: dict[str, list[str]] = field(default_factory=dict)
     completed: set[str] = field(default_factory=set)
@@ -213,13 +232,16 @@ class AgentState:
     consent: dict[str, bool] = field(default_factory=dict)
 
     def bind(self, key: str, value: str) -> None:
+        """Bind a slot value."""
         self.bindings[key] = value
         self.binding_history.setdefault(key, []).append(value)
 
     def complete(self, item: str) -> None:
+        """Mark the task complete."""
         self.completed.add(item)
 
     def clone(self) -> AgentState:
+        """Return an independent deep copy."""
         return AgentState(
             bindings=dict(self.bindings),
             binding_history={k: list(v) for k, v in self.binding_history.items()},
@@ -302,6 +324,7 @@ class Env:
 
     @staticmethod
     def diff(before: dict[str, Any], after: dict[str, Any]) -> dict[str, Any]:
+        """Return the keys whose values differ from ``other``."""
         keys = set(before) | set(after)
         changed: dict[str, Any] = {}
         for k in keys:
@@ -310,6 +333,7 @@ class Env:
         return changed
 
     def clone(self) -> Env:
+        """Return an independent deep copy."""
         return Env(
             ledger=self.ledger.clone(),
             contacts=deepcopy(self.contacts),

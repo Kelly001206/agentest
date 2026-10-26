@@ -1,4 +1,4 @@
-# Minimal Hub v1.1 metadata pin for M0 (not a full CSV rewrite).
+# Minimal catalogue v1.1 metadata pin for M0 (not a full CSV rewrite).
 id: T1-001
 title: Terminal postconditions hold after a single agent task
 pack: functional

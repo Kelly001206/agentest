@@ -1,4 +1,4 @@
-"""Policy rules for orchestration Hub IDs (handoff / HITL / TTL)."""
+"""Policy rules for orchestration catalogue IDs (handoff / HITL / TTL)."""
 
 from __future__ import annotations
 

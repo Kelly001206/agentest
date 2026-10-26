@@ -28,7 +28,7 @@ Attribution / References
 - Hardy, N. (1988). The Confused Deputy (or why capabilities might have been invented). ACM SIGOPS Operating Systems Review 22(4):36-38. https://doi.org/10.1145/54289.871709
 - Hardt, D. (Ed.) (2012). RFC 6749: The OAuth 2.0 Authorization Framework, sec. 4.1.2 (authorization code MUST NOT be used more than once). https://doi.org/10.17487/RFC6749
 - NIST SP 800-63B, Digital Identity Guidelines: Authentication and Lifecycle Management, sec. 7 (session management / reauthentication). https://pages.nist.gov/800-63-3/sp800-63b.html
-- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+- catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
 
 See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
@@ -60,6 +60,8 @@ FED_NATIVE = frozenset(
 
 
 class FederationAgent(SampleAgent):
+    """Sample agent; behaviour and defect profile described in the module docstring."""
+
     name = "federation"
     title = "Multi-tenant federation (TTL + single-use + tenant)"
     complexity = 10
@@ -71,6 +73,7 @@ class FederationAgent(SampleAgent):
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
         # IDs this agent handles natively with its own pattern; others are delegated.
+        """Run one episode for ``checklist_id`` with this agent's behaviour profile."""
         if checklist_id in FED_NATIVE:
             return self._federate(checklist_id, env)
 

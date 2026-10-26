@@ -8,6 +8,7 @@ from agentest.types import Trace
 
 
 def apply_privacy_policy(checklist_id: str, env: Env) -> Trace | None:
+    """Apply the masking/consent rules to an output and return it."""
     tr = Trace()
     # All tool calls go through the gateway, which records them on the trace and enforces simulated authz.
     gw = ToolGateway(env, tr)

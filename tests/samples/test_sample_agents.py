@@ -62,15 +62,15 @@ def test_cli_samples_exit_0():
     assert cli_main(["samples", "--failing"]) == 0
 
 
-def test_stub_fails_t1_001():
-    """stub (success flag only) must FAIL T1-001 - a claim is not evidence."""
-    results = run_ids(["T1-001"], suite="functional", agent="stub")
+def test_noop_fails_t1_001():
+    """noop (success flag only) must FAIL T1-001 - a claim is not evidence."""
+    results = run_ids(["T1-001"], suite="functional", agent="noop")
     assert results[0].outcome is Outcome.FAIL
 
 
-def test_stub_fails_privacy_soft_delete():
-    """stub must FAIL T1-016 soft delete (no tool calls, so deleted_at never set)."""
-    results = run_ids(["T1-016"], suite="privacy", agent="stub")
+def test_noop_fails_privacy_soft_delete():
+    """noop must FAIL T1-016 soft delete (no tool calls, so deleted_at never set)."""
+    results = run_ids(["T1-016"], suite="privacy", agent="noop")
     assert results[0].outcome is Outcome.FAIL
 
 
@@ -129,11 +129,11 @@ def test_expected_fail_partial_profile(agent: str):
 
 
 def test_matrix_must_pass_agents():
-    """Full matrix: stub fails more than it passes; golden + green ladder (scripted..federation) pass every ID;
+    """Full matrix: noop fails more than it passes; golden + green ladder (scripted..federation) pass every ID;
     each expected-fail agent has >=3 fails and >=5 passes; matrix_ok() is True."""
     summary = run_matrix(include_golden=True)
-    assert summary["stub"]["pass"] < summary["stub"]["total"]
-    assert summary["stub"]["fail"] > summary["stub"]["pass"]
+    assert summary["noop"]["pass"] < summary["noop"]["total"]
+    assert summary["noop"]["fail"] > summary["noop"]["pass"]
     for agent in (*GREEN, "golden"):
         assert summary[agent]["pass"] == summary[agent]["total"] == EXPECTED_MATRIX_TOTAL, (
             agent,

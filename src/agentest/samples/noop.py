@@ -1,6 +1,6 @@
-"""Complexity 1 — stub agent: claims success, zero tool calls.
+"""Complexity 1 — noop agent: claims success, zero tool calls.
 
-Learners should see that a success flag alone is not enough. The stub:
+Learners should see that a success flag alone is not enough. The noop:
 
 - Never calls tools (``Trace.calls`` stays empty).
 - Still *claims* success, and for many IDs also mutates env / sets bad
@@ -33,7 +33,7 @@ Attribution / References
 - In-house teaching design; references are for the general agent pattern it imitates (no LLM is used - the agent is deterministic).
 - Barr, E. T., Harman, M., McMinn, P., Shahbaz, M., Yoo, S. (2015). The Oracle Problem in Software Testing: A Survey. IEEE TSE 41(5):507-525. https://doi.org/10.1109/TSE.2014.2372785
 - Hoare, C. A. R. (1969). An axiomatic basis for computer programming. Communications of the ACM 12(10):576-580. https://doi.org/10.1145/363235.363259
-- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+- catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
 
 See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
@@ -45,9 +45,11 @@ from agentest.samples.base import SampleAgent
 from agentest.types import Trace
 
 
-class StubAgent(SampleAgent):
-    name = "stub"
-    title = "Stub (claim-only)"
+class NoopAgent(SampleAgent):
+    """Sample agent; behaviour and defect profile described in the module docstring."""
+
+    name = "noop"
+    title = "Noop (claim-only)"
     complexity = 1
     description = (
         "Claims success with zero tool calls; corrupts env/labels without "
@@ -56,8 +58,9 @@ class StubAgent(SampleAgent):
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
         # BAD (T1-002/T1-003): claims done with no write -> false completion in all k runs, TSR 0 (FAIL).
+        """Run one episode for ``checklist_id`` with this agent's behaviour profile."""
         if checklist_id in ("T1-002", "T1-003"):
-            return Trace(claims_success=True, message="stub: claimed high-risk done")
+            return Trace(claims_success=True, message="noop: claimed high-risk done")
 
         # Corrupt world state / metadata without recording tool calls (calls=[]).
         # NOTE: oracles that only forbid bad calls (T2-001/003/009/013, T5-012,
@@ -166,7 +169,7 @@ class StubAgent(SampleAgent):
 
         tr = Trace(
             claims_success=True,
-            message="Done — stub claimed success without tool calls",
+            message="Done — noop claimed success without tool calls",
             calls=[],
         )
         # Orchestration teach-fails: forge privileged ToolCalls so authz oracles fire

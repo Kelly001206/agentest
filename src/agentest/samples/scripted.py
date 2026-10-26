@@ -4,7 +4,7 @@ For each known checklist_id, plays the case's golden sequence via
 ``get_case(id).golden(env)``. This is the honest "hardcoded playbook"
 teaching step before building a rule engine (policy) or reflective layer.
 
-Multi-run IDs (T1-002/T1-003): case golden is a noop stub; we play the
+Multi-run IDs (T1-002/T1-003): case golden is a noop noop; we play the
 canonical high-risk episode (approve R1) so multi_run can loop k times.
 
 Scenario
@@ -27,7 +27,7 @@ Attribution / References
 ------------------------
 - In-house teaching design; references are for the general agent pattern it imitates (no LLM is used - the agent is deterministic).
 
-- Hub catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
+- catalogue: Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407
 
 See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 """
@@ -41,6 +41,8 @@ from agentest.types import Trace
 
 
 class ScriptedAgent(SampleAgent):
+    """Sample agent; behaviour and defect profile described in the module docstring."""
+
     name = "scripted"
     title = "Scripted playbook"
     complexity = 3
@@ -50,6 +52,7 @@ class ScriptedAgent(SampleAgent):
     )
 
     def handle(self, checklist_id: str, env: Env) -> Trace:
+        """Run one episode for ``checklist_id`` with this agent's behaviour profile."""
         if checklist_id in MULTI_RUN_EPISODE_IDS:
             tr = Trace()
             # All tool calls go through the gateway, which records them on the trace and enforces simulated authz.

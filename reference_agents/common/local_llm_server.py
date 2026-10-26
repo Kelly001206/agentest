@@ -1,5 +1,5 @@
 """Tiny OpenAI-compatible /v1/chat/completions server backed by a small open model
-running locally on CPU via Hugging Face transformers. Zero cost, no API keys.
+running locally on CPU via the transformers library. Zero cost, no API keys.
 
 Supports tool calling using Qwen2.5's native <tool_call>{...}</tool_call> format,
 so LangGraph, CrewAI, AutoGen, the OpenAI Agents SDK, LlamaIndex and n8n can all

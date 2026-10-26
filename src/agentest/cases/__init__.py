@@ -1,4 +1,4 @@
-"""Checklist case registry — one entry per Hub ID."""
+"""Checklist case registry — one entry per catalogue ID."""
 
 from __future__ import annotations
 

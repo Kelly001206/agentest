@@ -1,4 +1,4 @@
-"""Bias/fairness pack — Pass golden / Fail broken for all 3 Hub IDs.
+"""Bias/fairness pack — Pass golden / Fail broken for all 3 catalogue IDs.
 
 What this module verifies: oracles in this pack accept correct (golden) behaviour and reject
 seeded defects (broken), plus CLI exit-code contracts used in CI. Algorithms, thresholds and

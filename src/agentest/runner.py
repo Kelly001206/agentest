@@ -29,6 +29,7 @@ MATRIX_SUITES: tuple[str, ...] = ("functional", "privacy", "explainability", "bi
 
 
 def resolve_ids(suite: str, ids: list[str] | None) -> list[str]:
+    """Expand a suite name or comma list into an ordered list of checklist IDs."""
     if ids:
         return ids
     try:
@@ -44,6 +45,7 @@ def run_ids(
     suite: str = "functional",
     agent: str = "golden",
 ) -> list[Result]:
+    """Run each checklist ID against ``agent`` and return the results in order."""
     if agent not in ALL_AGENTS:
         raise ValueError(f"unknown agent {agent!r}; choose one of: {', '.join(ALL_AGENTS)}")
     resolved = resolve_ids(suite, ids)
@@ -63,6 +65,7 @@ def run_ids(
 
 
 def all_passed(results: list[Result]) -> bool:
+    """True when every result is a pass."""
     return bool(results) and all(r.ok for r in results)
 
 
@@ -74,7 +77,7 @@ def run_matrix(
     """Run all suites × sample agents (and optionally golden).
 
     Returns ``{agent: {"pass": n, "fail": n, "unverified": n, "total": n}}``.
-    Stub/eager and MATRIX_EXPECTED_FAIL agents are *expected* to fail some
+    Noop/eager and MATRIX_EXPECTED_FAIL agents are *expected* to fail some
     IDs — callers should not treat their failures as a process error.
     """
     from agentest.samples import SAMPLE_AGENT_NAMES
