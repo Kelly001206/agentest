@@ -66,7 +66,7 @@ def main(argv: list[str] | None = None) -> int:
         help="Real checks for the 41 catalogue IDs: sample agents + recorded reference-agent episodes (offline replay)",
     )
     real.add_argument("--agents", choices=["samples", "reference", "all"], default="all")
-    real.add_argument("--episodes", default="fixtures/real/episodes", help="Directory of recorded *.jsonl episodes")
+    real.add_argument("--episodes", default=None, help="Directory of recorded *.jsonl episodes (default: bundled fixtures/real/episodes)")
     real.add_argument("--md", default=None, help="Write the markdown matrix to this path")
     real.add_argument("--json", default=None, help="Write the JSON matrix to this path")
     real.add_argument("--ids", default=None, help="Comma-separated IDs: print only these cells (agent, status, detail)")
@@ -75,7 +75,24 @@ def main(argv: list[str] | None = None) -> int:
     lst.add_argument("--class", dest="class_id", default=None, help="Class ID, e.g. T3")
     lst.add_argument("--json", action="store_true", help="Emit JSON")
 
+    chk = sub.add_parser("check", help="Check YOUR agent: trace-level checks over a JSONL file of recorded episodes")
+    chk.add_argument("episodes", help="Path to episodes .jsonl (format: docs/BYO-AGENT.md)")
+    chk.add_argument("--md", default=None, help="Write a Markdown report here")
+    chk.add_argument("--html", default=None, help="Write a self-contained HTML report here")
+    chk.add_argument("--json", action="store_true", help="Print JSON instead of a table")
+    chk.add_argument("--strict", action="store_true", help="Exit 1 if any check fails")
+
+    sub.add_parser("version", help="Print the agentest version")
+
     args = parser.parse_args(argv)
+
+    if args.cmd == "check":
+        return _cmd_check(args)
+    if args.cmd == "version":
+        from agentest import __version__
+
+        print(__version__)
+        return 0
 
     if args.cmd == "list":
         return _cmd_list(args)
@@ -125,6 +142,34 @@ def main(argv: list[str] | None = None) -> int:
             print(f"{r.checklist_id}\t{mark}\tagent={args.agent}\t{r.reason}")
 
     return 0 if all_passed(results) else 1
+
+
+def _cmd_check(args: argparse.Namespace) -> int:
+    """Run the trace checks on a user's episodes file."""
+    from pathlib import Path
+
+    from agentest import byo
+
+    p = Path(args.episodes)
+    if not p.is_file():
+        print(f"error: no such file: {p}", file=sys.stderr)
+        return 2
+    try:
+        res = byo.run(byo.load(p))
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    if args.md:
+        Path(args.md).write_text(byo.to_md(p.stem, res), encoding="utf-8")
+    if args.html:
+        Path(args.html).write_text(byo.to_html(p.stem, res), encoding="utf-8")
+    if args.json:
+        print(json.dumps({i: {"status": r.status, "detail": r.detail} for i, r in res.items()}, indent=2))
+    else:
+        for i, r in res.items():
+            print(f"{i}\t{r.status.upper()}\t{r.detail}")
+    fails = sum(r.status in ("fail", "error") for r in res.values())
+    return 1 if (args.strict and fails) else 0
 
 
 def _cmd_samples(args: argparse.Namespace) -> int:
@@ -192,10 +237,11 @@ def _cmd_real(args: argparse.Namespace) -> int:
     """
     from pathlib import Path
 
+    from agentest.paths import episodes_dir
     from agentest.real.report import main_report, to_markdown
 
     m = main_report(
-        Path(args.episodes),
+        Path(args.episodes) if args.episodes else episodes_dir(),
         Path(args.md) if args.md else None,
         Path(args.json) if args.json else None,
         args.agents in ("samples", "all"),

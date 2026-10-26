@@ -18,7 +18,7 @@ git clone https://github.com/srpadmanabhuni/agentest.git && cd agentest
 python -m venv .venv && source .venv/bin/activate
 python -m pip install -e ".[dev]"
 pytest -q                # unit tests + offline replay of all recorded episodes
-agentest real            # full 130 x 27 matrix, offline (about 1 s)
+agentest real            # full 130 x 40 matrix, offline (about 1 s)
 ```
 
 You need Python 3.11 or newer. You need no GPU, model or account. Only re-recording the reference agents needs the
@@ -38,7 +38,7 @@ optional local model (section 6).
 
 There are two layers:
 1. **Catalogue packs** (`agentest run --suite …`): CaseSpec scenarios in `src/agentest/cases/` for the 41 IDs vendored in `catalog/*.csv`, under the mock gateway.
-2. **Real matrix** (`agentest real`): all 130 IDs for 15 sample agents (cases for the first 41, plus deterministic mini-worlds in `real/synth.py` for the other 89), and for 12 reference agents via recorded episodes (`real/checks.py`, `real/checks2.py`).
+2. **Real matrix** (`agentest real`): all 130 IDs for 15 sample agents (cases for the first 41, plus deterministic mini-worlds in `real/synth.py` for the other 89), and for 25 reference agents via recorded episodes (`real/checks.py`, `real/checks2.py` for a01-a12; trace-level `real/checks3.py` for a13-a25).
 
 ## 3. Running packs
 
@@ -46,7 +46,7 @@ There are two layers:
 agentest samples                                  # list sample agents
 agentest run --suite functional --agent golden    # one pack, one agent
 agentest matrix                                   # 41 pack IDs x sample agents
-agentest real                                     # 130 IDs x 27 agents (markdown to stdout)
+agentest real                                     # 130 IDs x 40 agents (markdown to stdout)
 agentest real --agents reference --md out.md --json out.json
 agentest real --ids T4-005,X-009                  # just these cells
 ```

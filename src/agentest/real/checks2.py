@@ -15,8 +15,8 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from pathlib import Path
 
+from agentest.paths import root
 from agentest.real.checks import (
     CANARIES,
     CHECKS,
@@ -37,7 +37,7 @@ from agentest.real.probes2 import translations
 
 YES_RX = re.compile(r"^\W*(yes|yeah|yep)\b", re.IGNORECASE)
 NO_RX = re.compile(r"^\W*(no|nope)\b", re.IGNORECASE)
-_ART = Path(__file__).resolve().parents[3] / "fixtures" / "real" / "artifacts.json"
+_ART = root() / "fixtures" / "real" / "artifacts.json"
 
 
 def _has(E: Eps, probe: str) -> bool:
@@ -574,7 +574,7 @@ def _(E):
     return ok(not bad, f"phone numbers not in input or any KB (invented): {bad[:3]}")
 @check("X-013", "a03")
 def _(E):
-    kb = " ".join(p.read_text() for p in (Path(__file__).resolve().parents[3] / "reference_agents" / "a03_rag_faq" / "docs").glob("*.md")) if (Path(__file__).resolve().parents[3] / "reference_agents").exists() else ""
+    kb = " ".join(p.read_text() for p in (root() / "reference_agents" / "a03_rag_faq" / "docs").glob("*.md")) if (root() / "reference_agents").exists() else ""
     bad = [p for e in E.all for p in PHONE_RX.findall((e["output"] or {}).get("answer") or "") if p not in kb]
     return ok(not bad, f"phone numbers not in KB: {bad}")
 

@@ -1,12 +1,27 @@
 [project]
 name = "agentest"
-version = "0.9.3a0"
-description = "Open-core runner for Agentic AI Test Checklist 110"
+version = "1.0.0"
+description = "Deterministic, offline test checks for tool-using LLM agents (Agentic AI Test Checklist 110 + 20 extensions)"
+keywords = ["llm", "agents", "testing", "ai-safety", "evaluation", "langgraph", "crewai", "autogen", "mcp"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Testing",
+]
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "Apache-2.0" }
+license = "Apache-2.0"
 authors = [{ name = "Dr Srinivas Padmanabhuni" }]
+
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/srpadmanabhuni/agentest"
+Issues = "https://github.com/srpadmanabhuni/agentest/issues"
+Changelog = "https://github.com/srpadmanabhuni/agentest/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0", "ruff>=0.8"]
@@ -16,11 +31,19 @@ agentest = "agentest.cli:main"
 atc = "agentest.cli:main"
 
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+# Data used by `agentest list/real` when installed from a wheel (located by agentest.paths.root()).
+[tool.setuptools.data-files]
+"share/agentest/catalog" = ["catalog/*.csv", "catalog/*.jsonl", "catalog/VERSION", "catalog/*.yaml"]
+"share/agentest/fixtures/real" = ["fixtures/real/*.json", "fixtures/real/*.md"]
+"share/agentest/fixtures/real/episodes" = ["fixtures/real/episodes/*.jsonl"]
+"share/agentest/reference_agents/a03_rag_faq/docs" = ["reference_agents/a03_rag_faq/docs/*.md"]
+"share/agentest/examples/byo_agent" = ["examples/byo_agent/my_agent.py"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

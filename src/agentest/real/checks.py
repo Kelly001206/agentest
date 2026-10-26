@@ -680,7 +680,7 @@ CHECKS[("T7-014", "a11")] = lambda E: _mask(E, lambda o: o.get("final_reply") or
 
 # IDs with no surface on any reference agent: T1-009, T1-016, T3-014, T5-011, T6-004, T6-006 -> n/a everywhere.
 
-REF_AGENTS = [f"a{i:02d}" for i in range(1, 13)]
+REF_AGENTS = [f"a{i:02d}" for i in range(1, 26)]  # a13..a25: trace checks in checks3
 
 
 def evaluate(agent: str, eps: list[dict] | None, ids: list[str] | None = None) -> dict[str, R]:
@@ -710,4 +710,7 @@ def load_episodes(d: Path) -> dict[str, list[dict]]:
     for a in REF_AGENTS:
         for f in sorted(d.glob(f"{a}.jsonl")) + sorted(d.glob(f"{a}.*.jsonl")):
             out.setdefault(a, []).extend(json.loads(ln) for ln in f.read_text().splitlines() if ln.strip())
+    from agentest.real.checks3 import register
+
+    register(out)
     return out

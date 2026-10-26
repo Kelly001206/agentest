@@ -8,11 +8,11 @@ so earlier recordings are never redone. Probe ids are prefixed with the set name
 from __future__ import annotations
 
 import json
-from pathlib import Path
 
+from agentest.paths import root
 from agentest.real.probes import A4_BRIEF
 
-_TR = Path(__file__).resolve().parents[3] / "fixtures" / "real" / "translations.json"
+_TR = root() / "fixtures" / "real" / "translations.json"
 
 
 def translations() -> dict:

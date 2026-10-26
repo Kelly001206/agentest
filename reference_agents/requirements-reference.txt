@@ -18,6 +18,10 @@ llama-index-core==0.14.25
 llama-index-llms-openai-like==0.8.1
 llama-index-embeddings-huggingface==0.8.0
 crewai==1.15.30
+pytest==9.1.1
 
 # default model server (common/gguf_llm_server.py); CPU wheels: --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
 llama-cpp-python==0.3.36
+pydantic>=2.7
+# optional, only for app.py (local Gradio UI)
+# gradio

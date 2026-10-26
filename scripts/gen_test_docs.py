@@ -12,14 +12,18 @@ import json
 import textwrap
 from pathlib import Path
 
+from agentest.paths import episodes_dir
 from agentest.real import checks as C
 from agentest.real import (
     checks2,  # noqa: F401  (registers checks)
     probes2,
     synth,
 )
+from agentest.real.checks3 import NEW_AGENTS
 from agentest.real.ids import ALL_IDS, REAL_IDS, X_IDS, catalogue, what
 from agentest.refs import BIB, refs_for
+
+C.load_episodes(episodes_dir())  # registers the A13-A25 trace checks
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "docs" / "tests"
@@ -51,6 +55,9 @@ def render(i: str, cat: dict, res: dict) -> str:
         L += ["**Reference agents:**", ""]
         for a in refs:
             ps = [p for p in _probes(a) if p]
+            if a in NEW_AGENTS:
+                L.append(f"- `{a}` — three recorded proof cases (`case0`-`case2`), trace-level check in `src/agentest/real/checks3.py`")
+                continue
             L.append(f"- `{a}` — recorded probes: canon/adversarial set" + (f" + {', '.join('`'+p+'`' for p in ps)}" if ps else ""))
         L.append("")
     else:
@@ -64,7 +71,7 @@ def render(i: str, cat: dict, res: dict) -> str:
         except (OSError, TypeError):
             src = "(lambda; see source)"
         L += [f"Reference check for `{a}`:", "", "```python", src, "```", ""]
-    L += ["## How to run", "", "```bash", f"agentest real --ids {i}                 # all 27 agents, offline replay",
+    L += ["## How to run", "", "```bash", f"agentest real --ids {i}                 # all 40 agents, offline replay",
           f"agentest real --ids {i} --agents reference", "```", ""]
     L += ["## How to interpret", "", "- `pass`: the oracle held on every recorded episode for that agent.", "- `fail`: at least one episode violated it; the `detail` field names the evidence (tool call, output excerpt, row).",
           "- `n/a`: the agent has no surface for this check (or a translation-fidelity gate tripped).", ""]

@@ -10,27 +10,59 @@ Clone → install → run. No account, token, network or model is needed at test
 
 > **Status: 130 of 130 checks are real; there are 0 placeholder checks.** The 130 are the 110 catalogue IDs plus 20 repo
 > extensions (`X-001`…`X-020`, kept separate from catalogue IDs). Every check is a deterministic or metamorphic oracle
-> over what an agent actually did. They run against **15 scripted sample agents** and **12 runnable reference agents**
-> (`reference_agents/`, driven by a local open 7B model, with episodes recorded and replayed offline in CI). Every ID has at least
+> over what an agent actually did. They run against **15 scripted sample agents** and **25 runnable reference agents**
+> (`reference_agents/`: LangGraph, CrewAI, AutoGen/AG2, OpenAI Agents SDK, LlamaIndex, MCP, n8n; driven by a local open 7B model,
+> with episodes recorded and replayed offline in CI). a13-a25 (supervisors, map-reduce, plan-execute, crews, debate, negotiation,
+> swarms) are checked at trace level over 3 recorded cases each, so many of their cells are `n/a`. Every ID has at least
 > one passing and one failing agent. **Caveats:** many IDs have no surface on a given reference agent and report `n/a` there.
 > Some checks read free text with regex heuristics (marked as **uncalibrated heuristics**). The Hindi/Tamil probes are
 > machine-translated by the local model, which is a heuristic. Samples are small (k = 1–3). These are not production-grade evaluators.
 > Results: [`fixtures/real/RESULTS.md`](fixtures/real/RESULTS.md).
 
-## Clone and run (30 seconds)
+## Install
+
+```bash
+pip install "agentest @ git+https://github.com/srpadmanabhuni/agentest.git@v1.0.0"   # from git, no clone
+# or download agentest-1.0.0-py3-none-any.whl from the v1.0.0 release and: pip install agentest-1.0.0-py3-none-any.whl
+agentest version     # 1.0.0
+```
+
+Python 3.11+, zero runtime dependencies, works offline. The catalogue and recorded episodes ship with the package.
+
+## 5-minute quickstart
+
+```bash
+agentest list --class T4             # 1. browse the checklist (T1..T7)
+agentest real --ids T4-005           # 2. one check across all 40 agents (offline replay)
+agentest run --suite functional      # 3. scenario suite on the golden oracle agent
+
+# 4. plug in YOUR agent: record episodes, then check them
+git clone https://github.com/srpadmanabhuni/agentest.git && cd agentest
+python examples/byo_agent/my_agent.py my_agent.jsonl
+agentest check my_agent.jsonl --md report.md --html report.html
+python examples/byo_agent/my_agent.py bug.jsonl --buggy && agentest check bug.jsonl --strict   # exit 1: defects caught
+```
+
+`agentest check` runs 13 trace-level checks (task success vs your own oracle, single-shot writes, raw PII in args/logs,
+tool-call reasons, retry storms, step/token/latency budgets, structured output) over any agent that writes the small JSONL
+format in [`docs/BYO-AGENT.md`](docs/BYO-AGENT.md). `agentest.byo.Recorder` writes it for you from LangGraph, CrewAI,
+AutoGen or plain Python. Sample reports: [Markdown](docs/sample-report/buggy_agent-report.md) ·
+[HTML](docs/sample-report/buggy_agent-report.html) · full matrix [`fixtures/real/RESULTS.md`](fixtures/real/RESULTS.md).
+
+## Develop (clone)
 
 ```bash
 git clone https://github.com/srpadmanabhuni/agentest.git
 cd agentest
 python -m venv .venv && source .venv/bin/activate
 python -m pip install -e ".[dev]"
+pytest -q && ruff check src tests scripts
 
 agentest samples            # 15 teaching agents
-agentest real               # 130 checks x 27 agents, offline replay
-agentest real --ids T4-005  # one check across all agents
+agentest real               # 130 checks x 40 agents, offline replay
 ```
 
-**Docs:** [`GUIDEBOOK.md`](GUIDEBOOK.md) (install, concepts, adapters, reports, CI, extending, FAQ) ·
+**Docs:** [`GUIDEBOOK.md`](GUIDEBOOK.md) · [`docs/BYO-AGENT.md`](docs/BYO-AGENT.md) · [`CHANGELOG.md`](CHANGELOG.md) · [`CONTRIBUTING.md`](CONTRIBUTING.md) (install, concepts, adapters, reports, CI, extending, FAQ) ·
 per-test reference [`docs/tests/`](docs/tests/README.md) · [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) ·
 [`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md) · [`docs/REFERENCES.md`](docs/REFERENCES.md)
 

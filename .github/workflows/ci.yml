@@ -32,10 +32,19 @@ jobs:
         run: |
           agentest samples
           agentest matrix
-      - name: Real checks - 130 IDs x 27 agents (offline replay of recorded reference-agent episodes)
+      - name: Real checks - 130 IDs x 40 agents (offline replay of recorded reference-agent episodes)
         run: |
           agentest real --md real-results.md --json real-results.json
           cat real-results.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Bring-your-own-agent example
+        run: |
+          python examples/byo_agent/my_agent.py /tmp/ok.jsonl && agentest check /tmp/ok.jsonl --strict
+          python examples/byo_agent/my_agent.py /tmp/bug.jsonl --buggy && ! agentest check /tmp/bug.jsonl --strict
+      - name: Wheel install smoke (outside the checkout)
+        run: |
+          python -m pip install build && python -m build
+          python -m venv /tmp/w && /tmp/w/bin/pip install dist/*.whl
+          cd /tmp && /tmp/w/bin/agentest version && /tmp/w/bin/agentest real --ids T1-001 && /tmp/w/bin/agentest list --class T3
       - uses: actions/upload-artifact@v4
         with:
           name: real-results
