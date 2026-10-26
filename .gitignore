@@ -10,3 +10,5 @@ build/
 .ruff_cache/
 .coverage
 htmlcov/
+reference_agents/**/enterprise.db
+reference_agents/**/*.sqlite
