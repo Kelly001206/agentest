@@ -23,7 +23,7 @@ Clone → install → run. No account, token, network or model is needed at test
 
 ```bash
 pip install "agentest @ git+https://github.com/srpadmanabhuni/agentest.git@v1.0.0"   # from git, no clone
-# or download agentest-1.0.0-py3-none-any.whl from the v1.0.0 release and: pip install agentest-1.0.0-py3-none-any.whl
+# or build a wheel from a clone: python -m pip install build && python -m build && pip install dist/agentest-1.0.0-py3-none-any.whl
 agentest version     # 1.0.0
 ```
 
