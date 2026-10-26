@@ -3,7 +3,8 @@
 [![CI](https://github.com/srpadmanabhuni/agentest/actions/workflows/ci.yml/badge.svg)](https://github.com/srpadmanabhuni/agentest/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
-[![Zenodo](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23587407-blue.svg)](https://doi.org/10.5281/zenodo.23587407)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23614376-blue.svg)](https://doi.org/10.5281/zenodo.23614376)
+[![HF dataset](https://img.shields.io/badge/%F0%9F%A4%97%20dataset-agentic--ai--test--checklist--110-yellow)](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
 
 **Offline test runner for agentic AI, covering the Agentic AI Test Checklist 110.**  
 Clone → install → run. No account, token, network or model is needed at test time. The checklist design is informed by ISO 42001 themes; this is not certification.
@@ -35,6 +36,33 @@ per-test reference [`docs/tests/`](docs/tests/README.md) · [`docs/ARCHITECTURE.
 [`docs/DEVELOPER-GUIDE.md`](docs/DEVELOPER-GUIDE.md) · [`docs/REFERENCES.md`](docs/REFERENCES.md)
 
 **Author:** Dr Srinivas Padmanabhuni · srinivas AT testAIng.com · [testAIng.com](https://testaing.com) / [AiEnsured](https://aiensured.com)
+
+**Browse the checklist:**
+
+```bash
+atc list --class T3      # or: agentest list --class T3
+atc run --suite functional
+```
+
+**Related:** checklist dataset on [Hugging Face](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110) ·
+DOI [10.5281/zenodo.23614376](https://doi.org/10.5281/zenodo.23614376) ·
+article [Testing Agentic AI: 110 Tests for Safer AI Agents](https://www.linkedin.com/pulse/testing-agentic-ai-dr-srinivas-padmanabhuni-5stoc/) ·
+framework crosswalk (NIST AI RMF, EU AI Act, OWASP LLM Top 10, ISO/IEC 42001 themes; indicative only) [`docs/FRAMEWORK-MAPPING.md`](docs/FRAMEWORK-MAPPING.md)
+
+**Scope, honestly:** the checks are small deterministic oracles over scripted and recorded agents. Treat them as starter scaffolds to adapt to your own agent, not turnkey certification tests.
+
+## Cite
+
+```bibtex
+@software{padmanabhuni_agentic_ai_test_checklist_110,
+  author = {Padmanabhuni, Srinivas},
+  title  = {Agentic AI Test Checklist 110 and agentest runner},
+  doi    = {10.5281/zenodo.23614376},
+  url    = {https://github.com/srpadmanabhuni/agentest}
+}
+```
+
+See also [`CITATION.cff`](CITATION.cff).
 
 ## Non-goals
 

@@ -71,7 +71,14 @@ def main(argv: list[str] | None = None) -> int:
     real.add_argument("--json", default=None, help="Write the JSON matrix to this path")
     real.add_argument("--ids", default=None, help="Comma-separated IDs: print only these cells (agent, status, detail)")
 
+    lst = sub.add_parser("list", help="List catalogue tests, optionally filtered by class (T1..T7)")
+    lst.add_argument("--class", dest="class_id", default=None, help="Class ID, e.g. T3")
+    lst.add_argument("--json", action="store_true", help="Emit JSON")
+
     args = parser.parse_args(argv)
+
+    if args.cmd == "list":
+        return _cmd_list(args)
 
     if args.cmd == "real":
         return _cmd_real(args)
@@ -214,3 +221,23 @@ def _cmd_real(args: argparse.Namespace) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
+def _cmd_list(args: argparse.Namespace) -> int:
+    """Print catalogue rows (ID, class, title), optionally filtered by class."""
+    from agentest.real.ids import catalogue
+
+    rows = list(catalogue().values())
+    if args.class_id:
+        cid = args.class_id.upper()
+        rows = [r for r in rows if r.get("class_id") == cid]
+        if not rows:
+            print(f"No tests for class {cid}; valid classes are T1..T7", file=sys.stderr)
+            return 2
+    if args.json:
+        print(json.dumps([{k: r.get(k) for k in ("id", "class_id", "title", "severity")} for r in rows], indent=2))
+    else:
+        for r in rows:
+            print(f"{r['id']}  [{r['class_id']}] {r['title']}")
+        print(f"{len(rows)} test(s)")
+    return 0
