@@ -24,3 +24,19 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 200
+extend-exclude = ["reference_agents"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "B", "UP"]
+ignore = ["UP042"]  # Outcome(str, Enum) kept for 3.11 JSON behaviour
+
+[tool.ruff.lint.per-file-ignores]
+# closures in the probe loop are invoked immediately inside the same iteration
+"src/agentest/real/live.py" = ["B023", "B905"]
+# one-line check definitions are deliberate in the real-check table
+"src/agentest/real/checks.py" = ["E701", "E702", "E731"]
+"tests/real/test_checks.py" = ["E701", "E702"]

@@ -115,7 +115,7 @@ def check_live(meta: dict[str, str], packs: list[str]) -> list[str]:
             url = f"{base}/{p}.csv"
             dest = tmp_path / f"{p}.csv"
             try:
-                urllib.request.urlretrieve(url, dest)  # noqa: S310 — public Hub URL
+                urllib.request.urlretrieve(url, dest)
             except urllib.error.URLError as exc:
                 errors.append(f"live download failed for {p}: {exc}")
                 continue

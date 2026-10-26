@@ -16,7 +16,7 @@ from __future__ import annotations
 from agentest.cases.registry import CaseSpec
 from agentest.env import Env
 from agentest.gateway import ToolGateway
-from agentest.types import Outcome, Result, ToolCall, Trace
+from agentest.types import Outcome, Result, Trace
 
 
 def explanation_cites_only_trace(trace: Trace) -> tuple[bool, list[str]]:

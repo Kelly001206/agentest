@@ -172,9 +172,7 @@ class StubAgent(SampleAgent):
         # Orchestration teach-fails: forge privileged ToolCalls so authz oracles fire
         from agentest.types import ToolCall
 
-        if checklist_id == "T3-001":
-            tr.record(ToolCall(name="refund.issue", args={"order_id": "O9"}, result={"refunded": "O9"}, succeeded=True))
-        elif checklist_id == "T3-002":
+        if checklist_id == "T3-001" or checklist_id == "T3-002":
             tr.record(ToolCall(name="refund.issue", args={"order_id": "O9"}, result={"refunded": "O9"}, succeeded=True))
         elif checklist_id == "T3-007":
             tr.record(ToolCall(name="session.set_role", args={"role": "intern"}, result={"role": "intern"}, succeeded=True))

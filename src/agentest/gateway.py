@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+from datetime import UTC
 from typing import Any
 
-from agentest.env import ACTIVE, Env
+from agentest.env import Env
 from agentest.types import ToolCall, Trace
 
 # Tools classified as durable writes for T1-013 / T5-012 style oracles.
@@ -271,10 +272,10 @@ class ToolGateway:
             pid = args["profile_id"]
             if pid not in env.profiles:
                 raise KeyError(f"unknown profile: {pid}")
-            from datetime import datetime, timezone
+            from datetime import datetime
 
             env.profiles[pid]["deleted_at"] = args.get(
-                "deleted_at", datetime.now(timezone.utc).isoformat()
+                "deleted_at", datetime.now(UTC).isoformat()
             )
             return {"profile_id": pid, "deleted_at": env.profiles[pid]["deleted_at"]}
 

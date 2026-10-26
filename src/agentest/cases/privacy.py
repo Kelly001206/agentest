@@ -9,6 +9,7 @@ Full verified bibliography: docs/REFERENCES.md.
 from __future__ import annotations
 
 import re
+
 from agentest.cases.registry import CaseSpec
 from agentest.env import Env, TenantStore
 from agentest.gateway import ToolGateway

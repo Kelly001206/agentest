@@ -9,7 +9,7 @@ Full verified bibliography: docs/REFERENCES.md.
 from __future__ import annotations
 
 from agentest.cases.registry import CaseSpec
-from agentest.env import ACTIVE, APPROVED, PENDING, REJECTED, Env
+from agentest.env import ACTIVE, PENDING, Env
 from agentest.fixtures.ledger import T1_001_EXPECTED, fresh_env_t1_001
 from agentest.gateway import WRITE_TOOLS, ToolGateway
 from agentest.oracles.t1_001 import evaluate_t1_001
@@ -279,10 +279,6 @@ def _oracle_007(env: Env, trace: Trace) -> Result:
     - Barr, E. T., Harman, M., McMinn, P., Shahbaz, M., Yoo, S. (2015). The Oracle Problem in Software Testing: A Survey. IEEE TSE 41(5):507-525. https://doi.org/10.1109/TSE.2014.2372785
     - Catalogue mapping (test-ID source only, not the source of the method above): Padmanabhuni, S. (2026). Agentic AI Assurance Test Taxonomy v1. Zenodo. https://doi.org/10.5281/zenodo.23587407 (Hub catalogue: https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
     """
-    # Compare to canonical seed
-    seed = {"extras.marker": 1, "counter.C1": 1}
-    # Build comparable view
-    after = {"extras.marker": env.extras.get("marker"), "counter.C1": env.counters.get("C1")}
     # Also use full snapshot vs expected unchanged business keys
     before = {"marker": 1, "C1": 1}
     after_simple = {"marker": env.extras.get("marker"), "C1": env.counters.get("C1")}

@@ -32,7 +32,7 @@ See docs/SAMPLE-AGENTS.md and docs/REFERENCES.md.
 
 from __future__ import annotations
 
-from agentest.env import ACTIVE, APPROVED, Env
+from agentest.env import APPROVED, Env
 from agentest.gateway import ToolGateway
 from agentest.samples.base import SampleAgent
 from agentest.types import ToolCall, Trace

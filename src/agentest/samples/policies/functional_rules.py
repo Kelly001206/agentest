@@ -10,7 +10,7 @@ from agentest.config.thresholds import (
     T2_013_SOFT,
     T5_012_READ,
 )
-from agentest.env import ACTIVE, APPROVED, REJECTED, Env
+from agentest.env import ACTIVE, APPROVED, Env
 from agentest.fixtures.ledger import T1_001_EXPECTED
 from agentest.gateway import ToolGateway
 from agentest.types import Trace

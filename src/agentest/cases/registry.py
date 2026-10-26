@@ -53,7 +53,16 @@ class CaseSpec:
 
 
 def _build_registry() -> dict[str, CaseSpec]:
-    from agentest.cases import bias, explainability, orchestration, privacy, t1, t2, t5, t6
+    from agentest.cases import (
+        bias,
+        explainability,
+        orchestration,
+        privacy,
+        t1,
+        t2,
+        t5,
+        t6,
+    )
 
     specs: list[CaseSpec] = []
     specs.extend(t1.all_cases())

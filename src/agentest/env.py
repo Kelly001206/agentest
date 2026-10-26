@@ -6,7 +6,6 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Any
 
-
 PENDING = "PENDING"
 APPROVED = "APPROVED"
 REJECTED = "REJECTED"
@@ -183,7 +182,7 @@ class ApprovalsStore:
             tok.consumed = True
         return tok
 
-    def clone(self) -> "ApprovalsStore":
+    def clone(self) -> ApprovalsStore:
         other = ApprovalsStore(_seq=self._seq)
         for ref, tok in self.tokens.items():
             other.tokens[ref] = ApprovalToken(

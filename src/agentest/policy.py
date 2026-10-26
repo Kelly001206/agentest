@@ -79,7 +79,7 @@ ROLE_PERMS: dict[str, frozenset[str]] = {
 }
 
 
-def session_alive(env: "Env") -> bool:
+def session_alive(env: Env) -> bool:
     """True if session has not expired (clock < session_expires_at)."""
     expires = env.session_expires_at
     if expires is None:
@@ -99,12 +99,12 @@ def role_allows(role: str, tool: str) -> bool:
     return False
 
 
-def has_approval(env: "Env", tool: str, target: str = "") -> bool:
+def has_approval(env: Env, tool: str, target: str = "") -> bool:
     """True if approvals store has a valid (unconsumed) token covering tool/target."""
     return env.approvals.has_valid(tool=tool, target=target)
 
 
-def permits(env: "Env", actor: str | None, tool: str, target: str = "") -> bool:
+def permits(env: Env, actor: str | None, tool: str, target: str = "") -> bool:
     """policy.permits(actor, tool, target) — role + TTL + approval gates.
 
     - Session expired → deny privileged tools.
