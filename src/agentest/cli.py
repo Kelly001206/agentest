@@ -60,7 +60,19 @@ def main(argv: list[str] | None = None) -> int:
     )
     matrix.add_argument("--json", action="store_true", help="Emit JSON summary")
 
+    real = sub.add_parser(
+        "real",
+        help="Real checks for the 41 catalogue IDs: sample agents + recorded reference-agent episodes (offline replay)",
+    )
+    real.add_argument("--agents", choices=["samples", "reference", "all"], default="all")
+    real.add_argument("--episodes", default="fixtures/real/episodes", help="Directory of recorded *.jsonl episodes")
+    real.add_argument("--md", default=None, help="Write the markdown matrix to this path")
+    real.add_argument("--json", default=None, help="Write the JSON matrix to this path")
+
     args = parser.parse_args(argv)
+
+    if args.cmd == "real":
+        return _cmd_real(args)
 
     if args.cmd == "samples":
         return _cmd_samples(args)
@@ -160,6 +172,33 @@ def _cmd_matrix(args: argparse.Namespace) -> int:
             "(golden) all-pass only (MATRIX_MUST_PASS)."
         )
     return 0 if matrix_ok(summary) else 1
+
+
+
+
+def _cmd_real(args: argparse.Namespace) -> int:
+    """Exit 0 when the real matrix was built; agent failures are findings, not errors.
+
+    Exit 1 only if a reference agent has no recorded episodes (``not-run``).
+    """
+    from pathlib import Path
+
+    from agentest.real.report import main_report, to_markdown
+
+    m = main_report(
+        Path(args.episodes),
+        Path(args.md) if args.md else None,
+        Path(args.json) if args.json else None,
+        args.agents in ("samples", "all"),
+        args.agents in ("reference", "all"),
+    )
+    if not args.md:
+        print(to_markdown(m))
+    not_run = [a for a, row in m.items() if any(r.status == "not-run" for r in row.values())]
+    if not_run:
+        print(f"not run (no episodes): {not_run}")
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
