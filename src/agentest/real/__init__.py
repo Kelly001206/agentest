@@ -1,4 +1,4 @@
-"""Real (non-stub) checks for the 41 catalogue IDs.
+"""Real (non-noop) checks for the 41 catalogue IDs.
 
 * ``ids``      - the 41 IDs and what each real check verifies
 * ``probes``   - concrete inputs sent to the 12 vendored reference agents

@@ -12,6 +12,7 @@ from agentest.types import Outcome
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Command-line entry point; returns the process exit code."""
     parser = argparse.ArgumentParser(prog="agentest", description="Agentic AI checklist runner")
     sub = parser.add_subparsers(dest="cmd")
 
@@ -20,14 +21,14 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument(
         "--ids",
         default=None,
-        help="Comma-separated Hub IDs (default: all IDs in --suite)",
+        help="Comma-separated catalogue IDs (default: all IDs in --suite)",
     )
     run.add_argument(
         "--agent",
         default="golden",
         choices=list(ALL_AGENTS),
         help=(
-            "Agent under test: golden|broken|stub|eager|scripted|policy|reflective|"
+            "Agent under test: golden|broken|noop|eager|scripted|policy|reflective|"
             "supervisor|handoff|planner|critic|federation|"
             "leaky|hallucinator|biased|overreach|flaky_plan"
         ),
@@ -50,7 +51,7 @@ def main(argv: list[str] | None = None) -> int:
         help=(
             "Run all suites × sample agents (and golden). "
             "Exit 0 if scripted…federation/(golden) all-pass; "
-            "stub/eager and expected-fail scenarios (leaky…flaky_plan) may fail."
+            "noop/eager and expected-fail scenarios (leaky…flaky_plan) may fail."
         ),
     )
     matrix.add_argument(
@@ -68,6 +69,7 @@ def main(argv: list[str] | None = None) -> int:
     real.add_argument("--episodes", default="fixtures/real/episodes", help="Directory of recorded *.jsonl episodes")
     real.add_argument("--md", default=None, help="Write the markdown matrix to this path")
     real.add_argument("--json", default=None, help="Write the JSON matrix to this path")
+    real.add_argument("--ids", default=None, help="Comma-separated IDs: print only these cells (agent, status, detail)")
 
     args = parser.parse_args(argv)
 
@@ -167,7 +169,7 @@ def _cmd_matrix(args: argparse.Namespace) -> int:
             )
         print()
         print(
-            "Note: stub/eager and expected-fail scenarios (leaky…flaky_plan) are "
+            "Note: noop/eager and expected-fail scenarios (leaky…flaky_plan) are "
             "meant to fail some IDs. Exit status reflects scripted…federation/"
             "(golden) all-pass only (MATRIX_MUST_PASS)."
         )
@@ -192,7 +194,16 @@ def _cmd_real(args: argparse.Namespace) -> int:
         args.agents in ("samples", "all"),
         args.agents in ("reference", "all"),
     )
-    if not args.md:
+    if args.ids:
+        want = [x.strip() for x in args.ids.split(",") if x.strip()]
+        bad = [x for x in want if not any(x in row for row in m.values())]
+        if bad:
+            print(f"unknown IDs: {bad}")
+            return 2
+        for i in want:
+            for a, row in m.items():
+                print(f"{i}\t{a}\t{row[i].status}\t{row[i].detail}")
+    elif not args.md:
         print(to_markdown(m))
     not_run = [a for a, row in m.items() if any(r.status == "not-run" for r in row.values())]
     if not_run:

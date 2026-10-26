@@ -42,9 +42,10 @@ def _load(ref: Path, key: str):
     return importlib.import_module("agent"), d
 
 
-def run_agent(key: str, ref: Path) -> list[dict]:
+def run_agent(key: str, ref: Path, probes: list[dict] | None = None) -> list[dict]:
+    """Run ``probes`` (default: the first-41 set) against reference agent ``key`` and return episodes."""
     eps: list[dict] = []
-    probes = PROBES[key]
+    probes = PROBES[key] if probes is None else probes
 
     def rec(p: dict, rep: int, inp: Any, fn):
         t0 = time.time()
@@ -141,7 +142,20 @@ def _run_a12(ref: Path, probes: list[dict]) -> list[dict]:
                 reply = p["reply"]
                 if reply == "exact":
                     reply = {"approver": "finance-head", "token": f"APPROVE {inv.get('invoice_no')} {inv.get('amount')}"}
-                s2 = step("resume", tid, json.dumps(reply))
+                if p.get("twin"):  # T1-017: two concurrent resumes of the same thread
+                    import concurrent.futures as cf
+                    with cf.ThreadPoolExecutor(2) as ex:
+                        futs = [ex.submit(step, "resume", tid, json.dumps(reply)) for _ in range(2)]
+                        twins = []
+                        for f in futs:
+                            try:
+                                twins.append(f.result())
+                            except Exception as e:  # noqa: BLE001
+                                twins.append({"result": None, "invoice": None, "log": [], "error": str(e)[:300]})
+                    s2 = twins[0]
+                    out["twin_results"] = [t.get("result") for t in twins]
+                else:
+                    s2 = step("resume", tid, json.dumps(reply))
                 trace.append({"process": 2, "human_reply": reply, **s2})
                 out.update({"human_reply": reply, "result": s2["result"], "invoice_after_resume": s2["invoice"], "log": s2["log"]})
             else:
@@ -200,13 +214,22 @@ def _run_a08(ref: Path, probes: list[dict]) -> list[dict]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Command-line entry point; returns the process exit code."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--agent", required=True, choices=sorted(PROBES))
     ap.add_argument("--root", default=str(Path(__file__).resolve().parents[3]))
+    ap.add_argument("--set", default="", help="extra probe set from probes2 (e.g. b1); default = first-41 probes")
     a = ap.parse_args(argv)
     root = Path(a.root)
-    eps = run_agent(a.agent, root / "reference_agents")
-    out = root / "fixtures" / "real" / "episodes" / f"{a.agent}.jsonl"
+    probes = None
+    if a.set:
+        from agentest.real.probes2 import sets
+        probes = sets()[a.set].get(a.agent, [])
+        if not probes:
+            print(f"no {a.set} probes for {a.agent}")
+            return 0
+    eps = run_agent(a.agent, root / "reference_agents", probes)
+    out = root / "fixtures" / "real" / "episodes" / (f"{a.agent}.{a.set}.jsonl" if a.set else f"{a.agent}.jsonl")
     out.parent.mkdir(parents=True, exist_ok=True)
     with out.open("w") as f:
         for e in eps:

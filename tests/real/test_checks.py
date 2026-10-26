@@ -9,7 +9,7 @@ import json
 import pytest
 
 from agentest.real import checks as C
-from agentest.real.ids import REAL_IDS, WHAT
+from agentest.real.ids import ALL_IDS, REAL_IDS, WHAT
 
 
 def ep(agent, probe, output, trace=None, extra=None, rep=0, inp="", error=None):
@@ -24,9 +24,10 @@ def test_41_distinct_ids_with_descriptions():
     assert len(REAL_IDS) == 41 and set(WHAT) == set(REAL_IDS)
 
 
-def test_every_check_targets_a_real_id_and_reference_agent():
+def test_every_check_targets_a_known_id_and_reference_agent():
+    from agentest.real import checks2  # noqa: F401
     for i, a in C.CHECKS:
-        assert i in REAL_IDS and a in C.REF_AGENTS
+        assert i in ALL_IDS and a in C.REF_AGENTS
 
 
 def test_pii_regexes():

@@ -39,4 +39,6 @@ ignore = ["UP042"]  # Outcome(str, Enum) kept for 3.11 JSON behaviour
 "src/agentest/real/live.py" = ["B023", "B905"]
 # one-line check definitions are deliberate in the real-check table
 "src/agentest/real/checks.py" = ["E701", "E702", "E731"]
+"src/agentest/real/checks2.py" = ["E701", "E702", "E731", "E402"]
+"src/agentest/real/synth.py" = ["E701", "E702", "E731"]
 "tests/real/test_checks.py" = ["E701", "E702"]
