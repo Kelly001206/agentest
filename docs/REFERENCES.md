@@ -46,7 +46,7 @@ Per-test source table with audit status: [TEST-SOURCES.md](TEST-SOURCES.md).
 | Trajectory-level evaluation (explainability pack) | Kim, W., Park, S., In, Y., Kim, S., Lee, D., Park, C. (2025). *Beyond the Final Answer: Evaluating the Reasoning Trajectories of Tool-Augmented Agents.* [arXiv:2510.02837](https://arxiv.org/abs/2510.02837). The paper proposes **TRACE**, the label used in these docs. |
 | Memory provenance (T6-007) | Lewis, P. et al. (2020). *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.* NeurIPS 2020. [arXiv:2005.11401](https://arxiv.org/abs/2005.11401) |
 | Counterfactual fairness, the idea (T7-007) | Kusner, M. J., Loftus, J., Russell, C., Silva, R. (2017). *Counterfactual Fairness.* NeurIPS 2017. [arXiv:1703.06856](https://arxiv.org/abs/1703.06856). No causal model is fitted. |
-| Catalogue (all IDs) | Padmanabhuni, S. (2026). *Agentic AI Assurance Test Taxonomy v1.* Zenodo. [doi:10.5281/zenodo.23587407](https://doi.org/10.5281/zenodo.23587407) · [Hub dataset](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110) |
+| Catalogue (all IDs) | Padmanabhuni, S. (2026). *Agentic AI Assurance Test Taxonomy v1.* Zenodo. [doi:10.5281/zenodo.23587407](https://doi.org/10.5281/zenodo.23587407) · catalogue dataset |
 
 ## C. Agent patterns imitated by the sample agents
 

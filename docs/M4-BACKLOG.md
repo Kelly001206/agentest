@@ -1,6 +1,6 @@
 # M4 backlog — `v0.5.0`
 
-**Bias / fairness** pack (3 Hub IDs) + research note.
+**Bias / fairness** pack (3 catalogue IDs) + research note.
 
 ## Tasks
 

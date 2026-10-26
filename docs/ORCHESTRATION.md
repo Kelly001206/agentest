@@ -1,15 +1,14 @@
 # Orchestration pack (runner theme)
 
-**Hub pack:** [`packs/orchestration.csv`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/packs/orchestration.csv)  
-on [`srinivaspadmanabhuni/agentic-ai-test-checklist-110`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110)
+**catalogue pack:** `packs/orchestration.csv`  
 
 **Runner module:** `src/agentest/cases/orchestration.py` · suite `--suite orchestration` (alias `orch`)  
-**Local catalog sync:** `catalog/orchestration.csv` (do not invent conflicting Hub IDs)
+**Local catalog sync:** `catalog/orchestration.csv` (do not invent conflicting catalogue IDs)
 
 ## What this pack is
 
-Hub rows live under `eval_group` **security** / **compliance_governance** / **explainability**.  
-There is **no** Hub `eval_group=orchestration`. This runner defines a **theme suite** that selects multi-agent handoff / HITL IDs so learners can run one focused matrix:
+catalogue rows live under `eval_group` **security** / **compliance_governance** / **explainability**.  
+There is **no** catalogue `eval_group=orchestration`. This runner defines a **theme suite** that selects multi-agent handoff / HITL IDs so learners can run one focused matrix:
 
 | ID | Priority | Title | CaseSpec home |
 |:---|:---------|:------|:--------------|
@@ -56,4 +55,4 @@ agentest matrix                                   # includes orchestration suite
 
 - [`SAMPLE-AGENTS.md`](SAMPLE-AGENTS.md) — complexity 1–7
 - [`M5-BACKLOG.md`](M5-BACKLOG.md) — milestone checklist
-- Hub [`CONTROL-MAP`](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110) / OWASP ASI AgenticHandoff
+- catalogue `CONTROL-MAP` / OWASP ASI AgenticHandoff

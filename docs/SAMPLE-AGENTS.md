@@ -3,13 +3,13 @@
 Fifteen **deterministic** teaching agents live under `src/agentest/samples/`.  
 They are **additional** to the oracle fixtures `golden` / `broken`.
 
-Catalogue (design authority): [Agentic AI Test Checklist 110 on Hugging Face](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110) · Hub [USER-GUIDE.md](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md).
+Catalogue (design authority): Agentic AI Test Checklist 110 in the published catalogue · catalogue USER-GUIDE.md.
 
 ## Green ladder (1–10)
 
 | name | cx | idea | expected matrix |
 |:-----|---:|:-----|:----------------|
-| `stub` | 1 | Claims success, **zero** real tools; forges bad orch traces | 41 unique IDs: 32 FAIL, 8 vacuous PASS, 1 UNVERIFIED (matrix 8/42 pass) |
+| `noop` | 1 | Claims success, **zero** real tools; forges bad orch traces | 41 unique IDs: 32 FAIL, 8 vacuous PASS, 1 UNVERIFIED (matrix 8/42 pass) |
 | `eager` | 2 | Calls tools but ignores order, fences, authz, TTL, HITL | **FAIL** on all 41 (matrix 0/42) |
 | `scripted` | 3 | Hardcoded playbook: `get_case(id).golden(env)` | **all PASS** |
 | `policy` | 4 | Rule-engine over `samples/policies/*` (incl. orchestration) | **all PASS** |
@@ -44,7 +44,7 @@ See [`SCENARIOS-EXPECTED-FAIL.md`](SCENARIOS-EXPECTED-FAIL.md).
 
 ## Why fifteen levels?
 
-1. **stub** — Success flags ≠ terminal/authz truth.
+1. **noop** — Success flags ≠ terminal/authz truth.
 2. **eager** — Classic fails: wrong order, hard-delete, trust handover prose, skip HITL, immortal session.
 3. **scripted** — Playbook reuses case goldens.
 4. **policy** — Shared rules including `orchestration_rules.py`.
@@ -70,7 +70,7 @@ Each agent's module docstring in `src/agentest/samples/<name>.py` has the full t
 
 | # | agent | scenario & design | tests exercised → expected | why / references |
 |--:|:--|:--|:--|:--|
-| 1 | `stub` | Returns `claims_success=True` with no tool calls. Forges traces for orchestration IDs. | 32 FAIL; 8 PASS vacuously on an empty trace (T2-001/003/009/013, T5-012, T2-005, T4-009, T5-004); T5-015 UNVERIFIED. | A success flag is not evidence. See the test-oracle problem (Barr et al. 2015) and postconditions (Hoare 1969). |
+| 1 | `noop` | Returns `claims_success=True` with no tool calls. Forges traces for orchestration IDs. | 32 FAIL; 8 PASS vacuously on an empty trace (T2-001/003/009/013, T5-012, T2-005, T4-009, T5-004); T5-015 UNVERIFIED. | A success flag is not evidence. See the test-oracle problem (Barr et al. 2015) and postconditions (Hoare 1969). |
 | 2 | `eager` | Calls real tools but breaks the constraints: wrong order, hard delete, disclose before verify, duplicate single-shot calls, writes on read-only tasks, trusts handover prose, skips HITL. | All suites → mostly FAIL. | Shows excessive agency (OWASP LLM06) and broken least privilege (Saltzer & Schroeder 1975). |
 | 3 | `scripted` | Replays each case's golden trajectory (`playbook.py`). | Every ID → PASS. | Baseline that proves the oracles accept correct behaviour. |
 | 4 | `policy` | A rule engine over `samples/policies/*` for the functional, privacy, explain, bias and orchestration rules. | Every ID → PASS. | Explicit, auditable rules (least privilege, complete mediation; ISO/IEC 42001 Annex A). |
@@ -89,7 +89,7 @@ Each agent's module docstring in `src/agentest/samples/<name>.py` has the full t
 ### Reading an oracle
 
 Every oracle function in `src/agentest/cases/*.py` has a docstring with these parts:
-**Hub catalogue ID(s) → Algorithm (step by step) → Thresholds / rationale →
+**catalogue ID(s) → Algorithm (step by step) → Thresholds / rationale →
 Pass / fail interpretation → Limitations → Attribution / References**. The first
 reference line states whether the check applies a published method or is an
 in-house heuristic.
@@ -111,10 +111,10 @@ agentest run --suite functional --ids T2-001 --agent flaky_plan
 
 agentest matrix
 # Exit 0 iff scripted…federation/(golden) all-pass.
-# stub/eager + leaky…flaky_plan failures are expected.
+# noop/eager + leaky…flaky_plan failures are expected.
 ```
 
-See [`ORCHESTRATION.md`](ORCHESTRATION.md) for Hub ↔ runner mapping.
+See [`ORCHESTRATION.md`](ORCHESTRATION.md) for catalogue ↔ runner mapping.
 
 ## Constraints
 

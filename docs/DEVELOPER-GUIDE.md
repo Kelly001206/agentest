@@ -1,17 +1,17 @@
 # Developer guide — run the checklist runner from GitHub alone
 
-> **Status: early / stub implementations.** Oracles are reference implementations exercised against scripted mock agents and a mock tool gateway; they are not production-grade evaluators. Real-agent adapters, richer oracles and more packs (e.g. security) are being added incrementally.
+> **Status: early / noop implementations.** Oracles are reference implementations exercised against scripted mock agents and a mock tool gateway; they are not production-grade evaluators. Real-agent adapters, richer oracles and more packs (e.g. security) are being added incrementally.
 
 This guide is for engineers who clone
 [`srpadmanabhuni/agentest`](https://github.com/srpadmanabhuni/agentest)
-and want to run checklist tests **without Hugging Face**, plug in their own
+and want to run checklist tests **without any external service**, plug in their own
 agent, and (optionally) extend suites later.
 
 **Audience:** developers who have only the GitHub link.  
 **Runner version:** `0.9.3a0` (see `pyproject.toml`).  
-**Pinned catalogue:** Hub `v1.1.2` packs vendored under `catalog/` (see
+**Pinned catalogue:** catalogue `v1.1.2` packs vendored under `catalog/` (see
 `catalog/VERSION`).  
-Hub-first narrative (same packs): [USER-GUIDE.md](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110/blob/main/USER-GUIDE.md).
+catalogue-first narrative (same packs): USER-GUIDE.md.
 
 Related short docs: [`ARCHITECTURE.md`](ARCHITECTURE.md),
 [`SAMPLE-AGENTS.md`](SAMPLE-AGENTS.md), [`ORCHESTRATION.md`](ORCHESTRATION.md).
@@ -27,13 +27,13 @@ against an agent and reports Pass / Fail / Unverified.
 | Piece | Role |
 |:------|:-----|
 | **This GitHub repo** | Runnable harness. Cases live in Python; pack CSVs are **vendored** in `catalog/`. |
-| **Hugging Face dataset** | Optional **catalogue source of truth** for authors who edit pack CSVs. |
+| **published catalogue** | Optional **catalogue source of truth** for authors who edit pack CSVs. |
 
-**You do not need Hugging Face to install, run tests, or evaluate your agent.**
-No Hub account, token, or network download is required at runtime. Runtime
+**You do not need any online service to install, run tests, or evaluate your agent.**
+No catalogue account, token, or network download is required at runtime. Runtime
 dependencies are Python ≥ 3.11 and (for `.[dev]`) pytest.
 
-Hub remains useful only if you *author* catalogue changes: edit packs there
+catalogue remains useful only if you *author* catalogue changes: edit packs there
 first, then sync CSVs into `catalog/` (see §7).
 
 ---
@@ -57,7 +57,7 @@ agentest --help
 python -c "import agentest; print(agentest.__file__)"
 ```
 
-There is no Hugging Face dependency in `pyproject.toml`. You never set
+There is no catalogue-download dependency in `pyproject.toml`. You never set
 `HF_TOKEN` for normal use.
 
 ---
@@ -91,7 +91,7 @@ agentest run --suite functional --ids T1-001,T1-004 --agent golden --json
 ```bash
 agentest samples
 # name           cx  title
-# stub            1  Stub (claim-only)
+# noop            1  Noop (claim-only)
 # …               …
 # federation     10  …
 # leaky          11  Leaky (privacy anti-pattern)
@@ -103,7 +103,7 @@ agentest run --suite functional --agent scripted
 agentest run --suite privacy --agent leaky
 agentest matrix
 # Exit 0 iff scripted…federation/(golden) all-pass.
-# stub/eager + expected-fail scenarios (leaky…flaky_plan) do not fail the process.
+# noop/eager + expected-fail scenarios (leaky…flaky_plan) do not fail the process.
 ```
 
 ### Pytest (same suites CI runs)
@@ -145,9 +145,9 @@ or `get_sample(agent_name).handle(checklist_id, env)`. Multi-run IDs
 `T1-002` and `T1-003` bypass the single-shot path and loop inside
 `cases.multi_run` (see §5).
 
-### Suites ↔ Hub IDs
+### Suites ↔ catalogue IDs
 
-Suites are lists of Hub checklist IDs in `runner.SUITE_IDS` /
+Suites are lists of catalogue checklist IDs in `runner.SUITE_IDS` /
 `cases.registry`:
 
 | Suite CLI | Alias | Count | ID list constant |
@@ -158,13 +158,13 @@ Suites are lists of Hub checklist IDs in `runner.SUITE_IDS` /
 | `bias_fairness` | `bias` | 3 | `BIAS_FAIRNESS_IDS` |
 | `orchestration` | `orch` | 8 | `ORCHESTRATION_IDS` |
 
-`orchestration` is a **runner theme pack** (multi-agent handoff / HITL). Hub
-has no `eval_group=orchestration`; the IDs still come from the Hub dataset
+`orchestration` is a **runner theme pack** (multi-agent handoff / HITL). catalogue
+has no `eval_group=orchestration`; the IDs still come from the catalogue dataset
 and are vendored as `catalog/orchestration.csv`. `T3-006` is listed in
 orchestration for thematic runs but its `CaseSpec` lives in
 `cases/explainability.py` (one registration only).
 
-Vendored pack CSVs under `catalog/` mirror Hub for documentation and sync;
+Vendored pack CSVs under `catalog/` mirror catalogue for documentation and sync;
 **oracles and cases are Python**, not CSV parsers.
 
 ### What the agent must not do
@@ -243,7 +243,7 @@ return tr
 
 **Do not** mutate `env` behind the gateway and pretend tools ran: several
 oracles require both world state *and* matching `Trace.calls` /
-`succeeded` flags. The teaching `stub` agent deliberately breaks that
+`succeeded` flags. The teaching `noop` agent deliberately breaks that
 contract so learners can see Failures.
 
 ### 5.3 Multi-run IDs (`T1-002`, `T1-003`)
@@ -403,7 +403,7 @@ Expected teaching behaviour (full matrix totals sum all five suites;
 
 | Agent | cx | Expected |
 |:------|---:|:---------|
-| `stub` | 1 | matrix 8/42 pass (32 FAIL, 8 vacuous PASS, 1 UNVERIFIED over 41 unique IDs) (claims success, no real tools) |
+| `noop` | 1 | matrix 8/42 pass (32 FAIL, 8 vacuous PASS, 1 UNVERIFIED over 41 unique IDs) (claims success, no real tools) |
 | `eager` | 2 | FAIL on all 41, matrix 0/42 (tools without rules / HITL / TTL) |
 | `scripted` | 3 | **All PASS** (case goldens) |
 | `policy` | 4 | **All PASS** (rule engine) |
@@ -424,7 +424,7 @@ Expected teaching behaviour (full matrix totals sum all five suites;
 `MATRIX_MUST_PASS` is
 `{scripted, policy, reflective, supervisor, handoff, planner, critic, federation, golden}`.
 `MATRIX_EXPECTED_FAIL` is
-`{stub, eager, leaky, hallucinator, biased, overreach, flaky_plan}`.
+`{noop, eager, leaky, hallucinator, biased, overreach, flaky_plan}`.
 Expected-fail failures never fail `agentest matrix`’s exit status.
 
 Details: [`SAMPLE-AGENTS.md`](SAMPLE-AGENTS.md), [`SCENARIOS-8-10.md`](SCENARIOS-8-10.md), [`SCENARIOS-EXPECTED-FAIL.md`](SCENARIOS-EXPECTED-FAIL.md), [`ORCHESTRATION.md`](ORCHESTRATION.md).
@@ -448,7 +448,7 @@ class CaseSpec:
 Place new cases in the appropriate module under `src/agentest/cases/`
 (`t1.py`, `privacy.py`, `orchestration.py`, …), return them from
 `all_cases()`, and ensure `_build_registry()` in `registry.py` already
-imports that module (it does for current packs). Add the Hub ID to the
+imports that module (it does for current packs). Add the catalogue ID to the
 right `*_IDS` list and to `SUITE_IDS` via those constants.
 
 **Broken-agent contract:** every ID must Pass on `golden` and Fail on
@@ -456,36 +456,36 @@ right `*_IDS` list and to `SUITE_IDS` via those constants.
 
 ### Sync rule for pack CSVs
 
-1. Change pack CSVs on Hugging Face first (catalogue source of truth).
+1. Change pack CSVs in the catalogue first (catalogue source of truth).
 2. Copy them into `catalog/` byte-identical.
 3. Refresh hashes and pins:
    ```bash
-   python scripts/check_hub_sync.py --write-hashes
+   python scripts/check_catalog_pins.py --write-hashes
    # edit catalog/VERSION: hub_revision / hub_main_sha_at_sync / pack URLs
-   python scripts/check_hub_sync.py          # offline
-   python scripts/check_hub_sync.py --live   # optional network check
+   python scripts/check_catalog_pins.py          # offline
+   python scripts/check_catalog_pins.py --live   # optional network check
    ```
-4. Keep Hub `USER-GUIDE.md` / README / FAQ pointing at current agentest sample
+4. Keep catalogue `USER-GUIDE.md` / README / FAQ pointing at current agentest sample
    agents (green ladder 1–10 + expected-fail 11–15 / `agentest samples --failing`).
 
-Do **not** invent conflicting Hub IDs only in this repo. Security-labelled
+Do **not** invent conflicting catalogue IDs only in this repo. Security-labelled
 work remains **parked** (see README non-goals).
 
-### Keeping Hub and GitHub in sync
+### Keeping catalogue and GitHub in sync
 
 | Surface | Authority | What must match |
 |:--------|:----------|:----------------|
-| Hugging Face dataset | **Design** (packs, USER-GUIDE, kit) | Pack CSV bytes for suites in scope |
+| published catalogue | **Design** (packs, USER-GUIDE, kit) | Pack CSV bytes for suites in scope |
 | This GitHub repo | **Runner** (cases, oracles, samples, CI) | Vendored `catalog/*.csv` + `catalog/VERSION` |
 
-**Offline guard (CI):** `python scripts/check_hub_sync.py` compares each
-in-scope CSV to `sha256_*` lines in `catalog/VERSION`. No Hub token or network.
+**Offline guard (CI):** `python scripts/check_catalog_pins.py` compares each
+in-scope CSV to `sha256_*` lines in `catalog/VERSION`. No catalogue token or network.
 
-**Live guard (authors):** `python scripts/check_hub_sync.py --live` downloads
-`packs/<name>.csv` from Hub `main` and byte-compares. Optional; never required
+**Live guard (authors):** `python scripts/check_catalog_pins.py --live` downloads
+`packs/<name>.csv` from catalogue `main` and byte-compares. Optional; never required
 for contributor CI.
 
-After editing Hub docs only (no pack change), still bump runner docs that
+After editing catalogue docs only (no pack change), still bump runner docs that
 mention sample-agent counts, and leave `hub_revision` / pack hashes unchanged.
 
 ### Where things live
@@ -496,7 +496,7 @@ mention sample-agent counts, and leave `hub_revision` / pack hashes unchanged.
 | Sample agents | `src/agentest/samples/` |
 | Policy rules (teaching) | `src/agentest/samples/policies/` |
 | Vendored packs | `catalog/*.csv`, `catalog/VERSION` |
-| Hub sync check | `scripts/check_hub_sync.py` |
+| catalogue sync check | `scripts/check_catalog_pins.py` |
 | Pytest | `tests/functional`, `tests/privacy`, … |
 | CI | `.github/workflows/ci.yml` (includes offline sync check) |
 
@@ -508,7 +508,7 @@ mention sample-agent counts, and leave `hub_revision` / pack hashes unchanged.
 
 1. Checkout + Python **3.11**
 2. `pip install -e ".[dev]"`
-3. `python scripts/check_hub_sync.py` (offline catalog hash check)
+3. `python scripts/check_catalog_pins.py` (offline catalog hash check)
 4. `pytest -q`
 5. Golden suites: functional, privacy, explainability, bias_fairness, orchestration
 6. `agentest samples` + `agentest matrix`
@@ -517,7 +517,7 @@ Mirror locally:
 
 ```bash
 python -m pip install -e ".[dev]"
-python scripts/check_hub_sync.py
+python scripts/check_catalog_pins.py
 pytest -q
 agentest run --suite functional --agent golden
 agentest run --suite privacy --agent golden
@@ -532,11 +532,11 @@ agentest matrix
 
 ## 9. FAQ / pitfalls
 
-**Do I need Hugging Face?**  
-No. Clone GitHub, `pip install -e ".[dev]"`, run. Hub is for catalogue
+**Do I need network access to the catalogue?**  
+No. Clone GitHub, `pip install -e ".[dev]"`, run. catalogue is for catalogue
 authors syncing CSVs.
 
-**Why do stub, eager, and the cx 11–15 agents fail some IDs?**  
+**Why do noop, eager, and the cx 11–15 agents fail some IDs?**  
 By design. They teach that success flags and ungoverned tool use are not
 enough. Matrix exit status ignores them.
 
@@ -555,8 +555,8 @@ multi-run loop invokes your `handle` (see §5.6).
 **Security pack?**  
 Parked. Do not expect `--suite security` yet.
 
-**Orchestration vs Hub eval_group.**  
-Orchestration is a runner theme selecting Hub T3/T2 IDs. See
+**Orchestration vs catalogue eval_group.**  
+Orchestration is a runner theme selecting catalogue T3/T2 IDs. See
 [`ORCHESTRATION.md`](ORCHESTRATION.md).
 
 **Mutating `env` without tools.**  
@@ -591,7 +591,7 @@ Exit codes: `run` → 0 iff all results Pass; `matrix` → 0 iff every agent in
 | Name | Role |
 |:-----|:-----|
 | `golden` / `broken` | Oracle Pass / Fail fixtures |
-| `stub` … `federation` | Green teaching samples, complexity **1–10** |
+| `noop` … `federation` | Green teaching samples, complexity **1–10** |
 | `leaky` … `flaky_plan` | Expected-fail scenarios, complexity **11–15** |
 
 ### Key modules
@@ -608,7 +608,7 @@ src/agentest/
   cases/multi_run.py  # T1-002 / T1-003
   samples/base.py     # SampleAgent protocol
   samples/__init__.py # get_sample, MATRIX_MUST_PASS, MATRIX_EXPECTED_FAIL
-catalog/              # vendored Hub pack CSVs + VERSION
+catalog/              # vendored catalogue pack CSVs + VERSION
 ```
 
 ### Three commands to remember
@@ -627,4 +627,4 @@ agentest run --suite functional --agent myagent
 
 ---
 
-*Apache-2.0 runner · Checklist data CC BY 4.0 on Hugging Face · Author: Dr Srinivas Padmanabhuni*
+*Apache-2.0 runner · Checklist data CC BY 4.0 in the published catalogue · Author: Dr Srinivas Padmanabhuni*

@@ -1,6 +1,6 @@
 # M1 backlog — `v0.2.0`
 
-Full **functional** pack (18 Hub IDs).
+Full **functional** pack (18 catalogue IDs).
 
 ## Tasks
 

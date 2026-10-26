@@ -1,6 +1,6 @@
 # M3 backlog — `v0.4.0`
 
-**Explainability** pack (5 Hub IDs) + research map.
+**Explainability** pack (5 catalogue IDs) + research map.
 
 ## Tasks
 

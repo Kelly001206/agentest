@@ -6,12 +6,12 @@ Solo, one ID: **T1-001** (Terminal postconditions after a single task).
 
 1. [x] `pyproject.toml` + `agentest` CLI entrypoint
 2. [x] `Env` + mock ledger fixture (`fixtures/ledger.py` + `agentest.fixtures.ledger`)
-3. [x] Mock tool gateway (allowlist stub)
+3. [x] Mock tool gateway (allowlist noop)
 4. [x] Golden agent that sets expected ledger statuses
 5. [x] `examples/broken_agent` that claims success without writes
 6. [x] `tests/functional/test_t1_001.py` — Pass golden, Fail broken
 7. [ ] GitHub Actions: run T1-001 on PR *(deferred — OAuth lacks `workflow` scope)*
-8. [x] Sync T1-001 metadata into `catalog/t1_001.yaml` (Hub v1.1 pin; not full CSV)
+8. [x] Sync T1-001 metadata into `catalog/t1_001.yaml` (catalogue v1.1 pin; not full CSV)
 
 ## Acceptance
 

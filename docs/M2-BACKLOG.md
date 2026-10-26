@@ -1,6 +1,6 @@
 # M2 backlog — `v0.3.0`
 
-Full **privacy** pack (8 Hub IDs).
+Full **privacy** pack (8 catalogue IDs).
 
 ## Tasks
 

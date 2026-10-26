@@ -14,4 +14,4 @@ Algorithm and paper mapping for each explainability ID (TRACE [Kim et al. 2025],
 
 → **[`EXPLAINABILITY-RESEARCH.md`](EXPLAINABILITY-RESEARCH.md)**
 
-Hub taxonomy: [10.5281/zenodo.23587407](https://doi.org/10.5281/zenodo.23587407).
+catalogue taxonomy: [10.5281/zenodo.23587407](https://doi.org/10.5281/zenodo.23587407).

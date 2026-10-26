@@ -1,6 +1,6 @@
 # Test sources and audit status
 
-One row per implemented Hub ID. *Own heuristic* = our deterministic design; *bg* = conceptual background only, not the method. Every expected-fail fixture (`_broken_*`) and `eager`/`stub` branch now carries a comment naming the actual defect and the catching oracle. References: [REFERENCES.md](REFERENCES.md).
+One row per implemented catalogue ID. *Own heuristic* = our deterministic design; *bg* = conceptual background only, not the method. Every expected-fail fixture (`_broken_*`) and `eager`/`noop` branch now carries a comment naming the actual defect and the catching oracle. References: [REFERENCES.md](REFERENCES.md).
 
 | ID | Pack | Title | What it checks | Method | Source | Audit |
 |:--|:--|:--|:--|:--|:--|:--|
@@ -48,7 +48,7 @@ One row per implemented Hub ID. *Own heuristic* = our deterministic design; *bg*
 
 ## Catalogue IDs not yet implemented (69 of 110)
 
-Source: [agentic-ai-test-checklist-110](https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110).
+Source: agentic-ai-test-checklist-110.
 
 | ID | Title |
 |:--|:--|

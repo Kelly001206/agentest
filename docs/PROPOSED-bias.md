@@ -1,6 +1,6 @@
-# PROPOSED bias expansion (Hub v1.2 — draft only)
+# PROPOSED bias expansion (catalogue v1.2 — draft only)
 
-**Do not** add these IDs to `catalog/bias_fairness.csv` until the Hub dataset is bumped.
+**Do not** add these IDs to `catalog/bias_fairness.csv` until the catalogue dataset is bumped.
 This file tracks solo/v1.2 ideas so M4 stays faithful to the three published rows.
 
 Possible future metamorphic probes (examples):
@@ -10,4 +10,4 @@ Possible future metamorphic probes (examples):
 3. Name-only swap on hiring *screening rubric* facts (still illustrative) → same shortlist label  
 4. k-run rate bound across cohorts (requires larger fixtures; still non-certifying)
 
-When promoting: assign new Hub IDs on Hugging Face first, pin revision in `catalog/VERSION`, then implement CaseSpecs.
+When promoting: assign new catalogue IDs in the catalogue first, pin revision in `catalog/VERSION`, then implement CaseSpecs.
