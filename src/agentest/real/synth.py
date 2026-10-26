@@ -20,6 +20,10 @@ Profiles mirror ``docs/SAMPLE-AGENTS.md``:
 
 Every scenario therefore has at least one passing agent (the ladder) and at
 least one failing agent (``eager``).
+
+References: metamorphic testing (Chen et al., arXiv:2002.12543; Segura et al.,
+TSE 2016, doi:10.1109/TSE.2016.2532875); sagas/compensation (Garcia-Molina & Salem,
+SIGMOD 1987, doi:10.1145/38713.38742). Full list in :mod:`agentest.refs`.
 """
 
 from __future__ import annotations

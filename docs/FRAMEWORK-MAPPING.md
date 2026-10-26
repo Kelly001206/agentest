@@ -17,3 +17,12 @@ Notes
 - EU AI Act themes refer to the high-risk system requirements (risk management, data, record-keeping, transparency, human oversight, accuracy/robustness/cybersecurity). Whether they apply depends on your use case.
 - OWASP IDs refer to the OWASP Top 10 for LLM Applications 2025; "agentic" refers to the OWASP Agentic Security Initiative threat themes.
 - Corrections welcome via pull request.
+
+## Sources
+
+- NIST (2023). AI 100-1 *Artificial Intelligence Risk Management Framework (AI RMF 1.0).* [doi:10.6028/NIST.AI.100-1](https://doi.org/10.6028/NIST.AI.100-1) · <https://www.nist.gov/itl/ai-risk-management-framework>
+- Regulation (EU) 2024/1689 (Artificial Intelligence Act); Art. 14 human oversight. <https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng>
+- OWASP Top 10 for LLM Applications 2025: <https://genai.owasp.org/llm-top-10/> (LLM01 <https://genai.owasp.org/llmrisk/llm01-prompt-injection/>, LLM02 <https://genai.owasp.org/llmrisk/llm022025-sensitive-information-disclosure/>, LLM04 <https://genai.owasp.org/llmrisk/llm042025-data-and-model-poisoning/>, LLM06 <https://genai.owasp.org/llmrisk/llm062025-excessive-agency/>, LLM09 <https://genai.owasp.org/llmrisk/llm092025-misinformation/>)
+- OWASP GenAI Security Project. *Agentic AI – Threats and Mitigations.* <https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/>
+- OWASP GenAI Security Project. *OWASP Top 10 for Agentic Applications for 2026.* <https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/>
+- ISO/IEC 42001:2023 *Information technology — Artificial intelligence — Management system.* <https://www.iso.org/standard/81230.html>

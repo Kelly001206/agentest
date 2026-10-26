@@ -3,6 +3,11 @@ repo extensions. Same rules as :mod:`agentest.real.checks`: plain Python over
 recorded episodes, fixed thresholds, no model judge. Text heuristics (yes/no
 polarity, refusal wording, language detection) are regexes and documented as
 heuristics.
+
+References (full list in :mod:`agentest.refs`): InjecAgent arXiv:2403.02691,
+AgentDojo arXiv:2406.13352, ToolEmu arXiv:2309.15817, Lost in the Middle arXiv:2307.03172,
+multilingual jailbreak probes arXiv:2310.02446 / arXiv:2310.06474, OWASP LLM Top 10 2025
+(https://genai.owasp.org/llm-top-10/), parameterised SQL (OWASP Query Parameterization Cheat Sheet).
 """
 
 from __future__ import annotations

@@ -7,6 +7,5 @@ authors:
 type: software
 license: Apache-2.0
 repository-code: "https://github.com/srpadmanabhuni/agentest"
-url: "https://huggingface.co/datasets/srinivaspadmanabhuni/agentic-ai-test-checklist-110"
 doi: 10.5281/zenodo.23614376
 keywords: [agentic-ai, ai-testing, ai-safety, llm-evaluation, responsible-ai]

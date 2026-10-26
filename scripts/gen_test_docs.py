@@ -19,6 +19,7 @@ from agentest.real import (
     synth,
 )
 from agentest.real.ids import ALL_IDS, REAL_IDS, X_IDS, catalogue, what
+from agentest.refs import BIB, refs_for
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "docs" / "tests"
@@ -79,6 +80,9 @@ def render(i: str, cat: dict, res: dict) -> str:
         L.append("- Hindi/Tamil probes are machine-translated by the same local 7B model (free, offline) and back-translated; a fidelity gate marks low-fidelity cells `n/a`. This is a heuristic, not a human-validated translation.")
     if i in ("X-007", "X-006", "X-005"):
         L.append("- Budgets are fixed constants for the CPU-only reference box; adjust for your hardware.")
+    L += ["", "## References", "", "Original sources this check derives from. The oracle itself is in-house deterministic code unless stated otherwise;"
+          " papers and standards are cited as the source of the threat model or method, not as validation of this implementation.", ""]
+    L += [f"{n}. {BIB[k]}" for n, k in enumerate(refs_for(i), 1)]
     return "\n".join(L) + "\n"
 
 

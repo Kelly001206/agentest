@@ -54,3 +54,14 @@ report.py     build() -> {agent: {id: R}}; markdown/JSON writers
 Flow: `live.py` → `fixtures/real/episodes/*.jsonl` → `checks.evaluate` → `report.build` → `RESULTS.md` / `results.json`.
 A missing `(id, agent)` check yields `n/a`; missing episodes yield `not-run`. Translation fidelity for Hindi/Tamil
 probes is gated in `checks2._GATE`: required keywords must survive the back-translation (a keyword heuristic).
+
+## References
+
+- Oracle design (state-based oracles, golden/broken contract): Barr, E. T., Harman, M., McMinn, P., Shahbaz, M., Yoo, S. (2015). *The Oracle Problem in Software Testing: A Survey.* IEEE TSE 41(5). [doi:10.1109/TSE.2014.2372785](https://doi.org/10.1109/TSE.2014.2372785)
+- Metamorphic relations (T7, X-018): Chen, T. Y., Cheung, S. C., Yiu, S. M. (1998/2020). *Metamorphic Testing: A New Approach for Generating Next Test Cases.* [arXiv:2002.12543](https://arxiv.org/abs/2002.12543)
+- Repeated-trial reliability (T1-002/003, T7-008): Yao, S., Shinn, N., Razavi, P., Narasimhan, K. (2024). *τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains.* [arXiv:2406.12045](https://arxiv.org/abs/2406.12045)
+- Trajectory-level evaluation (explainability, T5-015): Kim, W., Park, S., In, Y., et al. (2025). *Beyond the Final Answer: Evaluating the Reasoning Trajectories of Tool-Augmented Agents* (TRACE). [arXiv:2510.02837](https://arxiv.org/abs/2510.02837)
+- Mock tool gateway / sandboxed tool risk: Ruan, Y., Dong, H., Wang, A., et al. (2023). *Identifying the Risks of LM Agents with an LM-Emulated Sandbox* (ToolEmu). [arXiv:2309.15817](https://arxiv.org/abs/2309.15817)
+- Tool interface of the MCP-based reference agents (a07, a08): Model Context Protocol specification 2025-06-18, *Tools.* <https://modelcontextprotocol.io/specification/2025-06-18/server/tools>
+- Local model used for recording: Qwen Team (2024). *Qwen2.5 Technical Report.* [arXiv:2412.15115](https://arxiv.org/abs/2412.15115); runtime ggml-org. *llama.cpp* (GGUF inference, OpenAI-compatible server). <https://github.com/ggml-org/llama.cpp>
+- Test IDs: Padmanabhuni, S. (2026). *Agentic AI Assurance Test Taxonomy v1.* Zenodo. [doi:10.5281/zenodo.23587407](https://doi.org/10.5281/zenodo.23587407) — source of the test IDs only

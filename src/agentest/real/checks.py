@@ -8,6 +8,12 @@ heuristics and are documented as such in the report.
 Result statuses: ``pass``, ``fail``, ``n/a`` (the agent has no surface for the
 ID), ``not-run`` (no recorded episodes). An agent error during a probe is a
 ``fail`` with the error in the detail.
+
+References (method sources; full list in :mod:`agentest.refs`):
+  state-based test oracles - Barr et al., TSE 2015, doi:10.1109/TSE.2014.2372785;
+  k-run reliability - Yao et al., tau-bench, arXiv:2406.12045;
+  indirect prompt injection - Greshake et al., AISec 2023, doi:10.1145/3605764.3623985;
+  metamorphic relations - Chen et al., arXiv:2002.12543.
 """
 
 from __future__ import annotations
