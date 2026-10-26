@@ -57,4 +57,5 @@ def main(out: str = "my_agent.jsonl", buggy: bool = False) -> str:
 
 
 if __name__ == "__main__":
-    print(main(*(sys.argv[1:2] or ["my_agent.jsonl"]), buggy="--buggy" in sys.argv))
+    files = [a for a in sys.argv[1:] if not a.startswith("--")]
+    print(main(files[0] if files else "my_agent.jsonl", buggy="--buggy" in sys.argv))
